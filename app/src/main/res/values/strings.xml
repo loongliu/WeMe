@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">唯觅</string>
+    <string name="login">登录</string>
+    <string name="login_weme_user">注册 WEME 用户</string>
+    <string name="account_or_password_not_null">帐号和密码不能为空</string>
+    <string name="login_fail">登录失败</string>
+    <string name="login_success">登录成功</string>
+</resources>
