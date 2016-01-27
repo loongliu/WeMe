@@ -1,4 +1,4 @@
-package space.weme.remix.ui;
+package space.weme.remix.ui.main;
 
 import android.os.Bundle;
 import android.app.Fragment;

@@ -1,4 +1,4 @@
-package space.weme.remix.ui;
+package space.weme.remix.ui.intro;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import space.weme.remix.R;
 import space.weme.remix.ui.base.BaseActivity;
+import space.weme.remix.ui.main.AtyMain;
 import space.weme.remix.util.StrUtils;
 
 /**

@@ -1,11 +1,9 @@
-package space.weme.remix.ui;
+package space.weme.remix.ui.main;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.util.ArrayMap;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -182,7 +180,7 @@ public class FgtActivity extends BaseFragment {
                     activityList.add(activity);
                 }
                 mRvAdapter.setActivityList(activityList);
-                mRvAdapter.notifyItemRangeChanged(1, activityList.size());
+                mRvAdapter.notifyDataSetChanged();
                 isRefreshing = false;
                 isLoading = false;
                 mSwipeLayout.setRefreshing(false);
@@ -277,43 +275,6 @@ public class FgtActivity extends BaseFragment {
                 mTvTime = (TextView) itemView.findViewById(R.id.fgt_activity_item_time);
                 mTvLocation = (TextView) itemView.findViewById(R.id.fgt_activity_item_location);
             }
-        }
-    }
-
-    static class TopPageAdapter extends PagerAdapter {
-        List<TopInfoWrapper> infoList;
-        Context context;
-
-        public TopPageAdapter(Context context){
-            this.context = context;
-        }
-
-        public void setInfoList(List<TopInfoWrapper> infoList) {
-            this.infoList = infoList;
-        }
-
-        @Override
-        public int getCount() {
-            return infoList==null?0:infoList.size();
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view==object;
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            SimpleDraweeView image = new SimpleDraweeView(context);
-            Uri uri = Uri.parse(infoList.get(position).url);
-            image.setImageURI(uri);
-            container.addView(image);
-            return image;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView((View) object);
         }
     }
 

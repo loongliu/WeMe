@@ -8,12 +8,15 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import space.weme.remix.util.DimensionUtils;
+import space.weme.remix.util.LogUtils;
 
 /**
  * Created by Liujilong on 16/1/27.
  * liujilong.me@gmail.com
  */
 public class PageIndicator extends View implements ViewPager.OnPageChangeListener{
+
+    private final static String TAG = "PageIndicator";
     private ViewPager mViewPager;
     private int mRadius;
     private int mStrokeWidth;
@@ -48,7 +51,10 @@ public class PageIndicator extends View implements ViewPager.OnPageChangeListene
     }
 
     public void setViewPager(ViewPager viewPager){
+        requestLayout();
+        setCurrentItem(0);
         if(mViewPager == viewPager) {
+            requestLayout();
             return;
         }
         if(mViewPager!=null){
@@ -60,14 +66,23 @@ public class PageIndicator extends View implements ViewPager.OnPageChangeListene
         mViewPager = viewPager;
         mViewPager.addOnPageChangeListener(this);
         invalidate();
+    }
 
+    public void setCurrentItem(int item) {
+        mCurrentPage = item;
+        invalidate();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if(mViewPager==null) return;
+        LogUtils.d(TAG,"start OnDraw()");
+        if(mViewPager==null){
+            LogUtils.d(TAG,"no view Pager, stop onDraw()");
+            return;
+        }
         final int count = mViewPager.getAdapter().getCount();
         if(count == 0){
+            LogUtils.d(TAG,"count = 0, stop onDraw()");
             return;
         }
         int leftPadding = getPaddingLeft();
@@ -75,17 +90,19 @@ public class PageIndicator extends View implements ViewPager.OnPageChangeListene
         for(int i = 0; i<count; i++){
             float dx = leftPadding + i*3*mRadius + mRadius;
             float dy = topPadding + mRadius;
+            LogUtils.d(TAG,"start draw, info: width = "+ getWidth()+", height = " + getHeight() +",dx = "+dx+",dy = "+dy);
             if(i == mCurrentPage){
                 canvas.drawCircle(dx, dy, mRadius, mPaintFill);
             }else {
                 canvas.drawCircle(dx, dy, mRadius-mStrokeWidth/2, mPaintStroke);
             }
         }
+        LogUtils.d(TAG,"draw success, stop onDraw()");
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(measureWidth(widthMeasureSpec),measureHeight(heightMeasureSpec));
+        setMeasuredDimension(measureWidth(widthMeasureSpec), measureHeight(heightMeasureSpec));
     }
 
     private int measureWidth(int measureSpec){

@@ -31,6 +31,8 @@ public final class StrUtils {
 
     public static final String TOP_BROAD_URL = BASE_URL + "topofficial";
 
+    public static final String GET_TOPIC_LIST = BASE_URL + "gettopiclist";
+
     public static final String GET_AVATAR = BASE_URL_NGINX + "avatar/";
 
     public static String thumForID(String id){
