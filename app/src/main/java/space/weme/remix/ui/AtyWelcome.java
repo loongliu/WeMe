@@ -21,13 +21,12 @@ public class AtyWelcome extends BaseActivity {
         setContentView(R.layout.aty_welcome);
         SharedPreferences sp = getSharedPreferences(StrUtils.SP_USER,MODE_PRIVATE);
         String token = sp.getString(StrUtils.SP_USER_TOKEN,"");
-        if(true){
+        if(token.equals("")){
             loginIn();
         }else{
             main();
         }
         finish();
-
     }
 
     private void loginIn(){

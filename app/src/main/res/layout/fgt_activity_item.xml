@@ -12,19 +12,76 @@
         android:layout_height="wrap_content">
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/fgt_activity_item_image"
-            android:layout_margin="16dp"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            app:placeholderImage="@mipmap/weme"
-            />
+            android:layout_margin="12dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@color/blue_700"/>
         <TextView
             android:background="@drawable/bg_activity_item_text"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:text="1/120"
             android:textColor="@color/white"
             android:id="@+id/fgt_activity_item_count"
+            android:layout_marginStart="12dp"
+            android:layout_marginLeft="12dp"
+            android:layout_below="@+id/fgt_activity_item_image"
+            android:layout_width="48dp"
+            android:gravity="center"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/fgt_activity_item_title"
+            android:layout_toEndOf="@+id/fgt_activity_item_image"
+            android:layout_toRightOf="@+id/fgt_activity_item_image"
+            android:layout_margin="12dp"
+            android:textColor="#515171"
+            android:text="南京高校联谊-牵手东大"
+            android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/fgt_activity_item_icon1"
+            android:layout_below="@+id/fgt_activity_item_title"
+            android:layout_alignLeft="@+id/fgt_activity_item_title"
+            android:layout_alignStart="@+id/fgt_activity_item_title"
+            android:src="@mipmap/date"
+            android:layout_width="24dp"
+            android:layout_height="24dp" />
+        <TextView
+            android:id="@+id/fgt_activity_item_time"
+            android:layout_toEndOf="@id/fgt_activity_item_icon1"
+            android:layout_toRightOf="@id/fgt_activity_item_icon1"
+            android:layout_alignTop="@+id/fgt_activity_item_icon1"
+            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:text="11月8号18：30"
+            android:textColor="#c8c8dc"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp" />
+        <ImageView
+            android:id="@+id/fgt_activity_item_icon2"
+            android:layout_below="@+id/fgt_activity_item_icon1"
+            android:layout_alignLeft="@+id/fgt_activity_item_title"
+            android:layout_alignStart="@+id/fgt_activity_item_title"
+            android:layout_marginTop="8dp"
+            android:src="@mipmap/location"
+            android:layout_width="24dp"
+            android:layout_height="24dp" />
+        <TextView
+            android:id="@+id/fgt_activity_item_location"
+            android:layout_toEndOf="@id/fgt_activity_item_icon2"
+            android:layout_toRightOf="@id/fgt_activity_item_icon2"
+            android:layout_alignTop="@+id/fgt_activity_item_icon2"
+            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
+            android:textSize="14sp"
+            android:text="东南大学四牌楼校区"
+            android:gravity="center"
+            android:textColor="#c8c8dc"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp" />
 
     </RelativeLayout>
 

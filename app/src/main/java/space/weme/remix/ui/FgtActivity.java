@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -172,7 +173,10 @@ public class FgtActivity extends BaseFragment {
                 top.mViewPager.setAdapter(mTopAdapter);
                 top.mIndicator.setViewPager(top.mViewPager);
             }else{
-
+                Activity activity = mActivityList.get(position-1);
+                ItemViewHolder item = (ItemViewHolder) holder;
+                item.mTvTitle.setText(activity.time);
+                item.mAvatar.setImageURI(Uri.parse(activity.));
             }
         }
 
@@ -196,9 +200,19 @@ public class FgtActivity extends BaseFragment {
             }
         }
         class ItemViewHolder extends RecyclerView.ViewHolder{
+            SimpleDraweeView mAvatar;
+            TextView mTvTitle;
+            TextView mTvCount;
+            TextView mTvTime;
+            TextView mTvLocation;
 
             public ItemViewHolder(View itemView) {
                 super(itemView);
+                mAvatar = (SimpleDraweeView) itemView.findViewById(R.id.fgt_activity_item_image);
+                mTvTitle = (TextView) itemView.findViewById(R.id.fgt_activity_item_title);
+                mTvCount = (TextView) itemView.findViewById(R.id.fgt_activity_item_count);
+                mTvTime = (TextView) itemView.findViewById(R.id.fgt_activity_item_time);
+                mTvLocation = (TextView) itemView.findViewById(R.id.fgt_activity_item_location);
             }
         }
     }
