@@ -29,6 +29,7 @@ import java.util.List;
 
 import space.weme.remix.R;
 import space.weme.remix.model.Activity;
+import space.weme.remix.model.TopInfoWrapper;
 import space.weme.remix.ui.base.BaseFragment;
 import space.weme.remix.util.DimensionUtils;
 import space.weme.remix.util.LogUtils;
@@ -316,14 +317,5 @@ public class FgtActivity extends BaseFragment {
         }
     }
 
-    static class TopInfoWrapper {
-        int id;
-        String url;
-        static TopInfoWrapper fromJSON(JSONObject j){
-            TopInfoWrapper info = new TopInfoWrapper();
-            info.id = j.optInt("activityid");
-            info.url = j.optString("imageurl");
-            return info;
-        }
-    }
+
 }

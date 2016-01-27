@@ -29,6 +29,8 @@ public final class StrUtils {
 
     public static final String GET_ACTIVITY_INFO_URL = BASE_URL + "getactivityinformation";
 
+    public static final String TOP_BROAD_URL = BASE_URL + "topofficial";
+
     public static final String GET_AVATAR = BASE_URL_NGINX + "avatar/";
 
     public static String thumForID(String id){
