@@ -78,12 +78,12 @@ public final class OkHttpUtils {
             @Override
             public void onResponse(final Call call, final Response response) throws IOException {
                 if (isCancel(call)) return;
-                final String res = response.body().string();
+                final String s = response.body().string();
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
                         if (isCancel(call,true)) return;
-                        callback.onResponse(res);
+                        callback.onResponse(s);
                     }
                 });
             }

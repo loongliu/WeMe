@@ -13,4 +13,7 @@ public final class DimensionUtils {
         DisplayMetrics metrics =  APP.context().getResources().getDisplayMetrics();
         return (int) (dp * metrics.density);
     }
+    public static DisplayMetrics getDisplay(){
+        return APP.context().getResources().getDisplayMetrics();
+    }
 }
