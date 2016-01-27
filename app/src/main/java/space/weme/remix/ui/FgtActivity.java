@@ -10,12 +10,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.drawee.generic.RoundingParams;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.json.JSONArray;
@@ -44,13 +46,15 @@ public class FgtActivity extends BaseFragment {
 
     // views
     private SwipeRefreshLayout mSwipeLayout;
-    private RecyclerView mRecyclerView;
 
     private TopPageAdapter mTopAdapter;
     private Adapter mRvAdapter;
 
     // data
     int page = 1;
+    boolean isLoading = false;
+    boolean isRefreshing = false;
+    boolean canLoadMore = true;
 
     public static FgtActivity newInstance() {
         Bundle args = new Bundle();
@@ -64,19 +68,53 @@ public class FgtActivity extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fgt_activity,container,false);
         mSwipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.fgt_activity_swipe_layout);
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.fgt_activity_recycler_view);
+        mSwipeLayout.setColorSchemeResources(R.color.colorPrimary);
+        mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (isRefreshing) {
+                    LogUtils.d(TAG, "ignore manually update!");
+                } else {
+                    refresh();
+                }
+            }
+        });
+        RecyclerView mRecyclerView = (RecyclerView) rootView.findViewById(R.id.fgt_activity_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        firePost();
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int visibleItemCount = recyclerView.getChildCount();
+                int totalItemCount = layoutManager.getItemCount();
+                int firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
+                if (!isLoading && (totalItemCount - visibleItemCount)
+                        <= (firstVisibleItem + 2) && canLoadMore) {
+                    Log.i(TAG, "scroll to end  load page " + (page + 1));
+                    loadPage(page + 1);
+                }
+            }
+        });
+
+
+
+        mTopAdapter = new TopPageAdapter(getActivity());
+        mRvAdapter = new Adapter();
+        mRecyclerView.setAdapter(mRvAdapter);
+        refresh();
         return rootView;
     }
 
-    private void firePost(){
+    private void refresh(){
+        isRefreshing = true;
+        canLoadMore = true;
         ArrayMap<String,String> params = new ArrayMap<>(3);
         params.put("token",StrUtils.token());
         OkHttpUtils.post(StrUtils.GET_TOP_ACTIVITY_URL, params, TAG, new OkHttpUtils.SimpleOkCallBack() {
             @Override
             public void onResponse(String s) {
-                LogUtils.i(TAG, s);
+                //LogUtils.i(TAG, s);
                 JSONObject j;
                 try {
                     j = new JSONObject(s);
@@ -97,15 +135,23 @@ public class FgtActivity extends BaseFragment {
                     TopInfoWrapper info = TopInfoWrapper.fromJSON(array.optJSONObject(i));
                     infoList.add(info);
                 }
-                mTopAdapter = new TopPageAdapter(getActivity(), infoList);
+                mTopAdapter.setInfoList(infoList);
+                mTopAdapter.notifyDataSetChanged();
             }
         });
-        params.put("page",page+"");
+        loadPage(1);
+    }
+
+    private void loadPage(int p){
+        ArrayMap<String,String> params = new ArrayMap<>(3);
+        params.put("token",StrUtils.token());
+        params.put("page",p+"");
+        isLoading = true;
         OkHttpUtils.post(StrUtils.GET_ACTIVITY_INFO_URL, params, TAG, new OkHttpUtils.SimpleOkCallBack() {
 
             @Override
             public void onResponse(String s) {
-                LogUtils.i(TAG, s);
+                //LogUtils.i(TAG, s);
                 JSONObject j;
                 try {
                     j = new JSONObject(s);
@@ -120,18 +166,25 @@ public class FgtActivity extends BaseFragment {
                     return;
                 }
                 int returnedPage = j.optInt("pages");
-                if(page < returnedPage){
+                if(page != returnedPage){
                     page = returnedPage;
                 }
                 JSONArray array = j.optJSONArray("result");
                 if(array == null) return;
+                if(array.length()==0){
+                    canLoadMore = false;
+                    return;
+                }
                 List<Activity> activityList = new ArrayList<>();
                 for(int i = 0; i<array.length(); i++){
                     Activity activity = Activity.fromJSON(array.optJSONObject(i));
                     activityList.add(activity);
                 }
-                mRvAdapter = new Adapter(activityList);
-                mRecyclerView.setAdapter(mRvAdapter);
+                mRvAdapter.setActivityList(activityList);
+                mRvAdapter.notifyItemRangeChanged(1, activityList.size());
+                isRefreshing = false;
+                isLoading = false;
+                mSwipeLayout.setRefreshing(false);
             }
         });
     }
@@ -146,8 +199,10 @@ public class FgtActivity extends BaseFragment {
         static final int TYPE_ACTIVITY = 2;
         List<Activity> mActivityList;
 
-        public Adapter(List<Activity> list){
-            mActivityList = list;
+        public Adapter(){}
+
+        public void setActivityList(List<Activity> activityList) {
+            this.mActivityList = activityList;
         }
 
         @Override
@@ -175,8 +230,12 @@ public class FgtActivity extends BaseFragment {
             }else{
                 Activity activity = mActivityList.get(position-1);
                 ItemViewHolder item = (ItemViewHolder) holder;
-                item.mTvTitle.setText(activity.time);
-                item.mAvatar.setImageURI(Uri.parse(activity.));
+                item.mTvTitle.setText(activity.title);
+                item.mAvatar.setImageURI(Uri.parse(StrUtils.thumForID(activity.authorID + "")));
+                String count = activity.signNumber+"/"+activity.capacity;
+                item.mTvCount.setText(count);
+                item.mTvTime.setText(activity.time);
+                item.mTvLocation.setText(activity.location);
             }
         }
 
@@ -209,6 +268,9 @@ public class FgtActivity extends BaseFragment {
             public ItemViewHolder(View itemView) {
                 super(itemView);
                 mAvatar = (SimpleDraweeView) itemView.findViewById(R.id.fgt_activity_item_image);
+                RoundingParams roundingParams = RoundingParams.fromCornersRadius(5f);
+                roundingParams.setRoundAsCircle(true);
+                mAvatar.getHierarchy().setRoundingParams(roundingParams);
                 mTvTitle = (TextView) itemView.findViewById(R.id.fgt_activity_item_title);
                 mTvCount = (TextView) itemView.findViewById(R.id.fgt_activity_item_count);
                 mTvTime = (TextView) itemView.findViewById(R.id.fgt_activity_item_time);
@@ -221,14 +283,17 @@ public class FgtActivity extends BaseFragment {
         List<TopInfoWrapper> infoList;
         Context context;
 
-        public TopPageAdapter(Context context, List<TopInfoWrapper> list){
+        public TopPageAdapter(Context context){
             this.context = context;
-            infoList = list;
+        }
+
+        public void setInfoList(List<TopInfoWrapper> infoList) {
+            this.infoList = infoList;
         }
 
         @Override
         public int getCount() {
-            return infoList.size();
+            return infoList==null?0:infoList.size();
         }
 
         @Override

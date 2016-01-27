@@ -21,11 +21,20 @@ public final class StrUtils {
     /** ####################### URLs ############################### **/
     private static final String BASE_URL = "http://218.244.147.240:8080/";
 
+    private static final String BASE_URL_NGINX = "http://218.244.147.240/";
+
     public static final String LOGIN_URL = BASE_URL + "login";
 
     public static final String GET_TOP_ACTIVITY_URL = BASE_URL + "activitytopofficial";
 
     public static final String GET_ACTIVITY_INFO_URL = BASE_URL + "getactivityinformation";
+
+    public static final String GET_AVATAR = BASE_URL_NGINX + "avatar/";
+
+    public static String thumForID(String id){
+        return GET_AVATAR + id + "_thumbnail.jpg";
+    }
+
 
     /** ################## SharedPreferences ####################### **/
 
