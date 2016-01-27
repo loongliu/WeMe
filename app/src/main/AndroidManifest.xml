@@ -20,6 +20,7 @@
         </activity>
 
         <activity android:name=".ui.AtyLogin" />
+        <activity android:name=".ui.AtyMain" />
 
 
     </application>

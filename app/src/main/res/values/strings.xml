@@ -5,4 +5,7 @@
     <string name="account_or_password_not_null">帐号和密码不能为空</string>
     <string name="login_fail">登录失败</string>
     <string name="login_success">登录成功</string>
+    <string name="activity">活动</string>
+    <string name="community">社区</string>
+    <string name="me">我</string>
 </resources>

@@ -11,6 +11,7 @@ import space.weme.remix.ui.base.BaseActivity;
  * liujilong.me@gmail.com
  */
 public class AtyWelcome extends BaseActivity {
+    private static final String TAG = "AtyWelcome";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,4 +27,8 @@ public class AtyWelcome extends BaseActivity {
         startActivity(new Intent(AtyWelcome.this,AtyLogin.class));
     }
 
+    @Override
+    protected String tag() {
+        return TAG;
+    }
 }
