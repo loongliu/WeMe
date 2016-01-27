@@ -8,4 +8,5 @@
     <string name="activity">活动</string>
     <string name="community">社区</string>
     <string name="me">我</string>
+    <string name="network_error">网络异常</string>
 </resources>

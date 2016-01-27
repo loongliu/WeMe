@@ -31,8 +31,6 @@ public class AtyMain extends BaseActivity {
     private ViewPager mPager;
     private TextView mTvTitle;
 
-    private Adapter mAdapter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +50,7 @@ public class AtyMain extends BaseActivity {
         mTvTitle = (TextView) findViewById(R.id.main_title);
         mTvTitle.setText(R.string.activity);
 
-        mAdapter = new Adapter(getFragmentManager());
+        Adapter mAdapter = new Adapter(getFragmentManager());
         mPager.setAdapter(mAdapter);
         mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

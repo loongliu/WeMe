@@ -26,7 +26,7 @@ import okhttp3.Response;
 public final class OkHttpUtils {
 
     // reserve all the running calls for cancel.
-    private ArrayMap<String,Set<Call>> mRunningCalls;
+    private final ArrayMap<String,Set<Call>> mRunningCalls;
 
     private static OkHttpUtils mInstance;
     private OkHttpClient mClient;
@@ -45,11 +45,12 @@ public final class OkHttpUtils {
         return mInstance;
     }
 
-    public static void post(String url, Map<String,String> params, Callback callback){
+    @SuppressWarnings("unused")
+    public static void post(String url, Map<String,String> params, OkCallBack callback){
         post(url, params, null, callback);
     }
 
-    public static void post(String url, Map<String,String> params,String tag, Callback callback){
+    public static void post(String url, Map<String,String> params,String tag, OkCallBack callback){
         JSONObject j = new JSONObject(params);
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), j.toString());
         Request.Builder builder = new Request.Builder().url(url).post(body);
@@ -58,7 +59,7 @@ public final class OkHttpUtils {
         getInstance().firePost(request, callback);
     }
 
-    private void firePost(Request request, final Callback callback){
+    private void firePost(Request request, final OkCallBack callback){
         Call call = mClient.newCall(request);
         cacheCallForCancel(call);
         call.enqueue(new Callback() {
@@ -68,7 +69,8 @@ public final class OkHttpUtils {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        callback.onFailure(call, e);
+                        if (isCancel(call,true)) return;
+                        callback.onFailure(e);
                     }
                 });
             }
@@ -76,14 +78,12 @@ public final class OkHttpUtils {
             @Override
             public void onResponse(final Call call, final Response response) throws IOException {
                 if (isCancel(call)) return;
+                final String res = response.body().string();
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        try {
-                            callback.onResponse(call, response);
-                        } catch (IOException e) {
-                            callback.onFailure(call, e);
-                        }
+                        if (isCancel(call,true)) return;
+                        callback.onResponse(res);
                     }
                 });
             }
@@ -93,29 +93,51 @@ public final class OkHttpUtils {
     private void cacheCallForCancel(Call call){
         String tag = (String) call.request().tag();
         if(tag!=null){
-            Set<Call> calls = mRunningCalls.get(tag);
-            if(calls == null){
-                calls = new HashSet<>();
+            synchronized (mRunningCalls) {
+                Set<Call> calls = mRunningCalls.get(tag);
+                if (calls == null) {
+                    calls = new HashSet<>();
+                }
+                calls.add(call);
+                mRunningCalls.put(tag, calls);
             }
-            calls.add(call);
-            mRunningCalls.put(tag,calls);
         }
     }
 
     private boolean isCancel(Call call){
+        return isCancel(call,false);
+    }
+    private boolean isCancel(Call call, boolean remove){
         String tag = (String) call.request().tag();
         if(tag==null) return false;
-        Set<Call> calls = mRunningCalls.get(tag);
-        if(calls == null) return true;
-        calls.remove(call);
-        if(calls.isEmpty()){
-            mRunningCalls.remove(tag);
+        synchronized (mRunningCalls) {
+            Set<Call> calls = mRunningCalls.get(tag);
+            if (calls == null || !calls.contains(call)) return true;
+            if(remove) {
+                calls.remove(call);
+                if (calls.isEmpty()) {
+                    mRunningCalls.remove(tag);
+                }
+            }
         }
         return false;
     }
 
     public static void cancel(String tag){
         getInstance().mRunningCalls.remove(tag);
+    }
+
+    public interface OkCallBack{
+        void onFailure(IOException e);
+        void onResponse(String res);
+    }
+    public static class SimpleOkCallBack implements OkCallBack{
+        @Override
+        public void onFailure(IOException e) {
+        }
+        @Override
+        public void onResponse(String res) {
+        }
     }
 
 }

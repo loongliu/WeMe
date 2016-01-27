@@ -1,20 +1,31 @@
 package space.weme.remix.util;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import space.weme.remix.APP;
 
 /**
  * Created by Liujilong on 16/1/22.
  * liujilong.me@gmail.com
  */
 public final class StrUtils {
+
     private StrUtils(){}
+
 
 
     /** ####################### URLs ############################### **/
     private static final String BASE_URL = "http://218.244.147.240:8080/";
 
     public static final String LOGIN_URL = BASE_URL + "login";
+
+    public static final String GET_TOP_ACTIVITY_URL = BASE_URL + "activitytopofficial";
+
+    public static final String GET_ACTIVITY_INFO_URL = BASE_URL + "getactivityinformation";
 
     /** ################## SharedPreferences ####################### **/
 
@@ -23,6 +34,11 @@ public final class StrUtils {
     public static final String SP_USER_ID = SP_USER + "_id";
 
 
+
+    public static String token(){
+        SharedPreferences sp = APP.context().getSharedPreferences(SP_USER, Context.MODE_PRIVATE);
+        return sp.getString(SP_USER_TOKEN,"");
+    }
 
     public static String md5(String input){
         try{
