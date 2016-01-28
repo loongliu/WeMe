@@ -21,6 +21,7 @@
 
         <activity android:name=".ui.intro.AtyLogin" />
         <activity android:name=".ui.main.AtyMain" />
+        <activity android:name=".ui.community.AtyTopic"/>
 
 
     </application>

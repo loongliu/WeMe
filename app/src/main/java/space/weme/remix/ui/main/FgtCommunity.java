@@ -1,5 +1,6 @@
 package space.weme.remix.ui.main;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,12 +12,10 @@ import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -27,6 +26,7 @@ import space.weme.remix.R;
 import space.weme.remix.model.TopInfoWrapper;
 import space.weme.remix.model.Topic;
 import space.weme.remix.ui.base.BaseFragment;
+import space.weme.remix.ui.community.AtyTopic;
 import space.weme.remix.util.DimensionUtils;
 import space.weme.remix.util.LogUtils;
 import space.weme.remix.util.OkHttpUtils;
@@ -45,6 +45,8 @@ public class FgtCommunity extends BaseFragment {
     ViewPager mVpTop;
     PageIndicator mIndicator;
     TopPageAdapter mTopAdapter;
+
+    View.OnClickListener mClickListener;
 
     public static FgtCommunity newInstance() {
         Bundle args = new Bundle();
@@ -67,14 +69,16 @@ public class FgtCommunity extends BaseFragment {
         mTopAdapter = new TopPageAdapter(getActivity());
         mVpTop.setAdapter(mTopAdapter);
         firePost();
-        LogUtils.d(TAG, "OnCreateView");
 
-        mIndicator.setOnClickListener(new View.OnClickListener() {
+        mClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LogUtils.d(TAG,mGridLayout.getWidth()+"");
+                Intent i = new Intent(getActivity(), AtyTopic.class);
+                i.putExtra(AtyTopic.TOPIC_ID,(String)v.getTag());
+                startActivity(i);
             }
-        });
+        };
+
 
         return rootView;
     }
@@ -87,17 +91,8 @@ public class FgtCommunity extends BaseFragment {
             @Override
             public void onResponse(String s) {
                 //LogUtils.i(TAG, s);
-                JSONObject j;
-                try {
-                    j = new JSONObject(s);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getActivity(), R.string.network_error, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                String state = j.optString("state");
-                if (!state.equals("successful")) {
-                    Toast.makeText(getActivity(), j.optString("reason"), Toast.LENGTH_SHORT).show();
+                JSONObject j = OkHttpUtils.parseJSON(getActivity(),s);
+                if(j==null){
                     return;
                 }
                 JSONArray array = j.optJSONArray("result");
@@ -117,17 +112,8 @@ public class FgtCommunity extends BaseFragment {
             @Override
             public void onResponse(String s) {
                 LogUtils.i(TAG, s);
-                JSONObject j;
-                try {
-                    j = new JSONObject(s);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getActivity(), R.string.network_error, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                String state = j.optString("state");
-                if (!state.equals("successful")) {
-                    Toast.makeText(getActivity(), j.optString("reason"), Toast.LENGTH_SHORT).show();
+                JSONObject j = OkHttpUtils.parseJSON(getActivity(),s);
+                if(j==null) {
                     return;
                 }
                 JSONArray array = j.optJSONArray("result");
@@ -162,7 +148,7 @@ public class FgtCommunity extends BaseFragment {
             ivParams.height = ivParams.width/2;
             ivImage.setLayoutParams(ivParams);
             convertView.setTag(topic.id);
-
+            convertView.setOnClickListener(mClickListener);
             grid.addView(convertView,params);
         }
     }

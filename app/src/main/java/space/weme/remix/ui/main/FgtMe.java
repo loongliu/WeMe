@@ -8,12 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.drawee.generic.RoundingParams;
 import com.facebook.drawee.view.SimpleDraweeView;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import space.weme.remix.R;
@@ -78,17 +76,8 @@ public class FgtMe extends BaseFragment {
             @Override
             public void onResponse(String s) {
                 LogUtils.i(TAG,s);
-                JSONObject j;
-                try {
-                    j = new JSONObject(s);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getActivity(), R.string.network_error, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                String state = j.optString("state");
-                if (!state.equals("successful")) {
-                    Toast.makeText(getActivity(), j.optString("reason"), Toast.LENGTH_SHORT).show();
+                JSONObject j = OkHttpUtils.parseJSON(getActivity(), s);
+                if(j==null){
                     return;
                 }
                 String number = j.optString("number");
@@ -121,19 +110,10 @@ public class FgtMe extends BaseFragment {
         param.put("token",StrUtils.token());
         OkHttpUtils.post(StrUtils.GET_PERSON_INFO,param,TAG,new OkHttpUtils.SimpleOkCallBack(){
             @Override
-            public void onResponse(String res) {
+            public void onResponse(String s) {
                 //LogUtils.i(TAG,res);
-                JSONObject j;
-                try {
-                    j = new JSONObject(res);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getActivity(), R.string.network_error, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                String state = j.optString("state");
-                if (!state.equals("successful")) {
-                    Toast.makeText(getActivity(), j.optString("reason"), Toast.LENGTH_SHORT).show();
+                JSONObject j = OkHttpUtils.parseJSON(getActivity(), s);
+                if(j == null){
                     return;
                 }
                 User me = User.fromJSON(j);

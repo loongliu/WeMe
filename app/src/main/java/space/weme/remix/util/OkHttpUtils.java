@@ -1,9 +1,12 @@
 package space.weme.remix.util;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.util.ArrayMap;
+import android.widget.Toast;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -18,6 +21,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import space.weme.remix.R;
 
 /**
  * Created by Liujilong on 16/1/22.
@@ -153,6 +157,23 @@ public final class OkHttpUtils {
         @Override
         public void onResponse(String res) {
         }
+    }
+
+    public static JSONObject parseJSON(Context context, String s){
+        JSONObject j;
+        try {
+            j = new JSONObject(s);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(context, R.string.network_error, Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        String state = j.optString("state");
+        if (!state.equals("successful")) {
+            Toast.makeText(context, j.optString("reason"), Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        return j;
     }
 
 }

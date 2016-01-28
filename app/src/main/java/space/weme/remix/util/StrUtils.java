@@ -31,11 +31,15 @@ public final class StrUtils {
 
     public static final String TOP_BROAD_URL = BASE_URL + "topofficial";
 
-    public static final String GET_TOPIC_LIST = BASE_URL + "gettopiclist";
-
     public static final String GET_PERSON_INFO = BASE_URL + "getprofile";
 
     public static final String GET_UNREAD_MESSAGE_URL = BASE_URL + "getmessageunreadnumber";
+
+    public static final String GET_TOPIC_LIST = BASE_URL + "gettopiclist";
+
+    public static final String GET_TOPIC_INFO = BASE_URL + "gettopicslogan";
+
+    public static final String GET_POST_LIST = BASE_URL + "getpostlist";
 
     public static final String GET_AVATAR = BASE_URL_NGINX + "avatar/";
 

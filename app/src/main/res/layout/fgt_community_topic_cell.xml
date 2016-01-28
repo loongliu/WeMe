@@ -6,14 +6,14 @@
     android:layout_height="wrap_content">
     <com.facebook.drawee.view.SimpleDraweeView
         fresco:actualImageScaleType="centerCrop"
-        fresco:roundedCornerRadius="2dp"
+        fresco:roundedCornerRadius="3dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:id="@+id/community_topic_cell_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <TextView
-        android:textSize="12sp"
+        android:textSize="8sp"
         android:textColor="#ef4991"
         android:background="@drawable/bg_community_text"
         android:layout_marginRight="4dp"
@@ -33,7 +33,6 @@
         android:layout_height="wrap_content" />
     <TextView
         android:layout_centerHorizontal="true"
-        android:text="1"
         android:layout_marginTop="4dp"
         android:layout_below="@id/community_topic_cell_image"
         android:id="@+id/community_topic_cell_theme"
@@ -43,7 +42,6 @@
     <TextView
         android:textColor="#b1b1b1"
         android:layout_centerHorizontal="true"
-        android:text="2"
         android:lines="1"
         android:layout_marginTop="4dp"
         android:layout_below="@id/community_topic_cell_theme"
