@@ -25,6 +25,8 @@ import okhttp3.Response;
  */
 public final class OkHttpUtils {
 
+    private static final String TAG = "OkHttpUtils";
+
     // reserve all the running calls for cancel.
     private final ArrayMap<String,Set<Call>> mRunningCalls;
 
@@ -69,7 +71,7 @@ public final class OkHttpUtils {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (isCancel(call,true)) return;
+                        if (isCancel(call, true)) return;
                         callback.onFailure(e);
                     }
                 });
@@ -82,7 +84,7 @@ public final class OkHttpUtils {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (isCancel(call,true)) return;
+                        if (isCancel(call, true)) return;
                         callback.onResponse(s);
                     }
                 });
@@ -94,14 +96,23 @@ public final class OkHttpUtils {
         String tag = (String) call.request().tag();
         if(tag!=null){
             synchronized (mRunningCalls) {
+                LogUtils.d(TAG,"start caching Call: " + printCall(call) + " \ncurrent running calls: "+printRunningCalls());
                 Set<Call> calls = mRunningCalls.get(tag);
                 if (calls == null) {
                     calls = new HashSet<>();
                 }
                 calls.add(call);
                 mRunningCalls.put(tag, calls);
+                LogUtils.d(TAG,"finish caching Call: " + printCall(call) + " \ncurrent running calls: "+printRunningCalls());
             }
         }
+    }
+
+    private static String printRunningCalls(){
+        return "\n"+getInstance().mRunningCalls.toString();
+    }
+    private String printCall(Call call){
+        return "call: " + call.toString() + " with tag " + call.request().tag();
     }
 
     private boolean isCancel(Call call){
@@ -111,12 +122,14 @@ public final class OkHttpUtils {
         String tag = (String) call.request().tag();
         if(tag==null) return false;
         synchronized (mRunningCalls) {
+            LogUtils.d(TAG,"start remove Call: " + printCall(call) + " \ncurrent running calls: "+printRunningCalls());
             Set<Call> calls = mRunningCalls.get(tag);
             if (calls == null || !calls.contains(call)) return true;
             if(remove) {
                 calls.remove(call);
                 if (calls.isEmpty()) {
                     mRunningCalls.remove(tag);
+                    LogUtils.d(TAG, "finish remove Call: " + printCall(call) + " \ncurrent running calls: " + printRunningCalls());
                 }
             }
         }
@@ -124,7 +137,9 @@ public final class OkHttpUtils {
     }
 
     public static void cancel(String tag){
+        LogUtils.d(TAG,"start remove Calls with tag: " + tag + " \ncurrent running calls: "+printRunningCalls());
         getInstance().mRunningCalls.remove(tag);
+        LogUtils.d(TAG, "finish remove Calls with tag: " + tag + " \ncurrent running calls: " + printRunningCalls());
     }
 
     public interface OkCallBack{

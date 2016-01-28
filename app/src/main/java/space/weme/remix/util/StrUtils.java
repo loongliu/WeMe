@@ -33,6 +33,10 @@ public final class StrUtils {
 
     public static final String GET_TOPIC_LIST = BASE_URL + "gettopiclist";
 
+    public static final String GET_PERSON_INFO = BASE_URL + "getprofile";
+
+    public static final String GET_UNREAD_MESSAGE_URL = BASE_URL + "getmessageunreadnumber";
+
     public static final String GET_AVATAR = BASE_URL_NGINX + "avatar/";
 
     public static String thumForID(String id){
@@ -51,6 +55,11 @@ public final class StrUtils {
     public static String token(){
         SharedPreferences sp = APP.context().getSharedPreferences(SP_USER, Context.MODE_PRIVATE);
         return sp.getString(SP_USER_TOKEN,"");
+    }
+
+    public static String id(){
+        SharedPreferences sp = APP.context().getSharedPreferences(SP_USER, Context.MODE_PRIVATE);
+        return sp.getString(SP_USER_ID,"");
     }
 
     public static String md5(String input){
