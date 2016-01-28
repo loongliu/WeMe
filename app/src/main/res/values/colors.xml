@@ -16,4 +16,5 @@
 
 
     <color name="white">#ffffffff</color>
+    <color name="grey_gap">#e0e0e0</color>
 </resources>

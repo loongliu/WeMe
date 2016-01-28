@@ -9,4 +9,10 @@
     <string name="community">社区</string>
     <string name="me">我</string>
     <string name="network_error">网络异常</string>
+    <string name="friend">好友</string>
+    <string name="message">私信</string>
+    <string name="location">附近</string>
+    <string name="discovery">发现</string>
+    <string name="food">美食</string>
+    <string name="setting">设置</string>
 </resources>
