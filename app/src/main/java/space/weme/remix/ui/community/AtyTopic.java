@@ -1,13 +1,20 @@
 package space.weme.remix.ui.community;
 
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
+
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,6 +26,7 @@ import space.weme.remix.R;
 import space.weme.remix.model.Post;
 import space.weme.remix.model.Topic;
 import space.weme.remix.ui.base.BaseActivity;
+import space.weme.remix.util.DimensionUtils;
 import space.weme.remix.util.LogUtils;
 import space.weme.remix.util.OkHttpUtils;
 import space.weme.remix.util.StrUtils;
@@ -41,11 +49,26 @@ public class AtyTopic extends BaseActivity {
 
     private TopicAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private SimpleDraweeView mImage;
+    private TextView mTvSlogan;
+    private Toolbar mToolbar;
+    private TextView mTvTheme;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.aty_topic);
+
+        AppBarLayout mBarLayout = (AppBarLayout) findViewById(R.id.appbar);
+        int width = DimensionUtils.getDisplay().widthPixels;
+        CoordinatorLayout.LayoutParams params = new CoordinatorLayout.LayoutParams(width,width/2);
+        mBarLayout.setLayoutParams(params);
+
+        mImage = (SimpleDraweeView) findViewById(R.id.aty_topic_title_image);
+        mTvSlogan = (TextView) findViewById(R.id.aty_topic_title_slogan);
+        //mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mTvTheme = (TextView) findViewById(R.id.aty_topic_theme);
+
         mTopicId = getIntent().getStringExtra(TOPIC_ID);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -87,7 +110,7 @@ public class AtyTopic extends BaseActivity {
                 if (isRefreshing) {
                     Log.d(TAG, "ignore manually update!");
                 } else {
-                    loadAll();
+                    loadPage(1,true);
                 }
             }
         });
@@ -108,8 +131,9 @@ public class AtyTopic extends BaseActivity {
                 }
                 JSONObject object = j.optJSONObject("result");
                 mTopic = Topic.fromJson(object);
-                mAdapter.setTopic(mTopic);
-                mAdapter.notifyItemChanged(0);
+                mImage.setImageURI(Uri.parse(mTopic.imageurl));
+                mTvSlogan.setText(mTopic.slogan);
+                mTvTheme.setText(mTopic.theme);
             }
         });
         loadPage(1, true);
@@ -122,7 +146,7 @@ public class AtyTopic extends BaseActivity {
         }else{
             isLoading = true;
             mPostList.add(null);
-            mAdapter.notifyItemInserted(mPostList.size() -1);
+            mAdapter.notifyItemInserted(mPostList.size());
         }
     }
     private void afterLoadPage(boolean replace){
@@ -177,7 +201,12 @@ public class AtyTopic extends BaseActivity {
                 for(int i = 0; i<result.length(); i++){
                     mPostList.add(Post.fromJSON(result.optJSONObject(i)));
                 }
-                mAdapter.notifyItemRangeInserted(previousCount, size);
+                mAdapter.setPostList(mPostList);
+                if(replace){
+                    mAdapter.notifyDataSetChanged();
+                }else {
+                    mAdapter.notifyItemRangeInserted(previousCount, size);
+                }
             }
         });
     }

@@ -18,4 +18,6 @@
     <color name="white">#ffffffff</color>
     <color name="grey_gap">#e0e0e0</color>
     <color name="red">#ff0000</color>
+    <color name="shadow_white">#ff717171</color>
+    <color name="black">#000000</color>
 </resources>
