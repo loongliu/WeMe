@@ -17,4 +17,13 @@
     <string name="setting">设置</string>
     <string name="more_than_99">99+</string>
     <string name="loading">正在加载</string>
+    <string name="today_visit">今日访问</string>
+    <string name="total_visit">总访问</string>
+    <string name="basic_info">基本信息</string>
+    <string name="name">姓名</string>
+    <string name="year">年龄</string>
+    <string name="school_info">学校信息</string>
+    <string name="school">学校</string>
+    <string name="education">学历</string>
+    <string name="major">专业</string>
 </resources>

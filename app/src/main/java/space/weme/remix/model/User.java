@@ -24,6 +24,7 @@ public class User {
     public String hometown;
     public String lookcount;
     public String weme;
+    public String constellation;
 
     public static User fromJSON(JSONObject j){
         User user = new User();
@@ -44,6 +45,7 @@ public class User {
         user.username = j.optString("username");
         user.wechat = j.optString("wechat");
         user.weme = j.optString("weme");
+        user.constellation = j.optString("constellation");
         return user;
     }
 }

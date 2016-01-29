@@ -1,5 +1,6 @@
 package space.weme.remix.ui.main;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,6 +18,7 @@ import org.json.JSONObject;
 import space.weme.remix.R;
 import space.weme.remix.model.User;
 import space.weme.remix.ui.base.BaseFragment;
+import space.weme.remix.ui.user.AtyInfo;
 import space.weme.remix.util.LogUtils;
 import space.weme.remix.util.OkHttpUtils;
 import space.weme.remix.util.StrUtils;
@@ -111,7 +113,7 @@ public class FgtMe extends BaseFragment {
         OkHttpUtils.post(StrUtils.GET_PERSON_INFO,param,TAG,new OkHttpUtils.SimpleOkCallBack(){
             @Override
             public void onResponse(String s) {
-                //LogUtils.i(TAG,res);
+                LogUtils.i(TAG,s);
                 JSONObject j = OkHttpUtils.parseJSON(getActivity(), s);
                 if(j == null){
                     return;
@@ -131,7 +133,9 @@ public class FgtMe extends BaseFragment {
             public void onClick(View v) {
                 switch (v.getId()){
                     case R.id.fgt_me_me:
-                        LogUtils.i(TAG,"me");
+                        Intent i = new Intent(getActivity(), AtyInfo.class);
+                        i.putExtra(AtyInfo.ID_INTENT,StrUtils.id());
+                        getActivity().startActivity(i);
                         break;
                     case R.id.fgt_me_friend:
                         LogUtils.i(TAG,"friend");

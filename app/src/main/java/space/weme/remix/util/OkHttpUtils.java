@@ -155,7 +155,7 @@ public final class OkHttpUtils {
         public void onFailure(IOException e) {
         }
         @Override
-        public void onResponse(String res) {
+        public void onResponse(String s) {
         }
     }
 

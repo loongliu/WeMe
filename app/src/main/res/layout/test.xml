@@ -1,0 +1,57 @@
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/aty_info_background"
+        app:actualImageScaleType="centerCrop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <com.facebook.drawee.view.SimpleDraweeView
+        app:roundingBorderWidth="2dp"
+        app:roundingBorderColor="@color/white"
+        android:id="@+id/aty_info_avatar"
+        android:layout_centerInParent="true"
+        app:roundAsCircle="true"
+        app:placeholderImage="@mipmap/default_avatar"
+        android:layout_width="80dp"
+        android:layout_height="80dp" />
+    <TextView
+        android:id="@+id/aty_info_visit"
+        android:shadowColor="@color/shadow_white"
+        android:shadowDx="5"
+        android:shadowDy="-5"
+        android:shadowRadius="5"
+        android:textSize="14sp"
+        android:textColor="@color/white"
+        android:layout_marginTop="8dp"
+        android:layout_below="@+id/aty_info_avatar"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_marginTop="8dp"
+        android:layout_below="@id/aty_info_visit"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/aty_info_constellation"
+            android:shadowColor="@color/shadow_white"
+            android:shadowDx="5"
+            android:shadowDy="-5"
+            android:shadowRadius="5"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/aty_info_gender"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_gravity="center_vertical"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+    </LinearLayout>
+</RelativeLayout>

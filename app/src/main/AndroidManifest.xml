@@ -23,6 +23,7 @@
         <activity android:name=".ui.main.AtyMain" />
         <activity android:name=".ui.community.AtyTopic"/>
         <activity android:name=".ui.AtyImage"/>
+        <activity android:name=".ui.user.AtyInfo" />
 
 
     </application>

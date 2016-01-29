@@ -8,14 +8,13 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import space.weme.remix.util.DimensionUtils;
-import space.weme.remix.util.LogUtils;
 
 /**
  * Created by Liujilong on 16/1/27.
  * liujilong.me@gmail.com
  */
 public class PageIndicator extends View implements ViewPager.OnPageChangeListener{
-
+    @SuppressWarnings("unused")
     private final static String TAG = "PageIndicator";
     private ViewPager mViewPager;
     private int mRadius;
@@ -75,14 +74,11 @@ public class PageIndicator extends View implements ViewPager.OnPageChangeListene
 
     @Override
     protected void onDraw(Canvas canvas) {
-        LogUtils.d(TAG,"start OnDraw()");
         if(mViewPager==null){
-            LogUtils.d(TAG,"no view Pager, stop onDraw()");
             return;
         }
         final int count = mViewPager.getAdapter().getCount();
         if(count == 0){
-            LogUtils.d(TAG,"count = 0, stop onDraw()");
             return;
         }
         int leftPadding = getPaddingLeft();
@@ -90,14 +86,12 @@ public class PageIndicator extends View implements ViewPager.OnPageChangeListene
         for(int i = 0; i<count; i++){
             float dx = leftPadding + i*3*mRadius + mRadius;
             float dy = topPadding + mRadius;
-            LogUtils.d(TAG,"start draw, info: width = "+ getWidth()+", height = " + getHeight() +",dx = "+dx+",dy = "+dy);
             if(i == mCurrentPage){
                 canvas.drawCircle(dx, dy, mRadius, mPaintFill);
             }else {
                 canvas.drawCircle(dx, dy, mRadius-mStrokeWidth/2, mPaintStroke);
             }
         }
-        LogUtils.d(TAG,"draw success, stop onDraw()");
     }
 
     @Override

@@ -9,7 +9,6 @@ import android.support.v4.util.ArrayMap;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -51,7 +50,6 @@ public class AtyTopic extends BaseActivity {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private SimpleDraweeView mImage;
     private TextView mTvSlogan;
-    private Toolbar mToolbar;
     private TextView mTvTheme;
 
     @Override
@@ -66,7 +64,6 @@ public class AtyTopic extends BaseActivity {
 
         mImage = (SimpleDraweeView) findViewById(R.id.aty_topic_title_image);
         mTvSlogan = (TextView) findViewById(R.id.aty_topic_title_slogan);
-        //mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mTvTheme = (TextView) findViewById(R.id.aty_topic_theme);
 
         mTopicId = getIntent().getStringExtra(TOPIC_ID);

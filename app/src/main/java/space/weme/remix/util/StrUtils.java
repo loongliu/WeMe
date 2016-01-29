@@ -41,11 +41,21 @@ public final class StrUtils {
 
     public static final String GET_POST_LIST = BASE_URL + "getpostlist";
 
+    public static final String GET_VISIT_INFO = BASE_URL + "visitinfo";
+
+    public static final String GET_PROFILE_BY_ID = BASE_URL + "getprofilebyid";
+
+
+
     public static final String GET_AVATAR = BASE_URL_NGINX + "avatar/";
+
+    public static final String GET_BACKGROUND = BASE_URL_NGINX + "background/";
 
     public static String thumForID(String id){
         return GET_AVATAR + id + "_thumbnail.jpg";
     }
+
+    public static String backgroundForID(String id){return GET_BACKGROUND + id;}
 
 
     /** ################## SharedPreferences ####################### **/

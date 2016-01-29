@@ -18,6 +18,7 @@ import java.util.List;
 import space.weme.remix.R;
 import space.weme.remix.model.Post;
 import space.weme.remix.ui.AtyImage;
+import space.weme.remix.ui.user.AtyInfo;
 import space.weme.remix.util.StrUtils;
 import space.weme.remix.widgt.GridLayout;
 
@@ -41,7 +42,9 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             @Override
             public void onClick(View v) {
                 String userId = (String) v.getTag();
-                // TODO goto user home page
+                Intent i = new Intent(mContext,AtyInfo.class);
+                i.putExtra(AtyInfo.ID_INTENT,userId);
+                mContext.startActivity(i);
             }
         };
         mImageListener = new View.OnClickListener(){
