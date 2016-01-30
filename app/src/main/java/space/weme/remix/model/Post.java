@@ -25,6 +25,8 @@ public class Post {
 
 
     public ArrayList<Integer> likeusers;
+
+    // whether current user has liked this post
     public String flag;
 
     private Post(){}
@@ -50,6 +52,15 @@ public class Post {
         post.thumbnailUrl = new ArrayList<>();
         for(int i = 0; i<array.length(); i++){
             post.thumbnailUrl.add(array.optString(i));
+        }
+
+        post.flag = j.optString("flag");
+        array = j.optJSONArray("likeusers");
+        if(array!=null) {
+            post.likeusers = new ArrayList<>();
+            for (int i = 0; i < array.length(); i++) {
+                post.likeusers.add(array.optInt(i));
+            }
         }
         return post;
     }

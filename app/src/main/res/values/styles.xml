@@ -6,5 +6,9 @@
         <item name="colorPrimary">@color/colorPrimary</item>
     </style>
 
+    <style name="AppTheme.Translucent">
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
 
 </resources>

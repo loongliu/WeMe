@@ -21,10 +21,11 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import space.weme.remix.R;
 import space.weme.remix.model.Post;
 import space.weme.remix.model.Topic;
-import space.weme.remix.ui.base.BaseActivity;
+import space.weme.remix.ui.base.SwipeActivity;
 import space.weme.remix.util.DimensionUtils;
 import space.weme.remix.util.LogUtils;
 import space.weme.remix.util.OkHttpUtils;
@@ -34,7 +35,7 @@ import space.weme.remix.util.StrUtils;
  * Created by Liujilong on 2016/1/28.
  * liujilong.me@gmail.com
  */
-public class AtyTopic extends BaseActivity {
+public class AtyTopic extends SwipeActivity {
     private static final String TAG = "AtyTopic";
     public static final String TOPIC_ID = "topic_id";
 
@@ -56,6 +57,10 @@ public class AtyTopic extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.aty_topic);
+
+        SwipeBackLayout mSwipeBackLayout = getSwipeBackLayout();
+        mSwipeBackLayout.setEdgeSize(DimensionUtils.getDisplay().widthPixels / 2);
+        mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
 
         AppBarLayout mBarLayout = (AppBarLayout) findViewById(R.id.appbar);
         int width = DimensionUtils.getDisplay().widthPixels;
@@ -131,6 +136,7 @@ public class AtyTopic extends BaseActivity {
                 mImage.setImageURI(Uri.parse(mTopic.imageurl));
                 mTvSlogan.setText(mTopic.slogan);
                 mTvTheme.setText(mTopic.theme);
+                mAdapter.setTopic(mTopic);
             }
         });
         loadPage(1, true);

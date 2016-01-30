@@ -17,6 +17,7 @@ import java.util.List;
 
 import space.weme.remix.R;
 import space.weme.remix.model.Post;
+import space.weme.remix.model.Topic;
 import space.weme.remix.ui.AtyImage;
 import space.weme.remix.ui.user.AtyInfo;
 import space.weme.remix.util.StrUtils;
@@ -29,38 +30,51 @@ import space.weme.remix.widgt.GridLayout;
 public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
     private Context mContext;
     private List<Post> mPostList;
+    private Topic mTopic;
 
     private final int TYPE_ITEM = 0x2;
     private final int TYPE_PROGRESS = 0x3;
 
-    private View.OnClickListener mAvatarListener, mImageListener;
+    private View.OnClickListener mListener;
+
+    private static final int imageID = StrUtils.generateViewId();
+    private static final int itemID = StrUtils.generateViewId();
 
 
-    public TopicAdapter(Context context){
+    TopicAdapter(Context context){
         mContext = context;
-        mAvatarListener = new View.OnClickListener() {
+        mListener = new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                String userId = (String) v.getTag();
-                Intent i = new Intent(mContext,AtyInfo.class);
-                i.putExtra(AtyInfo.ID_INTENT,userId);
-                mContext.startActivity(i);
-            }
-        };
-        mImageListener = new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                String url = (String) v.getTag();
-                Intent i = new Intent(mContext, AtyImage.class);
-                i.putExtra(AtyImage.URL_INTENT, url);
-                mContext.startActivity(i);
-                ((Activity)mContext).overridePendingTransition(0, 0);
+                if(v.getId()==R.id.aty_topic_item_avatar){
+                    String userId = (String) v.getTag();
+                    Intent i = new Intent(mContext,AtyInfo.class);
+                    i.putExtra(AtyInfo.ID_INTENT,userId);
+                    mContext.startActivity(i);
+                }else if(v.getId()==imageID){
+                    String url = (String) v.getTag();
+                    Intent i = new Intent(mContext, AtyImage.class);
+                    i.putExtra(AtyImage.URL_INTENT, url);
+                    mContext.startActivity(i);
+                    ((Activity)mContext).overridePendingTransition(0, 0);
+                }else if(v.getId()==itemID){
+                    Post post = (Post) v.getTag();
+                    Intent i = new Intent(mContext,AtyPost.class);
+                    i.putExtra(AtyPost.POST_INTENT, post.postId);
+                    i.putExtra(AtyPost.THEME_INTENT,mTopic==null?"":mTopic.theme);
+                    mContext.startActivity(i);
+                }
+
             }
         };
     }
 
-    public void setPostList(List<Post> postList){
+    void setPostList(List<Post> postList){
         mPostList = postList;
+    }
+
+    void setTopic(Topic topic){
+        mTopic = topic;
     }
 
 
@@ -84,7 +98,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             Post post = mPostList.get(position);
             item.avatar.setImageURI(Uri.parse(StrUtils.thumForID(post.userId)));
             item.avatar.setTag(post.userId);
-            item.avatar.setOnClickListener(mAvatarListener);
+            item.avatar.setOnClickListener(mListener);
             item.userName.setText(post.name);
             item.university.setText(post.school);
             item.time.setText(post.timestamp);
@@ -99,10 +113,11 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 item.grid.addView(image);
                 image.setImageURI(Uri.parse(url));
                 image.setTag(post.imageUrl.get(i));
-                image.setOnClickListener(mImageListener);
+                image.setId(imageID);
+                image.setOnClickListener(mListener);
             }
-            item.itemView.setTag(post.postId);
-            // todo post click listener;
+            item.itemView.setTag(post);
+            item.itemView.setOnClickListener(mListener);
         }else if(holder instanceof ProgressViewHolder){
             ProgressViewHolder progress = (ProgressViewHolder) holder;
             progress.progressBar.setIndeterminate(true);
@@ -136,6 +151,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         GridLayout grid;
         public ItemViewHolder(View itemView) {
             super(itemView);
+            itemView.setId(itemID);
             avatar = (SimpleDraweeView) itemView.findViewById(R.id.aty_topic_item_avatar);
             userName = (TextView) itemView.findViewById(R.id.aty_topic_item_name);
             university = (TextView) itemView.findViewById(R.id.aty_topic_item_university);

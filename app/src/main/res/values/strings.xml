@@ -26,4 +26,28 @@
     <string name="school">学校</string>
     <string name="education">学历</string>
     <string name="major">专业</string>
+    <string name="home_info">家乡信息</string>
+    <string name="home">家乡</string>
+    <string name="contact_info">联系方式</string>
+    <string name="QQ">QQ</string>
+    <string name="wechat">微信</string>
+    <string name="larger_than_you">比你大</string>
+    <string name="the_same_birth">同一天生日</string>
+    <string name="smaller_than_you">比你小</string>
+    <string name="he">他</string>
+    <string name="her">她</string>
+    <string name="has_follow_he">已关注他，取消关注</string>
+    <string name="has_follow_she">已关注她，取消关注</string>
+    <string name="he_has_follow_you">他已关注你，去关注他吧</string>
+    <string name="she_has_follow_you">她已关注你，去关注她吧</string>
+    <string name="has_follow_each_other">已互相关注，点击取消关注</string>
+    <string name="add_follow">添加关注</string>
+
+
+
+    <string-array name="aty_info_tabs">
+        <item >个人资料</item>
+        <item >时间轴</item>
+        <item >图集</item>
+    </string-array>
 </resources>
