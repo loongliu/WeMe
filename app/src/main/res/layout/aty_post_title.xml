@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        app:placeholderImage="@mipmap/default_avatar"
+        app:placeholderImageScaleType="fitCenter"
+        android:id="@+id/aty_post_title_avatar"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        app:roundAsCircle="true" />
+
+    <TextView
+        android:textColor="@color/black"
+        android:id="@+id/aty_post_title_user"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/aty_post_title_avatar"
+        android:layout_toRightOf="@+id/aty_post_title_avatar"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/aty_post_title_university"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/aty_post_title_user"
+        android:layout_toEndOf="@+id/aty_post_title_avatar"
+        android:layout_toRightOf="@+id/aty_post_title_avatar"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/aty_post_title_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/aty_post_title_user"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/aty_post_title_title"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/aty_post_title_time"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/aty_post_title_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/aty_post_title_title"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <space.weme.remix.widgt.GridLayout
+        android:id="@+id/aty_post_title_image"
+        android:layout_below="@id/aty_post_title_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+    <LinearLayout
+        android:id="@+id/aty_post_title_reply_count"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/aty_post_title_image"
+        android:orientation="horizontal"
+        android:padding="4dp">
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginStart="4dp"
+            android:src="@mipmap/reply" />
+
+        <TextView
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:id="@+id/aty_post_title_reply_number"
+            android:layout_width="wrap_content"
+            android:layout_height="16dp"
+            android:paddingEnd="4dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:paddingStart="4dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/aty_post_title_like_count"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_below="@id/aty_post_title_image"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_toLeftOf="@id/aty_post_title_reply_count"
+        android:layout_toStartOf="@id/aty_post_title_reply_count"
+        android:orientation="horizontal"
+        android:padding="4dp">
+
+        <ImageView
+            android:id="@+id/aty_post_title_like_image"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginStart="4dp"
+            android:src="@mipmap/like_on" />
+
+        <TextView
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:id="@+id/aty_post_title_like_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="8sp"
+            android:paddingEnd="4dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:paddingStart="4dp"/>
+    </LinearLayout>
+
+    <HorizontalScrollView
+        android:id="@+id/aty_post_title_like_people_wrapper"
+        android:layout_marginTop="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/aty_post_title_like_count">
+
+        <LinearLayout
+            android:id="@+id/aty_post_title_like_people"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" />
+    </HorizontalScrollView>
+
+    <View
+        android:layout_marginTop="4dp"
+        android:layout_below="@id/aty_post_title_like_people_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_gap"/>
+</RelativeLayout>

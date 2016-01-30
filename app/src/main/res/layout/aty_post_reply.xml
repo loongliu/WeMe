@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fafafa"
+    android:padding="16dp">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        app:placeholderImage="@mipmap/default_avatar"
+        android:id="@+id/aty_post_reply_avatar"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        app:roundAsCircle="true" />
+
+    <TextView
+        android:textColor="@color/black"
+        android:id="@+id/aty_post_reply_name"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/aty_post_reply_avatar"
+        android:layout_toRightOf="@+id/aty_post_reply_avatar"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/aty_post_reply_university"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/aty_post_reply_name"
+        android:layout_toEndOf="@+id/aty_post_reply_avatar"
+        android:layout_toRightOf="@+id/aty_post_reply_avatar"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/aty_post_reply_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/aty_post_reply_name"
+        android:textSize="12sp" />
+
+    <TextView
+        android:layout_toEndOf="@id/aty_post_reply_avatar"
+        android:layout_toRightOf="@id/aty_post_reply_avatar"
+        android:id="@+id/aty_post_reply_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:layout_below="@id/aty_post_reply_time" />
+
+    <space.weme.remix.widgt.GridLayout
+        android:id="@+id/aty_post_reply_images"
+        android:layout_marginTop="4dp"
+        android:layout_below="@id/aty_post_reply_content"
+        android:layout_toEndOf="@id/aty_post_reply_avatar"
+        android:layout_toRightOf="@id/aty_post_reply_avatar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:layout_below="@id/aty_post_reply_images"
+        android:layout_toEndOf="@id/aty_post_reply_avatar"
+        android:layout_toRightOf="@id/aty_post_reply_avatar"
+        android:layout_marginTop="4dp"
+        android:padding="4dp"
+        android:background="@color/grey_gap"
+        android:id="@+id/aty_post_reply_reply_list"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/aty_post_reply_commit_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:orientation="horizontal"
+        android:padding="4dp"
+        android:layout_below="@id/aty_post_reply_reply_list">
+
+        <ImageView
+            android:id="@+id/aty_post_reply_commit_image"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginStart="4dp"
+            android:src="@mipmap/reply" />
+
+        <TextView
+            android:gravity="center"
+            android:id="@+id/aty_post_reply_comment_number"
+            android:layout_width="wrap_content"
+            android:layout_height="16dp"
+            android:paddingEnd="4dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:paddingStart="4dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/aty_post_reply_like_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_toLeftOf="@id/aty_post_reply_commit_layout"
+        android:layout_toStartOf="@id/aty_post_reply_commit_layout"
+        android:orientation="horizontal"
+        android:padding="4dp"
+        android:layout_below="@id/aty_post_reply_reply_list">
+
+        <ImageView
+            android:id="@+id/aty_post_reply_like_image"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginStart="4dp"
+            android:src="@mipmap/like_on" />
+
+        <TextView
+            android:gravity="center"
+            android:id="@+id/aty_post_reply_like_number"
+            android:layout_width="wrap_content"
+            android:layout_height="16dp"
+            android:paddingEnd="4dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:paddingStart="4dp" />
+    </LinearLayout>
+
+    <View
+        android:layout_marginTop="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_gap"
+        android:layout_below="@id/aty_post_reply_like_layout" />
+</RelativeLayout>

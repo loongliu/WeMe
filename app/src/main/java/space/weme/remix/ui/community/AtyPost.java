@@ -6,7 +6,6 @@ import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -14,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -101,7 +101,6 @@ public class AtyPost extends SwipeActivity {
         mRecyclerView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                Log.i("tag", "onTouch");
                 if(mChatView.getVisibility()==View.VISIBLE){
                     mChatView.setVisibility(View.INVISIBLE);
                     return true;
@@ -151,6 +150,14 @@ public class AtyPost extends SwipeActivity {
                 if(j == null){
                     return;
                 }
+                JSONArray array = j.optJSONArray("result");
+                if(array==null){
+                    return;
+                }
+                for(int i = 0; i<array.length(); i++){
+                    mReplyList.add(Reply.fromJSON(array.optJSONObject(i)));
+                }
+                mAdapter.notifyDataSetChanged();
             }
         });
     }

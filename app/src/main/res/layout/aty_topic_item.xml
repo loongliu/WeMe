@@ -24,10 +24,9 @@
             android:id="@+id/aty_topic_item_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
+            android:textStyle="bold"
             android:layout_toEndOf="@+id/aty_topic_item_avatar"
             android:layout_toRightOf="@+id/aty_topic_item_avatar"
-            android:text="user"
             android:textSize="16sp" />
 
         <TextView
@@ -37,7 +36,6 @@
             android:layout_below="@+id/aty_topic_item_name"
             android:layout_toEndOf="@+id/aty_topic_item_avatar"
             android:layout_toRightOf="@+id/aty_topic_item_avatar"
-            android:text="daxue"
             android:textSize="12sp" />
 
         <TextView
@@ -47,7 +45,6 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/aty_topic_item_name"
-            android:text="08:56"
             android:textSize="12sp" />
 
         <View

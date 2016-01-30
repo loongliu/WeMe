@@ -42,7 +42,7 @@
     <string name="she_has_follow_you">她已关注你，去关注她吧</string>
     <string name="has_follow_each_other">已互相关注，点击取消关注</string>
     <string name="add_follow">添加关注</string>
-
+    <string name="reply">回复</string>
 
 
     <string-array name="aty_info_tabs">
