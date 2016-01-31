@@ -1,9 +1,11 @@
 package space.weme.remix.ui.main;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.util.ArrayMap;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,7 +27,6 @@ import java.util.List;
 
 import space.weme.remix.R;
 import space.weme.remix.model.Activity;
-import space.weme.remix.model.TopInfoWrapper;
 import space.weme.remix.ui.base.BaseFragment;
 import space.weme.remix.util.DimensionUtils;
 import space.weme.remix.util.LogUtils;
@@ -44,7 +45,7 @@ public class FgtActivity extends BaseFragment {
     // views
     private SwipeRefreshLayout mSwipeLayout;
 
-    private TopPageAdapter mTopAdapter;
+    private TopAdapter mTopAdapter;
     private Adapter mRvAdapter;
 
     // data
@@ -96,7 +97,7 @@ public class FgtActivity extends BaseFragment {
 
 
 
-        mTopAdapter = new TopPageAdapter(getActivity());
+        mTopAdapter = new TopAdapter(getActivity());
         mRvAdapter = new Adapter();
         mRecyclerView.setAdapter(mRvAdapter);
         refresh();
@@ -118,9 +119,9 @@ public class FgtActivity extends BaseFragment {
                 }
                 JSONArray array = j.optJSONArray("result");
                 if (array == null) return;
-                List<TopInfoWrapper> infoList = new ArrayList<>();
+                List<TopInfo> infoList = new ArrayList<>();
                 for (int i = 0; i < array.length(); i++) {
-                    TopInfoWrapper info = TopInfoWrapper.fromJSON(array.optJSONObject(i));
+                    TopInfo info = TopInfo.fromJSON(array.optJSONObject(i));
                     infoList.add(info);
                 }
                 mTopAdapter.setInfoList(infoList);
@@ -255,6 +256,60 @@ public class FgtActivity extends BaseFragment {
                 mTvTime = (TextView) itemView.findViewById(R.id.fgt_activity_item_time);
                 mTvLocation = (TextView) itemView.findViewById(R.id.fgt_activity_item_location);
             }
+        }
+    }
+
+    private static class TopInfo{
+        public int id;
+        public String url;
+        public static TopInfo fromJSON(JSONObject j){
+            TopInfo info = new TopInfo();
+            info.id = j.optInt("activityid");
+            info.url = j.optString("imageurl");
+            return info;
+        }
+    }
+
+    private static class TopAdapter extends PagerAdapter{
+        List<TopInfo> infoList;
+        Context context;
+        View.OnClickListener mListener;
+
+        public TopAdapter(Context context){
+            this.context = context;
+        }
+
+        public void setInfoList(List<TopInfo> infoList) {
+            this.infoList = infoList;
+        }
+        public void setListener(View.OnClickListener listener){
+            mListener = listener;
+        }
+
+        @Override
+        public int getCount() {
+            return infoList==null?0:infoList.size();
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view==object;
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            SimpleDraweeView image = new SimpleDraweeView(context);
+            Uri uri = Uri.parse(infoList.get(position).url);
+            image.setImageURI(uri);
+            image.setTag(infoList.get(position).id);
+            image.setOnClickListener(mListener);
+            container.addView(image);
+            return image;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            container.removeView((View) object);
         }
     }
 
