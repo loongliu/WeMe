@@ -42,6 +42,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     Context mContext;
     AtyPost aty;
 
+
     private static final String TAG = "PostAdapter";
 
     Post mPost;
