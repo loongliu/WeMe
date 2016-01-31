@@ -54,8 +54,12 @@ public final class StrUtils {
 
     public static final String LIKE_COMMET_URL = BASE_URL + "likecomment";
 
+    public static final String PUBLISH_POST_URL = BASE_URL + "publishpost";
+
 
     public static final String GET_AVATAR = BASE_URL_NGINX + "avatar/";
+
+    public static final String UPLOAD_AVATAR_URL = BASE_URL_NGINX + "uploadavatar";
 
     public static final String GET_BACKGROUND = BASE_URL_NGINX + "background/";
 

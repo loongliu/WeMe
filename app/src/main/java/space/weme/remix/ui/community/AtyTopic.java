@@ -1,5 +1,6 @@
 package space.weme.remix.ui.community;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -39,6 +40,8 @@ public class AtyTopic extends SwipeActivity {
     private static final String TAG = "AtyTopic";
     public static final String TOPIC_ID = "topic_id";
 
+    private static final int REQUEST_NEW_POST = 0xef;
+
     private String mTopicId;
     private Topic mTopic;
     private ArrayList<Post> mPostList;
@@ -76,10 +79,9 @@ public class AtyTopic extends SwipeActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO new post
-//                Intent i = new Intent(AtyTopic.this, PostNewActivity.class);
-//                i.putExtra("topicid",mTopicId);
-//                startActivityForResult(i, REQUEST_POST);
+                Intent i = new Intent(AtyTopic.this, AtyPostNew.class);
+                i.putExtra(AtyPostNew.INTENT_ID,mTopicId);
+                startActivityForResult(i, REQUEST_NEW_POST);
             }
         });
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.aty_topic_recycler_view);
@@ -220,6 +222,11 @@ public class AtyTopic extends SwipeActivity {
         return TAG;
     }
 
-
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_NEW_POST && resultCode == RESULT_OK){
+            loadAll();
+        }
+    }
 }

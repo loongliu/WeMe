@@ -43,6 +43,11 @@
     <string name="has_follow_each_other">已互相关注，点击取消关注</string>
     <string name="add_follow">添加关注</string>
     <string name="reply">回复</string>
+    <string name="new_post">发帖</string>
+    <string name="send">发送</string>
+    <string name="please_input_title">标题</string>
+    <string name="say_something">说点什么吧</string>
+    <string name="committing">正在上传</string>
 
 
     <string-array name="aty_info_tabs">

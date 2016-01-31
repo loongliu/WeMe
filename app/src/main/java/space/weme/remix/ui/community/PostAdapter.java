@@ -190,7 +190,6 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        // TODO multi item type
         if(position==0){
             return VIEW_TITLE;
         }else if(mReplyList.get(position-1)!=null){

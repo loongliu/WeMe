@@ -1,5 +1,7 @@
 package space.weme.remix.ui.base;
 
+import com.umeng.analytics.MobclickAgent;
+
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 import space.weme.remix.util.OkHttpUtils;
 
@@ -18,5 +20,16 @@ public abstract class SwipeActivity extends SwipeBackActivity {
     protected void onDestroy() {
         super.onDestroy();
         OkHttpUtils.cancel(tag());
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onResume(this);
     }
 }

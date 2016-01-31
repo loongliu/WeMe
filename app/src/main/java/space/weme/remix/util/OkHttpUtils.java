@@ -9,6 +9,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map;
@@ -16,7 +17,9 @@ import java.util.Set;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.Headers;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -63,6 +66,27 @@ public final class OkHttpUtils {
         if(tag!=null) builder.tag(tag);
         Request request = builder.build();
         getInstance().firePost(request, callback);
+    }
+    @SuppressWarnings("unused")
+    public static void uploadFile(String url,Map<String,String> param, String path,MediaType type,OkCallBack callBack){
+        uploadFile(url, param, path,type, null, callBack);
+    }
+    public static void uploadFile(String url,Map<String,String> param, String path,MediaType type, String tag, OkCallBack callBack){
+        JSONObject jsonObject = new JSONObject(param);
+        RequestBody requestBody=new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addPart(
+                        Headers.of("Content-Disposition", "form-data; name=\"json\""),
+                        RequestBody.create(MediaType.parse("application/json"), jsonObject.toString()))
+                .addPart(
+                        Headers.of("Content-Disposition", "form-data; name=\"avatar\";filename=\"file.jpg\""),
+                        RequestBody.create(type, new File(path))
+                ).build();
+        Request.Builder builder = new Request.Builder().url(url).post(requestBody);
+        if(tag!=null) builder.tag(tag);
+        Request request = builder.build();
+        getInstance().firePost(request, callBack);
+
     }
 
     private void firePost(Request request, final OkCallBack callback){
