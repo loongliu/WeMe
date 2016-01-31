@@ -1,7 +1,10 @@
 package space.weme.remix.ui.community;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -16,12 +19,18 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
+import org.json.JSONObject;
+
 import java.util.List;
 
 import space.weme.remix.R;
 import space.weme.remix.model.Commit;
 import space.weme.remix.model.Post;
 import space.weme.remix.model.Reply;
+import space.weme.remix.ui.AtyImage;
+import space.weme.remix.ui.user.AtyInfo;
+import space.weme.remix.util.LogUtils;
+import space.weme.remix.util.OkHttpUtils;
 import space.weme.remix.util.StrUtils;
 import space.weme.remix.widgt.GridLayout;
 
@@ -31,6 +40,9 @@ import space.weme.remix.widgt.GridLayout;
  */
 public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     Context mContext;
+    AtyPost aty;
+
+    private static final String TAG = "PostAdapter";
 
     Post mPost;
     List<Reply> mReplyList;
@@ -41,15 +53,14 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_ITEM = 2;
     private static final int VIEW_PROGRESS = 3;
 
+    private int imageID = StrUtils.generateViewId();
+    private int avatarId = StrUtils.generateViewId();
+
 
     PostAdapter(Context context){
         mContext = context;
-        mListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        };
+        aty = (AtyPost) context;
+        mListener = new PostListener();
     }
 
     void setPost(Post post){
@@ -77,44 +88,47 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof PostViewHolder){
             if(mPost==null) { return; }
             PostViewHolder viewHolder = (PostViewHolder) holder;
             viewHolder.avatarDraw.setImageURI(Uri.parse(StrUtils.thumForID(mPost.userId)));
-            // todo listener
+            viewHolder.avatarDraw.setTag(mPost.userId);
+            viewHolder.avatarDraw.setOnClickListener(mListener);
             viewHolder.tvName.setText(mPost.name);
             viewHolder.tvUniversity.setText(mPost.school);
             viewHolder.tvTime.setText(mPost.timestamp);
             viewHolder.tvTitle.setText(mPost.title);
             viewHolder.tvContent.setText(mPost.body);
             viewHolder.imagesGridLayout.removeAllViews();
-            for(String url : mPost.imageUrl) {
+            for(int i = 0; i<mPost.thumbnailUrl.size(); i++) {
+                String thumbUrl = mPost.thumbnailUrl.get(i);
                 SimpleDraweeView image = new SimpleDraweeView(mContext);
                 viewHolder.imagesGridLayout.addView(image);
-                image.setImageURI(Uri.parse(url));
-                image.setTag(url);
+                image.setImageURI(Uri.parse(thumbUrl));
+                image.setTag(mPost.imageUrl.get(i));
+                image.setId(imageID);
                 image.setOnClickListener(mListener);
-                // TODO implement listener
             }
             viewHolder.tvLikeNumber.setText(mPost.likenumber);
             viewHolder.tvCommit.setText(mPost.commentnumber);
             if(mPost.flag.equals("0")){
                 viewHolder.ivLike.setImageResource(R.mipmap.like_off);
                 viewHolder.likeLayout.setOnClickListener(mListener);
-                // TODO implement
             }else{
                 viewHolder.ivLike.setImageResource(R.mipmap.like_on);
             }
-            viewHolder.commitLayout.setOnClickListener(mListener); // TODO implement
+            viewHolder.commitLayout.setOnClickListener(mListener);
             viewHolder.llLikePeoples.removeAllViews();
             for(int id : mPost.likeusers){
                 SimpleDraweeView avatar = (SimpleDraweeView) LayoutInflater.from(mContext).
                         inflate(R.layout.aty_post_avatar,viewHolder.llLikePeoples,false);
                 viewHolder.llLikePeoples.addView(avatar);
                 avatar.setImageURI(Uri.parse(StrUtils.thumForID(Integer.toString(id))));
-                avatar.setTag(id);
-                avatar.setOnClickListener(mListener);//todo implement
+                avatar.setTag(String.format("%d", id));
+                avatar.setId(avatarId);
+                avatar.setOnClickListener(mListener);
                 // todo show more
             }
         }else if(holder instanceof ItemViewHolder){
@@ -132,14 +146,15 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             item.tvCommit.setText(String.format("%d", reply.commentnumber));
             if(reply.flag.equals("0")){
                 item.ivLike.setImageResource(R.mipmap.like_off);
-                item.ivLike.setOnClickListener(mListener);// todo listener
+                item.llLike.setTag(reply);
+                item.llLike.setOnClickListener(mListener);
             }else{
                 item.ivLike.setImageResource(R.mipmap.like_on);
             }
             item.llCommit.setTag(reply);
-            item.llCommit.setOnClickListener(mListener); // todo listener
+            item.llCommit.setOnClickListener(mListener);
             item.llReplyList.removeAllViews();
-            item.llReplyList.setVisibility(reply.reply.size()==0?View.GONE:View.VISIBLE);
+            item.llReplyList.setVisibility(reply.reply.size() == 0 ? View.GONE : View.VISIBLE);
             for(Commit commitReply : reply.reply){
                 TextView tv = new TextView(mContext);
                 SpannableStringBuilder builder = new SpannableStringBuilder();
@@ -161,12 +176,15 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 item.imagesGridLayout.setVisibility(View.GONE);
             }else {
                 item.imagesGridLayout.setVisibility(View.VISIBLE);
-                for (String url : reply.image) {
+                for (String url : reply.thumbnail) {
                     SimpleDraweeView drawView = new SimpleDraweeView(mContext);
                     drawView.setImageURI(Uri.parse(url));
                     item.imagesGridLayout.addView(drawView);
                 }
             }
+        }else {
+            ProgressViewHolder progress = (ProgressViewHolder)holder;
+            progress.progressBar.setIndeterminate(true);
         }
     }
 
@@ -226,8 +244,8 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             tvLikeNumber = (TextView) itemView.findViewById(R.id.aty_post_title_like_number);
             ivLike = (ImageView) itemView.findViewById(R.id.aty_post_title_like_image);
             tvCommit = (TextView) itemView.findViewById(R.id.aty_post_title_reply_number);
-            commitLayout = (LinearLayout) itemView.findViewById(R.id.aty_post_title_reply_count);
-            likeLayout = (LinearLayout) itemView.findViewById(R.id.aty_post_title_like_count);
+            commitLayout = (LinearLayout) itemView.findViewById(R.id.aty_post_title_reply_layout);
+            likeLayout = (LinearLayout) itemView.findViewById(R.id.aty_post_title_like_layout);
             llLikePeoples = (LinearLayout) itemView.findViewById(R.id.aty_post_title_like_people);
         }
     }
@@ -268,8 +286,88 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public ProgressViewHolder(View v) {
             super(v);
-//            progressBar = (ProgressBar) v.findViewById(R.id.progress);
+            progressBar = (ProgressBar) v.findViewById(R.id.progress);
         }
     }
 
+    private class PostListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            if(v.getId() == R.id.aty_post_title_avatar
+                    || v.getId() == R.id.aty_post_reply_avatar
+                    || v.getId() == avatarId){
+                String userID = (String) v.getTag();
+                Intent i = new Intent(mContext,AtyInfo.class);
+                i.putExtra(AtyInfo.ID_INTENT,userID);
+                mContext.startActivity(i);
+            }else if(v.getId()==imageID){
+                String url = (String) v.getTag();
+                Intent i = new Intent(mContext, AtyImage.class);
+                i.putExtra(AtyImage.URL_INTENT, url);
+                mContext.startActivity(i);
+                ((Activity)mContext).overridePendingTransition(0, 0);
+            }else if(v.getId() == R.id.aty_post_title_like_layout){
+                likePost(v);
+            }else if(v.getId() == R.id.aty_post_title_reply_layout){
+                aty.commitPost();
+            }else if(v.getId() == R.id.aty_post_reply_like_layout){
+                likeCommit(v);
+            }else if(v.getId() == R.id.aty_post_reply_commit_layout){
+                aty.commitReply();
+            }
+        }
+    }
+
+    private void likePost(final View v){
+        ArrayMap<String,String> param = new ArrayMap<>();
+        param.put("token",StrUtils.token());
+        param.put("postid", mPost.postId);
+        OkHttpUtils.post(StrUtils.LIKE_POST_URL,param,TAG,new OkHttpUtils.SimpleOkCallBack(){
+            @Override
+            public void onResponse(String s) {
+                LogUtils.i(TAG,s);
+                JSONObject j = OkHttpUtils.parseJSON(mContext, s);
+                if(j == null){
+                    return;
+                }
+                int likenumber = j.optInt("likenumber");
+                ImageView iv = (ImageView) v.findViewById(R.id.aty_post_reply_like_image);
+                TextView tv = (TextView) v.findViewById(R.id.aty_post_reply_like_number);
+                tv.setText(String.format("%d",likenumber));
+                if(likenumber==0){
+                    iv.setImageResource(R.mipmap.like_off);
+                }else{
+                    iv.setImageResource(R.mipmap.like_on);
+                }
+            }
+        });
+
+    }
+
+    private void likeCommit(final View v){
+        Reply reply = (Reply) v.getTag();
+        ArrayMap<String,String> param = new ArrayMap<>();
+        param.put("token",StrUtils.token());
+        param.put("commentid",reply.id);
+        OkHttpUtils.post(StrUtils.LIKE_COMMET_URL,param, TAG,new OkHttpUtils.SimpleOkCallBack(){
+            @Override
+            public void onResponse(String s) {
+                LogUtils.i(TAG,s);
+                JSONObject j = OkHttpUtils.parseJSON(mContext, s);
+                if(j == null){
+                    return;
+                }
+                int num = j.optInt("likenumber");
+                ImageView iv = (ImageView) v.findViewById(R.id.aty_post_reply_like_image);
+                TextView tv = (TextView) v.findViewById(R.id.aty_post_reply_like_number);
+                tv.setText(String.format("%d",num));
+                if(num==0){
+                    iv.setImageResource(R.mipmap.like_off);
+                }else {
+                    iv.setImageResource(R.mipmap.like_on);
+                }
+            }
+        });
+    }
 }

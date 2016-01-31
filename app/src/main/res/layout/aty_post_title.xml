@@ -71,7 +71,7 @@
 
 
     <LinearLayout
-        android:id="@+id/aty_post_title_reply_count"
+        android:id="@+id/aty_post_title_reply_layout"
         android:layout_width="wrap_content"
         android:layout_height="24dp"
         android:layout_alignParentEnd="true"
@@ -102,14 +102,14 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/aty_post_title_like_count"
+        android:id="@+id/aty_post_title_like_layout"
         android:layout_width="wrap_content"
         android:layout_height="24dp"
         android:layout_below="@id/aty_post_title_image"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_toLeftOf="@id/aty_post_title_reply_count"
-        android:layout_toStartOf="@id/aty_post_title_reply_count"
+        android:layout_toLeftOf="@id/aty_post_title_reply_layout"
+        android:layout_toStartOf="@id/aty_post_title_reply_layout"
         android:orientation="horizontal"
         android:padding="4dp">
 
@@ -129,7 +129,6 @@
             android:id="@+id/aty_post_title_like_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="8sp"
             android:paddingEnd="4dp"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
@@ -141,7 +140,7 @@
         android:layout_marginTop="4dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/aty_post_title_like_count">
+        android:layout_below="@id/aty_post_title_like_layout">
 
         <LinearLayout
             android:id="@+id/aty_post_title_like_people"

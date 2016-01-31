@@ -16,6 +16,7 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +52,6 @@ public class AtyPost extends SwipeActivity {
     private PostAdapter mAdapter;
 
 
-    private RecyclerView mRecyclerView;
     private LinearLayout mChatView;
     private EditText mEditText;
     private TextView mCommitText;
@@ -77,7 +77,7 @@ public class AtyPost extends SwipeActivity {
         mCommitText = (TextView) findViewById(R.id.activity_post_commit);
         mAddImage = (ImageView) findViewById(R.id.activity_post_add_image);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.post_detail_recycler_view);
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.post_detail_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(AtyPost.this));
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -91,7 +91,6 @@ public class AtyPost extends SwipeActivity {
 
                 if (!isLoading && (totalItemCount - visibleItemCount)
                         <= (firstVisibleItem + 2) && canLoadMore) {
-                    // End has been reached
                     LogUtils.i(TAG, "scroll to end  load page " + (curPage + 1));
                     loadPage(curPage + 1);
                 }
@@ -101,7 +100,7 @@ public class AtyPost extends SwipeActivity {
         mRecyclerView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(mChatView.getVisibility()==View.VISIBLE){
+                if (mChatView.getVisibility() == View.VISIBLE) {
                     mChatView.setVisibility(View.INVISIBLE);
                     return true;
                 }
@@ -120,12 +119,12 @@ public class AtyPost extends SwipeActivity {
         ArrayMap<String,String> param = new ArrayMap<>();
         param.put("token", StrUtils.token());
         param.put("postid", mPostID);
-        OkHttpUtils.post(StrUtils.GET_POST_DETAIL,param,TAG,new OkHttpUtils.SimpleOkCallBack(){
+        OkHttpUtils.post(StrUtils.GET_POST_DETAIL, param, TAG, new OkHttpUtils.SimpleOkCallBack() {
             @Override
             public void onResponse(String s) {
-                LogUtils.i(TAG,s);
-                JSONObject j = OkHttpUtils.parseJSON(AtyPost.this,s);
-                if(j == null){
+                LogUtils.i(TAG, s);
+                JSONObject j = OkHttpUtils.parseJSON(AtyPost.this, s);
+                if (j == null) {
                     return;
                 }
                 JSONObject result = j.optJSONObject("result");
@@ -135,37 +134,77 @@ public class AtyPost extends SwipeActivity {
             }
         });
         loadPage(1);
+        mChatView.setVisibility(View.INVISIBLE);
+        canLoadMore = true;
     }
 
-    private void loadPage(int page){
+    private void loadPage(final int page){
         ArrayMap<String,String> param = new ArrayMap<>();
         param.put("token",StrUtils.token());
         param.put("postid",mPostID);
         param.put("page", page + "");
-        OkHttpUtils.post(StrUtils.GET_POST_COMMIT,param,TAG, new OkHttpUtils.SimpleOkCallBack(){
+        beforeLoadPage(page);
+        curPage = page;
+        OkHttpUtils.post(StrUtils.GET_POST_COMMIT, param, TAG, new OkHttpUtils.SimpleOkCallBack() {
+            @Override
+            public void onFailure(IOException e) {
+                afterLoadPage(page);
+            }
+
             @Override
             public void onResponse(String s) {
-                LogUtils.i(TAG,s);
-                JSONObject j = OkHttpUtils.parseJSON(AtyPost.this,s);
-                if(j == null){
+                LogUtils.i(TAG, s);
+                afterLoadPage(page);
+                JSONObject j = OkHttpUtils.parseJSON(AtyPost.this, s);
+                if (j == null) {
                     return;
                 }
                 JSONArray array = j.optJSONArray("result");
-                if(array==null){
+                if (array == null) {
                     return;
                 }
-                for(int i = 0; i<array.length(); i++){
+                int size = array.length();
+                if(size==0){
+                    canLoadMore = false;
+                    return;
+                }
+                int previousCount = mReplyList.size();
+                for (int i = 0; i < array.length(); i++) {
                     mReplyList.add(Reply.fromJSON(array.optJSONObject(i)));
                 }
-                mAdapter.notifyDataSetChanged();
+                if(page==1){
+                    mAdapter.notifyDataSetChanged();
+                }else {
+                    mAdapter.notifyItemRangeInserted(previousCount, array.length());
+                }
             }
         });
     }
-
+    private void beforeLoadPage(int page){
+        isLoading = true;
+        if(page!=1){
+            mReplyList.add(null);
+            mAdapter.notifyItemInserted(mReplyList.size()+1);
+        }
+    }
+    private void afterLoadPage(int page){
+        isLoading = false;
+        if(page!=1){
+            mReplyList.remove(mReplyList.size()-1);
+            mAdapter.notifyItemRemoved(mReplyList.size()+1);
+        }
+    }
 
 
     @Override
     protected String tag() {
         return TAG;
+    }
+
+    void commitPost(){
+        // todo commit
+    }
+    void commitReply(){
+        // todo commit
     }
 }

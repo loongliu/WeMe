@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.json.JSONObject;
@@ -79,6 +80,8 @@ public class AtyInfo extends SwipeActivity {
 
         SimpleDraweeView mDrawBackground = (SimpleDraweeView) findViewById(R.id.aty_info_background);
         mDrawBackground.setImageURI(Uri.parse(StrUtils.backgroundForID(mId)));
+        GenericDraweeHierarchy hierarchy = mDrawBackground.getHierarchy();
+        hierarchy.setPlaceholderImage(R.mipmap.info_default);
 
         fireInfo();
 
