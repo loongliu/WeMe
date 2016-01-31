@@ -33,38 +33,38 @@ import space.weme.remix.widgt.GridLayout;
  * Created by Liujilong on 2016/1/31.
  * liujilong.me@gmail.com
  */
-public class AtyPostNew extends AtyImage {
-    private static final String TAG = "AtyPostNew";
-    public static final String INTENT_ID = "topicID";
+public class AtyPostReply extends AtyImage {
+    private static final String TAG = "AtyPostReply";
+    public static final String INTENT_ID = "intent_id";
+    public static final String INTENT_CONTENT = "intent_content";
     protected static final MediaType MEDIA_TYPE_JPG = MediaType.parse("image/*");
 
-    private String mTopicID;
+
+    private String mPostID;
+    TextView mSend;
+    EditText mEditor;
+    ProgressDialog mProgressDialog;
+    SimpleDraweeView mDrawAddImage;
+    GridLayout mImageGrids;
+
     private AtomicInteger mSendImageResponseNum;
 
-    private EditText mTitle;
-    private EditText mContent;
-    private SimpleDraweeView mDrawAddImage;
-    private GridLayout mImageGrids;
-    ProgressDialog mProgressDialog;
-
-
-
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTopicID = getIntent().getStringExtra(INTENT_ID);
-        setContentView(R.layout.aty_post_new);
+        setContentView(R.layout.aty_post_aty_reply);
+        mPostID = getIntent().getStringExtra(INTENT_ID);
+        String content = getIntent().getStringExtra(INTENT_CONTENT);
 
-
-        View.OnClickListener mPostListener = new PostListener();
-        mImageGrids = (GridLayout) findViewById(R.id.aty_post_new_images);
-        TextView mSend = (TextView) findViewById(R.id.aty_post_new_send);
-        mTitle = (EditText) findViewById(R.id.aty_post_new_title);
-        mContent = (EditText) findViewById(R.id.aty_post_new_content);
-        mDrawAddImage = (SimpleDraweeView) findViewById(R.id.aty_post_new_add_image);
+        mDrawAddImage = (SimpleDraweeView) findViewById(R.id.add_image);
         mDrawAddImage.setImageURI(Uri.parse("res:/" + R.mipmap.add_image));
         mDrawAddImage.setOnClickListener(mListener);
+        mSend = (TextView) findViewById(R.id.send);
+        mEditor = (EditText) findViewById(R.id.main_editor);
+        mEditor.setText(content);
+        mImageGrids = (GridLayout) findViewById(R.id.select_image_view);
 
-        mSend.setOnClickListener(mPostListener);
+        mSend.setOnClickListener(new ReplyListener());
         mChosenPicturePathList = new ArrayList<>();
         mSendImageResponseNum = new AtomicInteger();
     }
@@ -77,7 +77,7 @@ public class AtyPostNew extends AtyImage {
             mChosenPicturePathList.addAll(paths);
             mImageGrids.removeAllViews();
             for(String path : mChosenPicturePathList){
-                SimpleDraweeView image = new SimpleDraweeView(AtyPostNew.this);
+                SimpleDraweeView image = new SimpleDraweeView(AtyPostReply.this);
                 image.setImageURI(Uri.parse("file://"+path));
                 mImageGrids.addView(image);
                 image.setOnClickListener(mListener);
@@ -88,40 +88,38 @@ public class AtyPostNew extends AtyImage {
         }
     }
 
+
+
     @Override
     protected String tag() {
         return TAG;
     }
 
+    private class ReplyListener implements View.OnClickListener{
 
-
-    private class PostListener implements View.OnClickListener{
         @Override
         public void onClick(View v) {
-            String title = mTitle.getText().toString();
-            String content = mContent.getText().toString();
-            if(title.length() == 0){
+            if(mEditor.getText().length()==0){
                 return;
             }
-            mProgressDialog = ProgressDialog.show(AtyPostNew.this,null,getResources().getString(R.string.committing));
-            ArrayMap<String,String> param = new ArrayMap<>();
-            param.put("token",StrUtils.token());
-            param.put("topicid",mTopicID);
-            param.put("title",title);
-            param.put("body",content);
-            OkHttpUtils.post(StrUtils.PUBLISH_POST_URL,param,TAG,new OkHttpUtils.SimpleOkCallBack(){
+            mProgressDialog = ProgressDialog.show(AtyPostReply.this, null, getResources().getString(R.string.committing));
+            ArrayMap<String,String> map  = new ArrayMap<>();
+            map.put("token", StrUtils.token());
+            map.put("postid", mPostID);
+            map.put("body", mEditor.getText().toString());
+            OkHttpUtils.post(StrUtils.COMMENT_TO_POST_URL,map,TAG,new OkHttpUtils.SimpleOkCallBack(){
                 @Override
                 public void onFailure(IOException e) {
                     mProgressDialog.dismiss();
-                    Toast.makeText(AtyPostNew.this, R.string.reply_failed, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AtyPostReply.this, R.string.reply_failed, Toast.LENGTH_SHORT).show();
                 }
                 @Override
                 public void onResponse(String s) {
                     LogUtils.i(TAG,s);
-                    JSONObject j = OkHttpUtils.parseJSON(AtyPostNew.this, s);
+                    JSONObject j = OkHttpUtils.parseJSON(AtyPostReply.this,s);
                     if(j == null){
                         mProgressDialog.dismiss();
-                        Toast.makeText(AtyPostNew.this, R.string.reply_failed, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AtyPostReply.this, R.string.reply_failed, Toast.LENGTH_SHORT).show();
                         return;
                     }
                     String id = j.optString("id");
@@ -132,8 +130,8 @@ public class AtyPostNew extends AtyImage {
                     }
                     ArrayMap<String,String> p = new ArrayMap<>();
                     p.put("token",StrUtils.token());
-                    p.put("type","-4");
-                    p.put("postid",id);
+                    p.put("type","-7");
+                    p.put("commentid",id);
                     mSendImageResponseNum.set(0);
                     for(int number = 0; number<mChosenPicturePathList.size(); number++){
                         p.put("number", String.format("%d", number));
@@ -150,11 +148,11 @@ public class AtyPostNew extends AtyImage {
                             }
                         });
                     }
-
                 }
             });
         }
     }
+
     private void uploadImageReturned(){
         int num = mSendImageResponseNum.incrementAndGet();
         if(num == mChosenPicturePathList.size()){

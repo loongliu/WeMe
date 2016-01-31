@@ -38,7 +38,7 @@ import space.weme.remix.widgt.PageIndicator;
  * liujilong.me@gmail.com
  */
 public class FgtCommunity extends BaseFragment {
-
+// todo pull to refresh
     private static final String TAG = "FgtCommunity";
 
     GridLayout mGridLayout;

@@ -47,6 +47,7 @@ import me.nereo.multi_image_selector.utils.TimeUtils;
  * 图片选择Fragment
  * Created by Nereo on 2015/4/7.
  */
+
 public class MultiImageSelectorFragment extends Fragment {
 
     private static final String TAG = "MultiImageSelector";
@@ -178,7 +179,6 @@ public class MultiImageSelectorFragment extends Fragment {
         mPreviewBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO 预览
             }
         });
 

@@ -1,5 +1,8 @@
 package space.weme.remix.ui.community;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.util.ArrayMap;
@@ -39,6 +42,8 @@ public class AtyPost extends SwipeActivity {
     public static final String POST_INTENT = "postId";
     public static final String THEME_INTENT = "theme";
 
+    private static final int REPLY_CODE = 10;
+
     private String mPostID;
 
 
@@ -51,6 +56,7 @@ public class AtyPost extends SwipeActivity {
 
     private PostAdapter mAdapter;
 
+    ProgressDialog mProgressDialog;
 
     private LinearLayout mChatView;
     private EditText mEditText;
@@ -116,6 +122,7 @@ public class AtyPost extends SwipeActivity {
     }
 
     private void refreshAll(){
+        mReplyList.clear();
         ArrayMap<String,String> param = new ArrayMap<>();
         param.put("token", StrUtils.token());
         param.put("postid", mPostID);
@@ -190,8 +197,8 @@ public class AtyPost extends SwipeActivity {
     private void afterLoadPage(int page){
         isLoading = false;
         if(page!=1){
-            mReplyList.remove(mReplyList.size()-1);
-            mAdapter.notifyItemRemoved(mReplyList.size()+1);
+            mReplyList.remove(mReplyList.size() - 1);
+            mAdapter.notifyItemRemoved(mReplyList.size() + 1);
         }
     }
 
@@ -202,9 +209,100 @@ public class AtyPost extends SwipeActivity {
     }
 
     void commitPost(){
-        // todo commit
+        mChatView.setVisibility(View.VISIBLE);
+        mAddImage.setVisibility(View.VISIBLE);
+        mEditText.setText("");
+        mEditText.setHint("");
+        mAddImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(AtyPost.this, AtyPostReply.class);
+                i.putExtra(AtyPostReply.INTENT_ID, mPostID);
+                i.putExtra(AtyPostReply.INTENT_CONTENT, mEditText.getText().toString());
+                startActivityForResult(i, REPLY_CODE);
+            }
+        });
+        mCommitText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mEditText.getText().length() == 0){
+                    return;
+                }
+                ArrayMap<String,String> param = new ArrayMap<>();
+                param.put("token",StrUtils.token());
+                param.put("body",mEditText.getText().toString());
+                param.put("postid",mPostID);
+                mProgressDialog = ProgressDialog.show(AtyPost.this, null, getResources().getString(R.string.committing));
+                OkHttpUtils.post(StrUtils.COMMENT_TO_POST_URL,param,TAG,new OkHttpUtils.SimpleOkCallBack(){
+                    @Override
+                    public void onFailure(IOException e) {
+                        mProgressDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onResponse(String s) {
+                        mProgressDialog.dismiss();
+                        LogUtils.i(TAG,s);
+                        JSONObject j = OkHttpUtils.parseJSON(AtyPost.this,s);
+                        if(j == null){
+                            return;
+                        }
+                        clearChatView();
+                        refreshAll();
+                    }
+                });
+            }
+        });
     }
-    void commitReply(){
-        // todo commit
+    void commitReply(final Reply reply){
+        mChatView.setVisibility(View.VISIBLE);
+        mAddImage.setVisibility(View.GONE);
+        mEditText.setHint(getString(R.string.commit) + reply.name + ":");
+        mEditText.setText("");
+        mCommitText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mEditText.getText().length()==0){
+                    return;
+                }
+                ArrayMap<String,String> map = new ArrayMap<>();
+                map.put("token",StrUtils.token());
+                map.put("body",mEditText.getText().toString());
+                map.put("destcommentid", reply.id);
+                mProgressDialog = ProgressDialog.show(AtyPost.this, null, getResources().getString(R.string.committing));
+                OkHttpUtils.post(StrUtils.COMMENT_TO_COMMENT_URL,map,TAG,new OkHttpUtils.SimpleOkCallBack(){
+                    @Override
+                    public void onFailure(IOException e) {
+                        mProgressDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onResponse(String s) {
+                        mProgressDialog.dismiss();
+                        LogUtils.i(TAG,s);
+                        JSONObject j = OkHttpUtils.parseJSON(AtyPost.this,s);
+                        if(j == null){
+                            return;
+                        }
+                        clearChatView();
+                        refreshAll();
+                    }
+                });
+            }
+        });
+    }
+
+    private void clearChatView(){
+        mChatView.setVisibility(View.GONE);
+        mEditText.setText("");
+        mCommitText.setOnClickListener(null);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REPLY_CODE&&resultCode == Activity.RESULT_OK){
+            refreshAll();
+        }
     }
 }

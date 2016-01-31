@@ -12,7 +12,7 @@
         android:id="@+id/post_detail_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="?attr/actionBarSize" />
+        android:layout_marginTop="?attr/actionBarSize" />
     <LinearLayout
         android:visibility="gone"
         android:background="@color/chat_bg_grey"

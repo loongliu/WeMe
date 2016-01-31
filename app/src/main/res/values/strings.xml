@@ -48,6 +48,8 @@
     <string name="please_input_title">标题</string>
     <string name="say_something">说点什么吧</string>
     <string name="committing">正在上传</string>
+    <string name="commit">评论</string>
+    <string name="reply_failed">回复失败</string>
 
 
     <string-array name="aty_info_tabs">

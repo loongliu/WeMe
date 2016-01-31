@@ -198,6 +198,7 @@ public class AtyTopic extends SwipeActivity {
                 int size = result.length();
                 if(replace){
                     mPostList.clear();
+
                 }
                 if(size==0){
                     canLoadMore = false;

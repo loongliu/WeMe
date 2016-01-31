@@ -146,7 +146,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             item.tvCommit.setText(String.format("%d", reply.commentnumber));
             if(reply.flag.equals("0")){
                 item.ivLike.setImageResource(R.mipmap.like_off);
-                item.llLike.setTag(reply);
+                item.llLike.setTag(position);
                 item.llLike.setOnClickListener(mListener);
             }else{
                 item.ivLike.setImageResource(R.mipmap.like_on);
@@ -176,9 +176,12 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 item.imagesGridLayout.setVisibility(View.GONE);
             }else {
                 item.imagesGridLayout.setVisibility(View.VISIBLE);
-                for (String url : reply.thumbnail) {
+                for(int i = 0; i<reply.thumbnail.size(); i++){
                     SimpleDraweeView drawView = new SimpleDraweeView(mContext);
-                    drawView.setImageURI(Uri.parse(url));
+                    drawView.setImageURI(Uri.parse(reply.thumbnail.get(i)));
+                    drawView.setTag(reply.image.get(i));
+                    drawView.setId(imageID);
+                    drawView.setOnClickListener(mListener);
                     item.imagesGridLayout.addView(drawView);
                 }
             }
@@ -307,45 +310,41 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 mContext.startActivity(i);
                 ((Activity)mContext).overridePendingTransition(0, 0);
             }else if(v.getId() == R.id.aty_post_title_like_layout){
-                likePost(v);
+                likePost();
             }else if(v.getId() == R.id.aty_post_title_reply_layout){
                 aty.commitPost();
             }else if(v.getId() == R.id.aty_post_reply_like_layout){
                 likeCommit(v);
             }else if(v.getId() == R.id.aty_post_reply_commit_layout){
-                aty.commitReply();
+                Reply reply = (Reply) v.getTag();
+                aty.commitReply(reply);
             }
         }
     }
 
-    private void likePost(final View v){
+    private void likePost(){
         ArrayMap<String,String> param = new ArrayMap<>();
         param.put("token",StrUtils.token());
         param.put("postid", mPost.postId);
         OkHttpUtils.post(StrUtils.LIKE_POST_URL,param,TAG,new OkHttpUtils.SimpleOkCallBack(){
             @Override
             public void onResponse(String s) {
-                LogUtils.i(TAG,s);
+                LogUtils.i(TAG, s);
                 JSONObject j = OkHttpUtils.parseJSON(mContext, s);
                 if(j == null){
                     return;
                 }
-                int likenumber = j.optInt("likenumber");
-                ImageView iv = (ImageView) v.findViewById(R.id.aty_post_reply_like_image);
-                TextView tv = (TextView) v.findViewById(R.id.aty_post_reply_like_number);
-                tv.setText(String.format("%d",likenumber));
-                if(likenumber==0){
-                    iv.setImageResource(R.mipmap.like_off);
-                }else{
-                    iv.setImageResource(R.mipmap.like_on);
-                }
+                mPost.likenumber = (Integer.parseInt(mPost.likenumber)+1)+"";
+                mPost.likeusers.add(Integer.parseInt(StrUtils.id()));
+                mPost.flag = "1";
+                notifyItemChanged(0);
             }
         });
-
     }
 
     private void likeCommit(final View v){
-        Reply reply = (Reply) v.getTag();
+        final int position = (int) v.getTag();
+        final Reply reply = mReplyList.get(position-1);
         ArrayMap<String,String> param = new ArrayMap<>();
         param.put("token",StrUtils.token());
         param.put("commentid",reply.id);
@@ -357,15 +356,9 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 if(j == null){
                     return;
                 }
-                int num = j.optInt("likenumber");
-                ImageView iv = (ImageView) v.findViewById(R.id.aty_post_reply_like_image);
-                TextView tv = (TextView) v.findViewById(R.id.aty_post_reply_like_number);
-                tv.setText(String.format("%d",num));
-                if(num==0){
-                    iv.setImageResource(R.mipmap.like_off);
-                }else {
-                    iv.setImageResource(R.mipmap.like_on);
-                }
+                reply.flag = "1";
+                reply.likenumber++;
+                notifyItemChanged(position);
             }
         });
     }

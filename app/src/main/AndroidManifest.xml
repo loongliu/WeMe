@@ -25,6 +25,7 @@
         <activity android:name=".ui.intro.AtyLogin" />
         <activity android:name=".ui.main.AtyMain" />
         <activity android:name=".ui.community.AtyPostNew" />
+        <activity android:name=".ui.community.AtyPostReply" />
         <activity android:name=".ui.community.AtyTopic"  android:theme="@style/AppTheme.Translucent"/>
         <activity android:name=".ui.community.AtyPost" android:theme="@style/AppTheme.Translucent"/>
         <activity android:name=".ui.AtyImage" android:theme="@style/AppTheme.Translucent"/>
@@ -32,7 +33,7 @@
 
         <activity android:name="me.nereo.multi_image_selector.MultiImageSelectorActivity" />
 
-        <meta-data android:value="56ad96c667e58ef41100249d" android:name="UMENG_APPKEY"></meta-data>
+        <meta-data android:value="56ad96c667e58ef41100249d" android:name="UMENG_APPKEY"/>
         <meta-data android:value="seu" android:name="UMENG_CHANNEL"/>
 
     </application>

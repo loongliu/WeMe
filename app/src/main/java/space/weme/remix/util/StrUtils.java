@@ -56,6 +56,9 @@ public final class StrUtils {
 
     public static final String PUBLISH_POST_URL = BASE_URL + "publishpost";
 
+    public static final String COMMENT_TO_COMMENT_URL = BASE_URL + "commenttocomment";
+
+    public static final String COMMENT_TO_POST_URL = BASE_URL + "commenttopost";
 
     public static final String GET_AVATAR = BASE_URL_NGINX + "avatar/";
 
