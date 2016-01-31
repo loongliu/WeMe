@@ -126,6 +126,7 @@ public class AtyInfo extends SwipeActivity {
                 mTvConstellation.setText(user.constellation);
                 mIvGender.setImageResource(user.gender.equals("\u7537")?R.mipmap.boy:R.mipmap.girl);
                 configView1(user);
+                configView2(user);
             }
         });
     }
@@ -199,6 +200,11 @@ public class AtyInfo extends SwipeActivity {
 
     }
 
+    private void configView2(User user){
+
+
+    }
+
     private void unfollow(){
         LogUtils.i(TAG, mUser.name);
     }
@@ -213,8 +219,6 @@ public class AtyInfo extends SwipeActivity {
     }
 
     private class InfoAdapter extends PagerAdapter{
-
-
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             View v = mPagerViews[position];

@@ -99,7 +99,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             viewHolder.avatarDraw.setOnClickListener(mListener);
             viewHolder.tvName.setText(mPost.name);
             viewHolder.tvUniversity.setText(mPost.school);
-            viewHolder.tvTime.setText(mPost.timestamp);
+            viewHolder.tvTime.setText(StrUtils.timeTransfer(mPost.timestamp));
             viewHolder.tvTitle.setText(mPost.title);
             viewHolder.tvContent.setText(mPost.body);
             viewHolder.imagesGridLayout.removeAllViews();
@@ -141,7 +141,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             item.avatarDraw.setOnClickListener(mListener);
             item.tvName.setText(reply.name);
             item.tvUniversity.setText(reply.school);
-            item.tvTime.setText(reply.timestamp);
+            item.tvTime.setText(StrUtils.timeTransfer(reply.timestamp));
             item.tvContent.setText(reply.body);
             item.tvLike.setText(String.format("%d", reply.likenumber));
             item.tvCommit.setText(String.format("%d", reply.commentnumber));

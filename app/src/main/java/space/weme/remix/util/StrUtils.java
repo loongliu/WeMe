@@ -5,9 +5,16 @@ import android.content.SharedPreferences;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import space.weme.remix.APP;
+import space.weme.remix.R;
 
 /**
  * Created by Liujilong on 16/1/22.
@@ -78,6 +85,34 @@ public final class StrUtils {
     public static final String SP_USER = "StrUtils_sp_user";
     public static final String SP_USER_TOKEN = SP_USER + "_token";
     public static final String SP_USER_ID = SP_USER + "_id";
+
+
+    public static String timeTransfer(String timestamp){
+        SimpleDateFormat sdf = new SimpleDateFormat("EE, d LLLL yyyy HH:mm:ss zzzz", Locale.US);
+        try {
+            Date date = sdf.parse(timestamp);
+            long seconds = date.getTime();
+            long gmtDif = TimeZone.getDefault().getRawOffset();
+            long now = System.currentTimeMillis();
+            long dif = (now -seconds+gmtDif)/1000;
+            if(dif<3600){
+                return (dif/60)+APP.context().getString(R.string.minute_ago);
+            }else if (dif<24*3600){
+                return (dif/3600) + APP.context().getString(R.string.hour_ago);
+            }else if(dif<7*24*3600){
+                return (dif/3600/24) + APP.context().getString(R.string.day_ago);
+            }else if(dif<30*24*3600){
+                return (dif/3600/24/7) + APP.context().getString(R.string.week_ago);
+            }else if(dif<365*30*24*3600){
+                return (dif/3600/24/30) + APP.context().getString(R.string.month_ago);
+            }else{
+                return (dif/3600/24/365) + APP.context().getString(R.string.year_ago);
+            }
+        } catch (ParseException e) {
+            return "";
+        }
+    }
+
 
 
 

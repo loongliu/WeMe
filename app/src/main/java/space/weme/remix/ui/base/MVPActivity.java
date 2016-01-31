@@ -1,7 +1,6 @@
 package space.weme.remix.ui.base;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 /**
  * Created by Liujilong on 16/1/20.

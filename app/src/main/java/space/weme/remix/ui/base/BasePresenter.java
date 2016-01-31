@@ -11,13 +11,14 @@ public abstract class BasePresenter<View> {
     protected Reference<View> mViewRef;
 
     public void attachView(View view){
-        mViewRef = new WeakReference<View>(view);
+        mViewRef = new WeakReference<>(view);
     }
 
     protected View getView(){
         return mViewRef.get();
     }
 
+    @SuppressWarnings("unused")
     public boolean isViewAttached(){
         return mViewRef != null && mViewRef.get() != null;
     }

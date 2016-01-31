@@ -101,7 +101,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             item.avatar.setOnClickListener(mListener);
             item.userName.setText(post.name);
             item.university.setText(post.school);
-            item.time.setText(post.timestamp);
+            item.time.setText(StrUtils.timeTransfer(post.timestamp));
             item.title.setText(post.title);
             item.content.setText(post.body);
             item.like_number.setText(post.likenumber);

@@ -28,11 +28,7 @@ public class Commit {
 
 
         reply.timestamp = o.optString("timestamp");
-//        SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM yyyy HH:mm:ss", Locale.ENGLISH);
-//        try {
-//            reply.time = format.parse(reply.timestamp);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
+
 //        }
         reply.authorid = o.optString("authorid");
         return reply;

@@ -50,6 +50,12 @@
     <string name="committing">正在上传</string>
     <string name="commit">评论</string>
     <string name="reply_failed">回复失败</string>
+    <string name="minute_ago">分钟前</string>
+    <string name="hour_ago">小时前</string>
+    <string name="day_ago">天前</string>
+    <string name="week_ago">周前</string>
+    <string name="month_ago">个月前</string>
+    <string name="year_ago">年前</string>
 
 
     <string-array name="aty_info_tabs">
