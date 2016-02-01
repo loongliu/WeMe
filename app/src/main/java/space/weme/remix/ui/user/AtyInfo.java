@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -201,7 +202,7 @@ public class AtyInfo extends SwipeActivity {
     }
 
     private void configView2(User user){
-
+        RecyclerView recyclerView = (RecyclerView) mPagerViews[2];
 
     }
 
@@ -248,5 +249,22 @@ public class AtyInfo extends SwipeActivity {
         }
     }
 
+    private class TimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return null;
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return 0;
+        }
+    }
 
 }
