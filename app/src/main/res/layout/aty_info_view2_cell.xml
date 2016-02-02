@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/colorPrimary"
+        android:id="@+id/aty_info_view2_cell_timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:text="@string/publish_in"
+        android:textColor="@color/black"
+        android:id="@+id/aty_info_view2_cell_publish"
+        android:layout_toRightOf="@+id/aty_info_view2_cell_timestamp"
+        android:layout_toEndOf="@+id/aty_info_view2_cell_timestamp"
+        android:layout_alignTop="@+id/aty_info_view2_cell_timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/aty_info_view2_cell_topic"
+        android:textColor="@color/black"
+        android:layout_toRightOf="@+id/aty_info_view2_cell_publish"
+        android:layout_toEndOf="@+id/aty_info_view2_cell_publish"
+        android:layout_alignTop="@+id/aty_info_view2_cell_timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/aty_info_view2_cell_image"
+        android:layout_alignLeft="@+id/aty_info_view2_cell_timestamp"
+        android:layout_alignStart="@+id/aty_info_view2_cell_timestamp"
+        android:layout_below="@+id/aty_info_view2_cell_timestamp"
+        android:layout_marginTop="8dp"
+        app:placeholderImage="@mipmap/app_icon"
+        android:layout_width="60dp"
+        android:layout_height="60dp" />
+    <TextView
+        android:lines="1"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:id="@+id/aty_info_view2_cell_title"
+        android:layout_toEndOf="@id/aty_info_view2_cell_image"
+        android:layout_toRightOf="@id/aty_info_view2_cell_image"
+        android:layout_alignTop="@id/aty_info_view2_cell_image"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/aty_info_view2_cell_content"
+        android:layout_alignLeft="@id/aty_info_view2_cell_title"
+        android:layout_alignStart="@id/aty_info_view2_cell_title"
+        android:layout_below="@+id/aty_info_view2_cell_title"
+        android:layout_alignBottom="@+id/aty_info_view2_cell_image"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

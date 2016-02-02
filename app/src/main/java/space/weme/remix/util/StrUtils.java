@@ -67,6 +67,13 @@ public final class StrUtils {
 
     public static final String COMMENT_TO_POST_URL = BASE_URL + "commenttopost";
 
+    public static final String GET_TIME_LINE_URL = BASE_URL + "getusertimeline";
+
+    public static final String GET_USER_IMAGES_URL = BASE_URL + "getuserimages";
+
+
+
+
     public static final String GET_AVATAR = BASE_URL_NGINX + "avatar/";
 
     public static final String UPLOAD_AVATAR_URL = BASE_URL_NGINX + "uploadavatar";

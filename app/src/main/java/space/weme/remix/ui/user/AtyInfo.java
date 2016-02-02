@@ -1,12 +1,17 @@
 package space.weme.remix.ui.user;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +23,20 @@ import android.widget.TextView;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.view.SimpleDraweeView;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import space.weme.remix.R;
+import space.weme.remix.model.TimeLine;
 import space.weme.remix.model.User;
+import space.weme.remix.model.UserImage;
 import space.weme.remix.ui.base.SwipeActivity;
+import space.weme.remix.ui.community.AtyPost;
 import space.weme.remix.util.DimensionUtils;
 import space.weme.remix.util.LogUtils;
 import space.weme.remix.util.OkHttpUtils;
@@ -43,12 +56,25 @@ public class AtyInfo extends SwipeActivity {
     private TextView mTvVisit;
     private TextView mTvConstellation;
     private ImageView mIvGender;
+    private View[] mPagerViews;
+    private ViewPager mViewPager;
+
+    private SwipeRefreshLayout swipe_2;
+    private SwipeRefreshLayout swipe_3;
 
     int birthFlag;
     int followFlag;
+    boolean isLoading_2 = false;
+    boolean canLoadMore_2 = true;
+    int page_2;
 
-    private View[] mPagerViews;
-    private ViewPager mViewPager;
+    List<TimeLine> timeLineList;
+    TimeLineAdapter mTimeLineAdapter;
+
+    List<UserImage> userImageList;
+    UserImageAdapter mUserImageAdapter;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,26 +136,7 @@ public class AtyInfo extends SwipeActivity {
             }
         });
         param.clear();
-        param.put("token", StrUtils.token());
-        param.put("id", mId);
-        OkHttpUtils.post(StrUtils.GET_PROFILE_BY_ID, param, TAG, new OkHttpUtils.SimpleOkCallBack() {
-            @Override
-            public void onResponse(String s) {
-                LogUtils.i(TAG,s);
-                JSONObject j = OkHttpUtils.parseJSON(AtyInfo.this,s);
-                if(j == null){
-                    return;
-                }
-                User user = User.fromJSON(j);
-                mUser = user;
-                birthFlag = j.optInt("birthflag");
-                followFlag = j.optInt("followflag");
-                mTvConstellation.setText(user.constellation);
-                mIvGender.setImageResource(user.gender.equals("\u7537")?R.mipmap.boy:R.mipmap.girl);
-                configView1(user);
-                configView2(user);
-            }
-        });
+
     }
 
     private void setUpPagerViews(){
@@ -140,78 +147,216 @@ public class AtyInfo extends SwipeActivity {
         mPagerViews[0] = v0;
         mPagerViews[1] = v1;
         mPagerViews[2] = v2;
+
+        configView1();
+
+        configView2();
+
+        //configView3();
     }
 
-    private void configView1(User user){
-        TextView tvName = (TextView) mPagerViews[0].findViewById(R.id.aty_info_name);
-        tvName.setText(user.name);
-        TextView tvBirth = (TextView) mPagerViews[0].findViewById(R.id.aty_info_birth);
-        if(birthFlag == -1){
-            tvBirth.setText(R.string.larger_than_you);
-        }else if(birthFlag == 0){
-            tvBirth.setText(R.string.the_same_birth);
-        }else if (birthFlag == 1){
-            tvBirth.setText(R.string.smaller_than_you);
-        }
-        TextView tvSchool = (TextView) mPagerViews[0].findViewById(R.id.aty_info_school);
-        tvSchool.setText(user.school);
-        TextView tvEducation = (TextView) mPagerViews[0].findViewById(R.id.aty_info_education);
-        tvEducation.setText(user.enrollment);
-        TextView tvMajor = (TextView) mPagerViews[0].findViewById(R.id.aty_info_major);
-        tvMajor.setText(user.department);
-
-        TextView tvHome = (TextView) mPagerViews[0].findViewById(R.id.aty_info_home);
-        tvHome.setText(user.hometown);
-
-        TextView tvQQ = (TextView) mPagerViews[0].findViewById(R.id.aty_info_qq);
-        tvQQ.setText(user.qq);
-
-        TextView tvWeChat = (TextView) mPagerViews[0].findViewById(R.id.aty_info_we_chat);
-        tvWeChat.setText(user.wechat);
-
-        final Button btnFollow = (Button) mPagerViews[0].findViewById(R.id.aty_info_follow_btn);
-        if(mId.equals(StrUtils.id())){
-            btnFollow.setVisibility(View.GONE);
-        }else{
-            boolean isHe = user.gender.equals("\u7537");
-            switch (followFlag){
-                case 1:
-                    btnFollow.setText(isHe?R.string.has_follow_he:R.string.has_follow_she);
-                    break;
-                case 2:
-                    btnFollow.setText(isHe?R.string.he_has_follow_you:R.string.she_has_follow_you);
-                    break;
-                case 3:
-                    btnFollow.setText(R.string.has_follow_each_other);
-                    break;
-                case 4:
-                    btnFollow.setText(R.string.add_follow);
-            }
-            btnFollow.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(followFlag == 1 || followFlag==3){
-                        unfollow();
-                    }else{
-                        follow();
-                    }
+    private void configView1(){
+        ArrayMap<String,String> param = new ArrayMap<>();
+        param.put("token", StrUtils.token());
+        param.put("id", mId);
+        OkHttpUtils.post(StrUtils.GET_PROFILE_BY_ID, param, TAG, new OkHttpUtils.SimpleOkCallBack() {
+            @Override
+            public void onResponse(String s) {
+                LogUtils.i(TAG, s);
+                JSONObject j = OkHttpUtils.parseJSON(AtyInfo.this, s);
+                if (j == null) {
+                    return;
                 }
-            });
-        }
+                User user = User.fromJSON(j);
+                mUser = user;
+                birthFlag = j.optInt("birthflag");
+                followFlag = j.optInt("followflag");
+                mTvConstellation.setText(user.constellation);
+                mIvGender.setImageResource(user.gender.equals("\u7537") ? R.mipmap.boy : R.mipmap.girl);
+                TextView tvName = (TextView) mPagerViews[0].findViewById(R.id.aty_info_name);
+                tvName.setText(user.name);
+                TextView tvBirth = (TextView) mPagerViews[0].findViewById(R.id.aty_info_birth);
+                if (birthFlag == -1) {
+                    tvBirth.setText(R.string.larger_than_you);
+                } else if (birthFlag == 0) {
+                    tvBirth.setText(R.string.the_same_birth);
+                } else if (birthFlag == 1) {
+                    tvBirth.setText(R.string.smaller_than_you);
+                }
+                TextView tvSchool = (TextView) mPagerViews[0].findViewById(R.id.aty_info_school);
+                tvSchool.setText(user.school);
+                TextView tvEducation = (TextView) mPagerViews[0].findViewById(R.id.aty_info_education);
+                tvEducation.setText(user.enrollment);
+                TextView tvMajor = (TextView) mPagerViews[0].findViewById(R.id.aty_info_major);
+                tvMajor.setText(user.department);
+
+                TextView tvHome = (TextView) mPagerViews[0].findViewById(R.id.aty_info_home);
+                tvHome.setText(user.hometown);
+
+                TextView tvQQ = (TextView) mPagerViews[0].findViewById(R.id.aty_info_qq);
+                tvQQ.setText(user.qq);
+
+                TextView tvWeChat = (TextView) mPagerViews[0].findViewById(R.id.aty_info_we_chat);
+                tvWeChat.setText(user.wechat);
+
+                final Button btnFollow = (Button) mPagerViews[0].findViewById(R.id.aty_info_follow_btn);
+                if (mId.equals(StrUtils.id())) {
+                    btnFollow.setVisibility(View.GONE);
+                } else {
+                    boolean isHe = user.gender.equals("\u7537");
+                    switch (followFlag) {
+                        case 1:
+                            btnFollow.setText(isHe ? R.string.has_follow_he : R.string.has_follow_she);
+                            break;
+                        case 2:
+                            btnFollow.setText(isHe ? R.string.he_has_follow_you : R.string.she_has_follow_you);
+                            break;
+                        case 3:
+                            btnFollow.setText(R.string.has_follow_each_other);
+                            break;
+                        case 4:
+                            btnFollow.setText(R.string.add_follow);
+                    }
+                    btnFollow.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (followFlag == 1 || followFlag == 3) {
+                                unfollow();
+                            } else {
+                                follow();
+                            }
+                        }
+                    });
+                }
+            }
+        });
 
     }
 
-    private void configView2(User user){
-        RecyclerView recyclerView = (RecyclerView) mPagerViews[2];
+    private void configView2(){
+        swipe_2 = (SwipeRefreshLayout) mPagerViews[1];
+        RecyclerView recyclerView = (RecyclerView) swipe_2.findViewById(R.id.aty_info_view2_recycler);
+        mTimeLineAdapter = new TimeLineAdapter();
+        recyclerView.setLayoutManager(new LinearLayoutManager(AtyInfo.this));
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(mTimeLineAdapter);
+        timeLineList = new ArrayList<>();
+        mTimeLineAdapter.setTimeLineList(timeLineList);
+        getTimeLine(1);
+        swipe_2.setColorSchemeResources(R.color.colorPrimary);
+        swipe_2.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (!isLoading_2) {
+                    getTimeLine(1);
+                }
+            }
+        });
+        // todo page = 2 excepiton
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int visibleItemCount = recyclerView.getChildCount();
+                int totalItemCount = layoutManager.getItemCount();
+                int firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
+                if (!isLoading_2 && (totalItemCount - visibleItemCount)
+                        <= (firstVisibleItem + 2) && canLoadMore_2) {
+                    Log.i(TAG, "scroll to end  load page " + (page_2 + 1));
+                    getTimeLine(page_2 + 1);
+                }
+            }
+        });
+    }
 
+    private void getTimeLine(final int page){
+        ArrayMap<String,String> param = new ArrayMap<>();
+        param.put("token",StrUtils.token());
+        param.put("userid", mId);
+        param.put("page", String.format("%d", page));
+        LogUtils.d(TAG, param.toString());
+        isLoading_2 = true;
+        OkHttpUtils.post(StrUtils.GET_TIME_LINE_URL, param, TAG, new OkHttpUtils.SimpleOkCallBack() {
+            @Override
+            public void onFailure(IOException e) {
+                isLoading_2 = false;
+                swipe_2.setRefreshing(false);
+            }
+
+            @Override
+            public void onResponse(String s) {
+                isLoading_2 = false;
+                swipe_2.setRefreshing(false);
+                LogUtils.i(TAG, s);
+                JSONObject j = OkHttpUtils.parseJSON(AtyInfo.this, s);
+                if (j == null) {
+                    return;
+                }
+                JSONArray array = j.optJSONArray("result");
+                if (page == 1) {
+                    timeLineList.clear();
+                }
+                page_2 = page;
+                int size = array.length();
+                int preCount = timeLineList.size();
+                canLoadMore_2 = size != 0;
+                for (int i = 0; i < array.length(); i++) {
+                    timeLineList.add(TimeLine.fromJSON(array.optJSONObject(i)));
+                }
+                if (preCount == 0) {
+                    mTimeLineAdapter.notifyDataSetChanged();
+                } else {
+                    mTimeLineAdapter.notifyItemRangeInserted(preCount, size);
+                }
+            }
+        });
+    }
+
+
+    private void configView3(){
+//        swipe_3 = (SwipeRefreshLayout) mPagerViews[2];
+//        RecyclerView recyclerView = (RecyclerView) swipe_3.findViewById(R.id.aty_info_view3_recycler);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(AtyInfo.this));
+//        recyclerView.setHasFixedSize(true);
+//        mUserImageAdapter = new UserImageAdapter();
+//        userImageList = new ArrayList<>();
+//        mUserImageAdapter.setUserImageList(userImageList);
+//        recyclerView.setAdapter(mUserImageAdapter);
+//
+//
+//        getUserImages(1);
+    }
+
+    private void getUserImages(int page){
+        ArrayMap<String,String> param = new ArrayMap<>();
+        param.put("token",StrUtils.token());
+        param.put("userid",mId);
+        param.put("page", String.format("%d",page));
+        OkHttpUtils.post(StrUtils.GET_USER_IMAGES_URL, param, TAG, new OkHttpUtils.SimpleOkCallBack() {
+            @Override
+            public void onResponse(String s) {
+                LogUtils.i(TAG, s);
+                JSONObject j = OkHttpUtils.parseJSON(AtyInfo.this, s);
+                if (j == null) {
+                    return;
+                }
+                JSONArray result = j.optJSONArray("result");
+                for (int i = 0; i < result.length(); i++) {
+                    userImageList.add(UserImage.fromJSON(result.optJSONObject(i)));
+                }
+                mUserImageAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     private void unfollow(){
+        //todo
         LogUtils.i(TAG, mUser.name);
     }
 
     private void follow(){
-
+        //todo
     }
 
     @Override
@@ -251,19 +396,91 @@ public class AtyInfo extends SwipeActivity {
 
     private class TimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
+        List<TimeLine> timeLineList;
+
+        public void setTimeLineList(List<TimeLine> timeLineList) {
+            this.timeLineList = timeLineList;
+        }
+
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return null;
+            View v = LayoutInflater.from(AtyInfo.this).inflate(R.layout.aty_info_view2_cell,parent,false);
+            return new VH(v);
         }
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
+            final TimeLine timeLine = timeLineList.get(position);
+            VH vh = (VH) holder;
+            vh.tvTimeStamp.setText(StrUtils.timeTransfer(timeLine.timestamp));
+            vh.tvTopic.setText(timeLine.topic);
+            vh.mDrawImage.setImageURI(Uri.parse(timeLine.image));
+            vh.tvTitle.setText(timeLine.title);
+            vh.tvContent.setText(timeLine.body);
+            vh.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(AtyInfo.this, AtyPost.class);
+                    i.putExtra(AtyPost.POST_INTENT,timeLine.postId);
+                    i.putExtra(AtyPost.THEME_INTENT,timeLine.topic);
+                    startActivity(i);
+                }
+            });
         }
 
         @Override
         public int getItemCount() {
-            return 0;
+            return timeLineList==null?0:timeLineList.size();
+        }
+
+        private class VH extends RecyclerView.ViewHolder{
+            TextView tvTimeStamp;
+            TextView tvTopic;
+            SimpleDraweeView mDrawImage;
+            TextView tvTitle;
+            TextView tvContent;
+            public VH(View itemView) {
+                super(itemView);
+                tvTimeStamp = (TextView) itemView.findViewById(R.id.aty_info_view2_cell_timestamp);
+                tvTopic = (TextView) itemView.findViewById(R.id.aty_info_view2_cell_topic);
+                mDrawImage = (SimpleDraweeView) itemView.findViewById(R.id.aty_info_view2_cell_image);
+                tvTitle  = (TextView) itemView.findViewById(R.id.aty_info_view2_cell_title);
+                tvContent = (TextView) itemView.findViewById(R.id.aty_info_view2_cell_content);
+
+            }
+        }
+    }
+
+    private class UserImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+        List<UserImage> userImageList;
+
+        public void setUserImageList(List<UserImage> userImageList) {
+            this.userImageList = userImageList;
+        }
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            SimpleDraweeView draweeView = new SimpleDraweeView(AtyInfo.this);
+            return new VH(draweeView);
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            VH vh = (VH) holder;
+            vh.draw.setImageURI(Uri.parse(userImageList.get(position).thumbnail));
+        }
+
+        @Override
+        public int getItemCount() {
+            return userImageList==null?0:userImageList.size();
+        }
+
+        private class VH extends RecyclerView.ViewHolder{
+            SimpleDraweeView draw;
+            public VH(View itemView) {
+                super(itemView);
+                draw = (SimpleDraweeView) itemView;
+            }
         }
     }
 
