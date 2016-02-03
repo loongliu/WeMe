@@ -57,6 +57,11 @@
     <string name="month_ago">个月前</string>
     <string name="year_ago">年前</string>
     <string name="publish_in">发表于</string>
+    <string name="register_weme_user">注册WEME用户</string>
+    <string name="user_contract">用户协议</string>
+    <string name="name_not_empty">用户名不能为空</string>
+    <string name="password_long_6">密码至少6位</string>
+    <string name="password_not_equal">密码不一致</string>
 
 
     <string-array name="aty_info_tabs">

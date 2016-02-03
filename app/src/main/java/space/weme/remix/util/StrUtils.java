@@ -33,6 +33,8 @@ public final class StrUtils {
 
     public static final String LOGIN_URL = BASE_URL + "login";
 
+    public static final String REGISTER_URL = BASE_URL + "register";
+
     public static final String GET_TOP_ACTIVITY_URL = BASE_URL + "activitytopofficial";
 
     public static final String GET_ACTIVITY_INFO_URL = BASE_URL + "getactivityinformation";

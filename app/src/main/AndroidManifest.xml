@@ -23,6 +23,8 @@
         </activity>
 
         <activity android:name=".ui.intro.AtyLogin" />
+        <activity android:name=".ui.intro.AtyRegister" />
+        <activity android:name=".ui.intro.AtyContract" />
         <activity android:name=".ui.main.AtyMain" />
         <activity android:name=".ui.community.AtyPostNew" />
         <activity android:name=".ui.community.AtyPostReply" />
