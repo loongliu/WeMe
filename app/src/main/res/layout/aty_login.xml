@@ -69,6 +69,8 @@
         android:layout_height="50dp" />
 
     <TextView
+        android:padding="16dp"
+        android:gravity="center"
         android:id="@+id/login_text_view_register"
         android:text="@string/login_weme_user"
         android:textColor="@color/blue_300"

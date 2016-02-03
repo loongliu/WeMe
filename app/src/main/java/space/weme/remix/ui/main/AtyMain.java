@@ -2,6 +2,7 @@ package space.weme.remix.ui.main;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import space.weme.remix.R;
 import space.weme.remix.ui.base.BaseActivity;
+import space.weme.remix.ui.intro.AtyLogin;
 import space.weme.remix.widgt.TabItem;
 
 /**
@@ -19,6 +21,8 @@ import space.weme.remix.widgt.TabItem;
 public class AtyMain extends BaseActivity {
 
     private static final String TAG = "AtyMain";
+    public static final String INTENT_LOGOUT = "intent_lougout";
+
     private static final int PAGE_COUNT = 3;
 
     private int[] mTitleTexts = new int[]{
@@ -36,6 +40,13 @@ public class AtyMain extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.aty_main);
+        if (getIntent().getBooleanExtra(INTENT_LOGOUT, false))
+        {
+            Intent i = new Intent(AtyMain.this,AtyLogin.class);
+            startActivity(i);
+            finish();
+            return;
+        }
         bindViews();
     }
 

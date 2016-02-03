@@ -1,6 +1,8 @@
 package space.weme.remix.ui.main;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +20,7 @@ import org.json.JSONObject;
 import space.weme.remix.R;
 import space.weme.remix.model.User;
 import space.weme.remix.ui.base.BaseFragment;
+import space.weme.remix.ui.intro.AtyWelcome;
 import space.weme.remix.ui.user.AtyInfo;
 import space.weme.remix.util.LogUtils;
 import space.weme.remix.util.OkHttpUtils;
@@ -73,33 +76,33 @@ public class FgtMe extends BaseFragment {
 
     private void fetchUnreadMessage(){
         ArrayMap<String,String> param = new ArrayMap<>();
-        param.put("token",StrUtils.token());
-        OkHttpUtils.post(StrUtils.GET_UNREAD_MESSAGE_URL,param,TAG,new OkHttpUtils.SimpleOkCallBack(){
+        param.put("token", StrUtils.token());
+        OkHttpUtils.post(StrUtils.GET_UNREAD_MESSAGE_URL, param, TAG, new OkHttpUtils.SimpleOkCallBack() {
             @Override
             public void onResponse(String s) {
-                LogUtils.i(TAG,s);
+                LogUtils.i(TAG, s);
                 JSONObject j = OkHttpUtils.parseJSON(getActivity(), s);
-                if(j==null){
+                if (j == null) {
                     return;
                 }
                 String number = j.optString("number");
                 int count;
                 try {
                     count = Integer.parseInt(number);
-                }catch(NumberFormatException e){
+                } catch (NumberFormatException e) {
                     return;
                 }
-                if(count<=0){
+                if (count <= 0) {
                     return;
                 }
                 mTvCount.setVisibility(View.VISIBLE);
-                if(count<10){
+                if (count < 10) {
                     mTvCount.setText(number);
                     mTvCount.setTextSize(16);
-                }else if(count <100) {
+                } else if (count < 100) {
                     mTvCount.setText(number);
                     mTvCount.setTextSize(14);
-                }else {
+                } else {
                     mTvCount.setTextSize(12);
                     mTvCount.setText(R.string.more_than_99);
                 }
@@ -156,7 +159,7 @@ public class FgtMe extends BaseFragment {
                         LogUtils.i(TAG,"food");
                         break;
                     case R.id.fgt_me_setting:
-                        LogUtils.i(TAG,"setting");
+                        logout();
                         break;
                 }
             }
@@ -170,6 +173,15 @@ public class FgtMe extends BaseFragment {
         rootView.findViewById(R.id.fgt_me_food).setOnClickListener(mListener);
         rootView.findViewById(R.id.fgt_me_setting).setOnClickListener(mListener);
 
+    }
+
+    private void logout(){
+        SharedPreferences sp = getActivity().getSharedPreferences(StrUtils.SP_USER, Context.MODE_PRIVATE);
+        sp.edit().remove(StrUtils.SP_USER_ID).remove(StrUtils.SP_USER_TOKEN).apply();
+        Intent i = new Intent(getActivity(), AtyMain.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.putExtra(AtyMain.INTENT_LOGOUT,true);
+        startActivity(i);
     }
 
     @Override
