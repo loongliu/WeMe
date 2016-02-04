@@ -36,7 +36,6 @@ import space.weme.remix.widgt.GridLayout;
 public class AtyPostNew extends AtyImage {
     private static final String TAG = "AtyPostNew";
     public static final String INTENT_ID = "topicID";
-    protected static final MediaType MEDIA_TYPE_JPG = MediaType.parse("image/*");
 
     private String mTopicID;
     private AtomicInteger mSendImageResponseNum;
@@ -138,7 +137,7 @@ public class AtyPostNew extends AtyImage {
                     for(int number = 0; number<mChosenPicturePathList.size(); number++){
                         p.put("number", String.format("%d", number));
                         String path = mChosenPicturePathList.get(number);
-                        OkHttpUtils.uploadFile(StrUtils.UPLOAD_AVATAR_URL,p,path,MEDIA_TYPE_JPG,TAG,new OkHttpUtils.SimpleOkCallBack(){
+                        OkHttpUtils.uploadFile(StrUtils.UPLOAD_AVATAR_URL,p,path,StrUtils.MEDIA_TYPE_IMG,TAG,new OkHttpUtils.SimpleOkCallBack(){
                             @Override
                             public void onFailure(IOException e) {
                                 uploadImageReturned();

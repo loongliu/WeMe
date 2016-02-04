@@ -62,6 +62,12 @@
     <string name="name_not_empty">用户名不能为空</string>
     <string name="password_long_6">密码至少6位</string>
     <string name="password_not_equal">密码不一致</string>
+    <string name="birth_not_empty">生日不能为空</string>
+    <string name="phone_not_empty">手机号不能为空</string>
+    <string name="school_not_empty">学校不能为空</string>
+    <string name="choose_degree">请选择学历</string>
+    <string name="male"><![CDATA[ 男]]></string>
+    <string name="femail">女</string>
 
 
     <string-array name="aty_info_tabs">

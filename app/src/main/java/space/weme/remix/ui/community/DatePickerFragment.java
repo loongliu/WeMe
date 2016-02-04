@@ -12,9 +12,6 @@ import android.os.Bundle;
 public class DatePickerFragment extends DialogFragment {
 
     DatePickerDialog.OnDateSetListener dateSetListener;
-    private int year = 1990;
-    private int month = 0;
-    private int day = 1;
 
 
     public void setDateSetListener(DatePickerDialog.OnDateSetListener dateSetListener) {
@@ -27,7 +24,9 @@ public class DatePickerFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-
+        int year = 1990;
+        int month = 0;
+        int day = 1;
         return new DatePickerDialog(getActivity(), dateSetListener, year,
                 month, day);
     }

@@ -1,299 +1,305 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <LinearLayout
-        android:orientation="vertical"
+    android:orientation="vertical">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/aty_editinfo_toolbar"
+        android:background="@color/colorPrimary"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/aty_editinfo_toolbar"
-            android:background="@color/colorPrimary"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"/>
+        android:layout_height="56dp"/>
 
-        <FrameLayout
-            android:layout_margin="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:gravity="center_vertical"
-                android:text="头像" />
-            <com.facebook.drawee.view.SimpleDraweeView
-                android:id="@+id/aty_editinfo_avatar"
-                app:roundAsCircle="true"
-                android:layout_gravity="end|center_vertical"
-                app:placeholderImage="@mipmap/default_avatar"
-                android:layout_width="60dp"
-                android:layout_height="60dp" />
-        </FrameLayout>
-        <View
-            android:background="@color/grey_gap"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"/>
-        <LinearLayout
-            android:layout_margin="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:gravity="center_vertical"
-                android:text="姓名" />
-            <EditText
-                android:id="@+id/aty_editinfo_edittext_name"
-                android:background="@null"
-                android:textSize="14sp"
-                android:hint="请输入姓名"
-                android:layout_gravity="center_vertical"
-                android:gravity="end|center_vertical"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-        <View
-            android:background="@color/grey_gap"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"/>
-        <FrameLayout
-            android:layout_margin="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:gravity="center_vertical"
-                android:text="性别" />
-            <Switch
-                android:id="@+id/aty_editinfo_switch_gender"
-                android:thumb="@drawable/thumb"
-                android:track="@drawable/track"
-                android:textOn="男"
-                android:textOff="女"
-                android:layout_gravity="end|center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </FrameLayout>
-        <View
-            android:background="@color/grey_gap"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"/>
-        <LinearLayout
-            android:layout_margin="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:gravity="center_vertical"
-                android:text="生日" />
-            <TextView
-                android:id="@+id/aty_editinfo_birth"
-                android:textSize="14sp"
-                android:background="@null"
-                android:hint="公开..."
-                android:layout_gravity="center_vertical"
-                android:gravity="end|center_vertical"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-        <View
-            android:background="@color/grey_gap"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"/>
-        <LinearLayout
-            android:layout_margin="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:gravity="center_vertical"
-                android:text="手机号" />
-            <EditText
-                android:id="@+id/aty_editinfo_phone"
-                android:textSize="14sp"
-                android:background="@null"
-                android:hint="不公开..."
-                android:layout_gravity="center_vertical"
-                android:gravity="end|center_vertical"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-        <View
-            android:background="@color/grey_gap"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"/>
-        <LinearLayout
-            android:layout_margin="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:gravity="center_vertical"
-                android:text="学校" />
-            <TextView
-                android:id="@+id/aty_editinfo_school"
-                android:textSize="14sp"
-                android:background="@null"
-                android:hint="公开..."
-                android:layout_gravity="center_vertical"
-                android:gravity="end|center_vertical"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-        <View
-            android:background="@color/grey_gap"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"/>
-        <LinearLayout
-            android:layout_margin="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:gravity="center_vertical"
-                android:text="学历" />
-            <TextView
-                android:id="@+id/aty_editinfo_education"
-                android:textSize="14sp"
-                android:background="@null"
-                android:hint="公开..."
-                android:layout_gravity="center_vertical"
-                android:gravity="end|center_vertical"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-        <View
-            android:background="@color/grey_gap"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"/>
-        <LinearLayout
-            android:layout_margin="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:gravity="center_vertical"
-                android:text="专业" />
-            <EditText
-                android:id="@+id/aty_editinfo_major"
-                android:textSize="14sp"
-                android:background="@null"
-                android:hint="选填,公开..."
-                android:layout_gravity="center_vertical"
-                android:gravity="end|center_vertical"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-        <View
-            android:background="@color/grey_gap"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"/>
-        <LinearLayout
-        android:layout_margin="16dp"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_gravity="center_vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:gravity="center_vertical"
-            android:text="微信" />
-        <EditText
-            android:id="@+id/aty_editinfo_wechat"
-            android:textSize="14sp"
-            android:background="@null"
-            android:hint="选填,公开..."
-            android:layout_gravity="center_vertical"
-            android:gravity="end|center_vertical"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-        <View
-            android:background="@color/grey_gap"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"/>
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
         <LinearLayout
-            android:layout_margin="16dp"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
+
+            <FrameLayout
+                android:layout_margin="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:gravity="center_vertical"
+                    android:text="头像" />
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/aty_editinfo_avatar"
+                    app:roundAsCircle="true"
+                    android:layout_gravity="end|center_vertical"
+                    app:placeholderImage="@mipmap/default_avatar"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp" />
+            </FrameLayout>
+            <View
+                android:background="@color/grey_gap"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+            <LinearLayout
+                android:layout_margin="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:gravity="center_vertical"
+                    android:text="姓名" />
+                <EditText
+                    android:id="@+id/aty_editinfo_edittext_name"
+                    android:background="@null"
+                    android:textSize="14sp"
+                    android:hint="请输入姓名"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="end|center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <View
+                android:background="@color/grey_gap"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+            <FrameLayout
+                android:layout_margin="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:gravity="center_vertical"
+                    android:text="性别" />
+                <Switch
+                    android:id="@+id/aty_editinfo_switch_gender"
+                    android:thumb="@drawable/thumb"
+                    android:track="@drawable/track"
+                    android:textOn="男"
+                    android:textOff="女"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </FrameLayout>
+            <View
+                android:background="@color/grey_gap"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+            <LinearLayout
+                android:layout_margin="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:gravity="center_vertical"
+                    android:text="生日" />
+                <TextView
+                    android:id="@+id/aty_editinfo_birth"
+                    android:textSize="14sp"
+                    android:background="@null"
+                    android:hint="公开..."
+                    android:layout_gravity="center_vertical"
+                    android:gravity="end|center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <View
+                android:background="@color/grey_gap"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+            <LinearLayout
+                android:layout_margin="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:gravity="center_vertical"
+                    android:text="手机号" />
+                <EditText
+                    android:id="@+id/aty_editinfo_phone"
+                    android:textSize="14sp"
+                    android:background="@null"
+                    android:hint="不公开..."
+                    android:layout_gravity="center_vertical"
+                    android:gravity="end|center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <View
+                android:background="@color/grey_gap"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+            <LinearLayout
+                android:layout_margin="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:gravity="center_vertical"
+                    android:text="学校" />
+                <TextView
+                    android:id="@+id/aty_editinfo_school"
+                    android:textSize="14sp"
+                    android:background="@null"
+                    android:hint="公开..."
+                    android:layout_gravity="center_vertical"
+                    android:gravity="end|center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <View
+                android:background="@color/grey_gap"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+            <FrameLayout
+                android:layout_margin="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:gravity="center_vertical"
+                    android:text="学历" />
+                <Spinner
+                    android:id="@+id/aty_editinfo_education"
+                    android:textSize="14sp"
+                    android:hint="公开..."
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:background="@android:drawable/btn_dropdown"
+                    android:spinnerMode="dropdown" />
+            </FrameLayout>
+            <View
+                android:background="@color/grey_gap"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+            <LinearLayout
+                android:layout_margin="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:gravity="center_vertical"
+                    android:text="专业" />
+                <EditText
+                    android:id="@+id/aty_editinfo_major"
+                    android:textSize="14sp"
+                    android:background="@null"
+                    android:hint="选填,公开..."
+                    android:layout_gravity="center_vertical"
+                    android:gravity="end|center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <View
+                android:background="@color/grey_gap"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+            <LinearLayout
+                android:layout_margin="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:gravity="center_vertical"
+                    android:text="微信" />
+                <EditText
+                    android:id="@+id/aty_editinfo_wechat"
+                    android:textSize="14sp"
+                    android:background="@null"
+                    android:hint="选填,公开..."
+                    android:layout_gravity="center_vertical"
+                    android:gravity="end|center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <View
+                android:background="@color/grey_gap"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+            <LinearLayout
+                android:layout_margin="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:gravity="center_vertical"
+                    android:text="QQ" />
+                <EditText
+                    android:id="@+id/aty_editinfo_qq"
+                    android:textSize="14sp"
+                    android:background="@null"
+                    android:hint="选填,公开..."
+                    android:layout_gravity="center_vertical"
+                    android:gravity="end|center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <View
+                android:background="@color/grey_gap"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+            <LinearLayout
+                android:layout_margin="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:gravity="center_vertical"
+                    android:text="家乡" />
+                <EditText
+                    android:id="@+id/aty_editinfo_home"
+                    android:textSize="14sp"
+                    android:background="@null"
+                    android:hint="选填,公开..."
+                    android:layout_gravity="center_vertical"
+                    android:gravity="end|center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <View
+                android:background="@color/grey_gap"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
             <TextView
-                android:layout_gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:gravity="center_vertical"
-                android:text="QQ" />
-            <EditText
-                android:id="@+id/aty_editinfo_qq"
-                android:textSize="14sp"
-                android:background="@null"
-                android:hint="选填,公开..."
-                android:layout_gravity="center_vertical"
-                android:gravity="end|center_vertical"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content" />
+                android:id="@+id/aty_editinfo_commit"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_margin="16dp"
+                android:background="@drawable/bg_aty_register_btn"
+                android:gravity="center"
+                android:text="提交"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
         </LinearLayout>
-        <View
-            android:background="@color/grey_gap"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"/>
-        <LinearLayout
-            android:layout_margin="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:gravity="center_vertical"
-                android:text="家乡" />
-            <EditText
-                android:id="@+id/aty_editinfo_home"
-                android:textSize="14sp"
-                android:background="@null"
-                android:hint="选填,公开..."
-                android:layout_gravity="center_vertical"
-                android:gravity="end|center_vertical"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-        <View
-            android:background="@color/grey_gap"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"/>
-        <TextView
-            android:id="@+id/aty_editinfo_commit"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_margin="16dp"
-            android:background="@drawable/bg_aty_register_btn"
-            android:enabled="false"
-            android:gravity="center"
-            android:text="提交"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</LinearLayout>
+

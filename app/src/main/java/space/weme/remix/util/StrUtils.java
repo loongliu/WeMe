@@ -13,6 +13,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import okhttp3.MediaType;
 import space.weme.remix.APP;
 import space.weme.remix.R;
 
@@ -34,6 +35,8 @@ public final class StrUtils {
     public static final String LOGIN_URL = BASE_URL + "login";
 
     public static final String REGISTER_URL = BASE_URL + "register";
+
+    public static final String EDIT_PROFILE_URL = BASE_URL + "editprofileinfo";
 
     public static final String GET_TOP_ACTIVITY_URL = BASE_URL + "activitytopofficial";
 
@@ -95,6 +98,9 @@ public final class StrUtils {
     public static final String SP_USER_TOKEN = SP_USER + "_token";
     public static final String SP_USER_ID = SP_USER + "_id";
 
+
+
+    public static final MediaType MEDIA_TYPE_IMG = MediaType.parse("image/*");
 
     public static String timeTransfer(String timestamp){
         SimpleDateFormat sdf = new SimpleDateFormat("EE, d LLLL yyyy HH:mm:ss zzzz", Locale.US);
