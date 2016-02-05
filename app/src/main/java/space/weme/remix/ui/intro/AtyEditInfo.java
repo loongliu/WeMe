@@ -3,9 +3,11 @@ package space.weme.remix.ui.intro;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.util.ArrayMap;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -63,6 +65,8 @@ public class AtyEditInfo extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.aty_editinfo);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.aty_editinfo_toolbar);
+        toolbar.setTitleTextColor(Color.WHITE);
         bindViews();
     }
 

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/aty_friend_cell_avatar"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
+        app:roundAsCircle="true"
+        app:placeholderImage="@mipmap/default_avatar"
+        android:layout_width="48dp"
+        android:layout_height="48dp" />
+
+    <TextView
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:id="@+id/aty_friend_cell_name"
+        android:text="liujilong"
+        android:textSize="16sp"
+        android:layout_alignTop="@+id/aty_friend_cell_avatar"
+        android:layout_toRightOf="@+id/aty_friend_cell_avatar"
+        android:layout_toEndOf="@+id/aty_friend_cell_avatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/aty_friend_cell_gender"
+        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_alignTop="@+id/aty_friend_cell_avatar"
+        android:layout_toRightOf="@+id/aty_friend_cell_name"
+        android:layout_toEndOf="@+id/aty_friend_cell_name"
+        android:src="@mipmap/boy"
+        android:layout_width="16dp"
+        android:layout_height="16dp" />
+    <TextView
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:id="@+id/aty_friend_cell_school"
+        android:text="donganndaxue"
+        android:textSize="16sp"
+        android:layout_alignBottom="@+id/aty_friend_cell_avatar"
+        android:layout_toRightOf="@+id/aty_friend_cell_avatar"
+        android:layout_toEndOf="@+id/aty_friend_cell_avatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <View
+        android:layout_alignParentBottom="true"
+        android:background="@color/grey_gap"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+</RelativeLayout>

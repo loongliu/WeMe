@@ -21,6 +21,7 @@ import space.weme.remix.R;
 import space.weme.remix.model.User;
 import space.weme.remix.ui.base.BaseFragment;
 import space.weme.remix.ui.intro.AtyWelcome;
+import space.weme.remix.ui.user.AtyFriend;
 import space.weme.remix.ui.user.AtyInfo;
 import space.weme.remix.util.LogUtils;
 import space.weme.remix.util.OkHttpUtils;
@@ -141,7 +142,7 @@ public class FgtMe extends BaseFragment {
                         getActivity().startActivity(i);
                         break;
                     case R.id.fgt_me_friend:
-                        LogUtils.i(TAG,"friend");
+                        getActivity().startActivity(new Intent(getActivity(), AtyFriend.class));
                         break;
                     case R.id.fgt_me_message:
                         LogUtils.i(TAG,"message");
