@@ -80,6 +80,8 @@ public final class StrUtils {
 
     public static final String SEARCH_USER_URL = BASE_URL + "searchuser";
 
+    public static final String GET_USER_MESSAGE_LIST = BASE_URL + "getSendUserList";
+
 
 
 

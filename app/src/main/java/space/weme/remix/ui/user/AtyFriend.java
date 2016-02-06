@@ -18,9 +18,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import space.weme.remix.R;
 import space.weme.remix.model.FriendData;
 import space.weme.remix.ui.base.BaseActivity;
+import space.weme.remix.ui.base.SwipeActivity;
+import space.weme.remix.util.DimensionUtils;
 import space.weme.remix.util.LogUtils;
 import space.weme.remix.util.OkHttpUtils;
 import space.weme.remix.util.StrUtils;
@@ -29,7 +32,7 @@ import space.weme.remix.util.StrUtils;
  * Created by Liujilong on 16/2/5.
  * liujilong.me@gmail.com
  */
-public class AtyFriend extends BaseActivity {
+public class AtyFriend extends SwipeActivity {
     private static final String TAG = "AtyFriend";
 
     EditText etSearch;
@@ -44,6 +47,10 @@ public class AtyFriend extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.aty_friend);
+
+        SwipeBackLayout mSwipeBackLayout = getSwipeBackLayout();
+        mSwipeBackLayout.setEdgeSize(DimensionUtils.getDisplay().widthPixels / 2);
+        mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
 
         etSearch = (EditText) findViewById(R.id.aty_friend_search);
         tvSeeMe = (TextView) findViewById(R.id.aty_friend_see_me);

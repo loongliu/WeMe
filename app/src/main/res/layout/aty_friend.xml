@@ -3,6 +3,8 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 <android.support.v7.widget.Toolbar
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:background="@color/colorPrimary"
     android:layout_width="match_parent"
     android:layout_height="56dp">
@@ -21,6 +23,8 @@
         android:layout_height="48dp">
         <EditText
             android:id="@+id/aty_friend_search"
+            android:nextFocusUp="@id/aty_friend_search"
+            android:nextFocusLeft="@id/aty_friend_search"
             android:padding="8dp"
             android:hint="输入姓名快速查找"
             android:textSize="14sp"

@@ -71,6 +71,7 @@
     <string name="person_info">个人信息</string>
     <string name="boy">男</string>
     <string name="people_see_me">关注我的人</string>
+    <string name="message_list">私信列表</string>
 
 
     <string-array name="aty_info_tabs">

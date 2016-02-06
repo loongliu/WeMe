@@ -23,6 +23,7 @@ import space.weme.remix.ui.base.BaseFragment;
 import space.weme.remix.ui.intro.AtyWelcome;
 import space.weme.remix.ui.user.AtyFriend;
 import space.weme.remix.ui.user.AtyInfo;
+import space.weme.remix.ui.user.AtyMessage;
 import space.weme.remix.util.LogUtils;
 import space.weme.remix.util.OkHttpUtils;
 import space.weme.remix.util.StrUtils;
@@ -145,7 +146,7 @@ public class FgtMe extends BaseFragment {
                         getActivity().startActivity(new Intent(getActivity(), AtyFriend.class));
                         break;
                     case R.id.fgt_me_message:
-                        LogUtils.i(TAG,"message");
+                        getActivity().startActivity(new Intent(getActivity(), AtyMessage.class));
                         break;
                     case R.id.fgt_me_activity:
                         LogUtils.i(TAG,"activity");

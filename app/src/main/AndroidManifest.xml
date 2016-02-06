@@ -35,8 +35,10 @@
         <activity android:name=".ui.community.AtyPost" android:theme="@style/AppTheme.Translucent"/>
         <activity android:name=".ui.AtyImage" android:theme="@style/AppTheme.Translucent"/>
         <activity android:name=".ui.user.AtyInfo" android:theme="@style/AppTheme.Translucent" />
-        <activity android:name=".ui.user.AtyFriend" />
-        <activity android:name=".ui.user.AtySeeMe" />
+        <activity android:name=".ui.user.AtyFriend" android:theme="@style/AppTheme.Translucent" />
+        <activity android:name=".ui.user.AtySeeMe" android:theme="@style/AppTheme.Translucent" />
+        <activity android:name=".ui.user.AtyMessage" android:theme="@style/AppTheme.Translucent" />
+        <activity android:name=".ui.user.AtyMessageDetail" android:theme="@style/AppTheme.Translucent" />
 
         <activity android:name="me.nereo.multi_image_selector.MultiImageSelectorActivity" />
 
