@@ -82,6 +82,10 @@ public final class StrUtils {
 
     public static final String GET_USER_MESSAGE_LIST = BASE_URL + "getSendUserList";
 
+    public static final String GET_MESSAGE_DETAIL = BASE_URL + "getMessageDetailList";
+
+    public static final String SEND_MESSAGE = BASE_URL + "sendmessage";
+
 
 
 

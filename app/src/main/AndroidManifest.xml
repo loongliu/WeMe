@@ -39,6 +39,7 @@
         <activity android:name=".ui.user.AtySeeMe" android:theme="@style/AppTheme.Translucent" />
         <activity android:name=".ui.user.AtyMessage" android:theme="@style/AppTheme.Translucent" />
         <activity android:name=".ui.user.AtyMessageDetail" android:theme="@style/AppTheme.Translucent" />
+        <activity android:name=".ui.user.AtyMessageReply" />
 
         <activity android:name="me.nereo.multi_image_selector.MultiImageSelectorActivity" />
 

@@ -1,9 +1,14 @@
 package space.weme.remix.widgt;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.facebook.drawee.view.SimpleDraweeView;
+
+import java.util.List;
 
 /**
  * Created by Liujilong on 2015/12/11.
@@ -12,6 +17,7 @@ import android.view.ViewGroup;
 public class GridLayout extends ViewGroup {
     private int numInRow = 4;
     private int CELL_SIZE_DIVIDE_GAP_SIZE = 10;
+    private Context mContext;
 
 
     public void setNumInRow(int num){
@@ -22,16 +28,38 @@ public class GridLayout extends ViewGroup {
 
     public GridLayout(Context context) {
         this(context, null);
+        mContext = context;
     }
 
     public GridLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
+        mContext = context;
     }
 
     public GridLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        mContext = context;
     }
 
+    public void setImageLists(List<String> lists, View.OnClickListener listener){
+        removeAllViews();
+        if(lists==null || lists.size()==0){
+            setVisibility(GONE);
+            return;
+        }
+        setVisibility(VISIBLE);
+        for(String url : lists){
+            SimpleDraweeView image = new SimpleDraweeView(mContext);
+            addView(image);
+            image.setImageURI(Uri.parse(url));
+            image.setTag(url);
+            image.setOnClickListener(listener);
+        }
+    }
+
+    public void setImageLists(List<String> lists){
+        setImageLists(lists,null);
+    }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
