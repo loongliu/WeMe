@@ -86,6 +86,12 @@ public final class StrUtils {
 
     public static final String SEND_MESSAGE = BASE_URL + "sendmessage";
 
+    public static final String GET_PUBLISH_ACTIVITY = BASE_URL + "getpublishactivity";
+
+    public static final String GET_REGISTER_ACTIVITY = BASE_URL + "getattentactivity";
+
+    public static final String GET_LIKE_ACTIVITY = BASE_URL + "getlikeactivity";
+
 
 
 

@@ -79,4 +79,10 @@
         <item >时间轴</item>
         <item >图集</item>
     </string-array>
+
+    <string-array name="aty_user_activity_titles">
+        <item >我发布的活动</item>
+        <item >我关注的活动</item>
+        <item >我参与的活动</item>
+    </string-array>
 </resources>

@@ -57,7 +57,7 @@ public class AtyMessageDetail extends SwipeActivity {
         ArrayMap<String,String> param = new ArrayMap<>();
         param.put("token", StrUtils.token());
         param.put("page",String.format("%d", page));
-        param.put("SendId",id);
+        param.put("SendId",id);   
         OkHttpUtils.post(StrUtils.GET_MESSAGE_DETAIL,param,TAG, new OkHttpUtils.SimpleOkCallBack(){
             @Override
             public void onResponse(String s) {

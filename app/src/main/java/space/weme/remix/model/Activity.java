@@ -44,6 +44,7 @@ public class Activity {
         a.state = j.optString("state").equals("yes");
         a.time = j.optString("time");
         a.title = j.optString("title");
+        a.status = j.optString("status");
         return a;
     }
 
