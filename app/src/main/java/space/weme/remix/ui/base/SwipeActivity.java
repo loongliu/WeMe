@@ -30,6 +30,6 @@ public abstract class SwipeActivity extends SwipeBackActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onResume(this);
+        MobclickAgent.onPause(this);
     }
 }

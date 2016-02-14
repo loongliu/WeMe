@@ -20,6 +20,7 @@ import org.json.JSONObject;
 import space.weme.remix.R;
 import space.weme.remix.model.User;
 import space.weme.remix.ui.base.BaseFragment;
+import space.weme.remix.ui.user.AtyDiscovery;
 import space.weme.remix.ui.user.AtyFriend;
 import space.weme.remix.ui.user.AtyInfo;
 import space.weme.remix.ui.user.AtyMessage;
@@ -151,11 +152,11 @@ public class FgtMe extends BaseFragment {
                     case R.id.fgt_me_activity:
                         getActivity().startActivity(new Intent(getActivity(), AtyUserActivity.class));
                         break;
-                    case R.id.fgt_me_location:
-                        LogUtils.i(TAG,"location");
-                        break;
+//                    case R.id.fgt_me_location:
+//                        LogUtils.i(TAG,"location");
+//                        break;
                     case R.id.fgt_me_discovery:
-                        LogUtils.i(TAG,"discovery");
+                        getActivity().startActivity(new Intent(getActivity(), AtyDiscovery.class));
                         break;
                     case R.id.fgt_me_food:
                         LogUtils.i(TAG,"food");
@@ -170,7 +171,7 @@ public class FgtMe extends BaseFragment {
         rootView.findViewById(R.id.fgt_me_friend).setOnClickListener(mListener);
         rootView.findViewById(R.id.fgt_me_message).setOnClickListener(mListener);
         rootView.findViewById(R.id.fgt_me_activity).setOnClickListener(mListener);
-        rootView.findViewById(R.id.fgt_me_location).setOnClickListener(mListener);
+        //rootView.findViewById(R.id.fgt_me_location).setOnClickListener(mListener);
         rootView.findViewById(R.id.fgt_me_discovery).setOnClickListener(mListener);
         rootView.findViewById(R.id.fgt_me_food).setOnClickListener(mListener);
         rootView.findViewById(R.id.fgt_me_setting).setOnClickListener(mListener);

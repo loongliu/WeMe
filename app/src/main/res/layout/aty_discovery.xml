@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/aty_discovery_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--todo change color-->
+    <ImageView
+        android:id="@+id/aty_discovery_back"
+        android:padding="16dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp" />
+
+    <ImageView
+        android:id="@+id/aty_discovery_more"
+        android:padding="16dp"
+        android:layout_gravity="end|top"
+        android:layout_width="48dp"
+        android:layout_height="48dp" />
+
+
+
+    <space.weme.remix.widgt.Card
+        android:id="@+id/aty_discovery_card"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="6dp">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/spade" />
+    </space.weme.remix.widgt.Card>
+
+    <TextView
+        android:id="@+id/aty_discovery_text"
+        android:text="点击此处抽取卡片"
+        android:padding="16dp"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</FrameLayout>

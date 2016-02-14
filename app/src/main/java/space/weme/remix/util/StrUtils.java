@@ -92,6 +92,8 @@ public final class StrUtils {
 
     public static final String GET_LIKE_ACTIVITY = BASE_URL + "getlikeactivity";
 
+    public static final String GET_RECOMMAND_USER = BASE_URL + "getrecommenduser";
+
 
 
 
@@ -103,6 +105,10 @@ public final class StrUtils {
 
     public static String thumForID(String id){
         return GET_AVATAR + id + "_thumbnail.jpg";
+    }
+
+    public static String avatarForID(String id){
+        return GET_AVATAR + id;
     }
 
     public static String backgroundForID(String id){return GET_BACKGROUND + id;}

@@ -32,6 +32,6 @@ public abstract class BaseActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onResume(this);
+        MobclickAgent.onPause(this);
     }
 }

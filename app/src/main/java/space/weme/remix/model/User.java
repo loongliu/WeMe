@@ -26,6 +26,8 @@ public class User {
     public String weme;
     public String constellation;
 
+    public String avatar;
+
     public static User fromJSON(JSONObject j){
         User user = new User();
         user.birthday = j.optString("birthday");
@@ -46,6 +48,8 @@ public class User {
         user.wechat = j.optString("wechat");
         user.weme = j.optString("weme");
         user.constellation = j.optString("constellation");
+
+        user.avatar = j.optString("avatar");
         return user;
     }
 }
