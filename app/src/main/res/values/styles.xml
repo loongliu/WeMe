@@ -10,5 +10,11 @@
         <item name="android:windowIsTranslucent">true</item>
     </style>
 
+    <style name="PopupWindowAnimation">
+
+        <item name="android:windowEnterAnimation">@anim/inuptodown</item>
+        <item name="android:windowExitAnimation">@anim/outdowntoup</item>
+    </style>
+
 
 </resources>

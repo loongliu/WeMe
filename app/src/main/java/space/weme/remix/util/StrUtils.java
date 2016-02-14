@@ -94,6 +94,8 @@ public final class StrUtils {
 
     public static final String GET_RECOMMAND_USER = BASE_URL + "getrecommenduser";
 
+    public static final String FOLLOW_USER = BASE_URL + "follow";
+
 
 
 

@@ -4,8 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,14 +13,18 @@ import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.CardView;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -46,15 +50,21 @@ public class AtyDiscovery extends BaseActivity {
 
     private static final String TAG_USER = TAG + "_USER";
 
+    private static final int STATE_FIRST = 0x1;
+    private static final int STATE_ANIMATING = 0x2;
+    private static final int STATE_READY = 0x3;
 
+    private int state = STATE_FIRST;
+
+
+    private DisplayMetrics displayMetrics;
 
     private Card mCard;
     private FrameLayout flBackground;
 
     private float mTranslationY;
 
-    private boolean mFirstAnimation = true;
-    private boolean isAnimating = false;
+
     private boolean isLoading = false;
 
     private float preValue = 0;
@@ -65,17 +75,15 @@ public class AtyDiscovery extends BaseActivity {
     ExecutorService exec;
     private Handler mHandler;
 
+    private PopupWindow popupWindow;
+
     @Override
+    @SuppressWarnings("deprecation")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.aty_discovery);
 
         ImageView ivBack = (ImageView) findViewById(R.id.aty_discovery_back);
-        BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.mipmap.card_back);
-        if(drawable!=null) {
-            Bitmap whiteBitmap = BitmapUtils.changeColor(drawable.getBitmap(), 0xffffff);
-            ivBack.setImageBitmap(whiteBitmap);
-        }
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,11 +92,6 @@ public class AtyDiscovery extends BaseActivity {
         });
 
         ImageView ivMore = (ImageView) findViewById(R.id.aty_discovery_more);
-        BitmapDrawable drawable1 = (BitmapDrawable) getResources().getDrawable(R.mipmap.card_more);
-        if(drawable1!=null){
-            Bitmap white = BitmapUtils.changeColor(drawable1.getBitmap(),Color.WHITE);
-            ivMore.setImageBitmap(white);
-        }
         ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,7 +110,7 @@ public class AtyDiscovery extends BaseActivity {
 
         mCard = Card.fromXML(this, flBackground);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(0,0);
-        DisplayMetrics displayMetrics = DimensionUtils.getDisplay();
+        displayMetrics = DimensionUtils.getDisplay();
 
         params.width = displayMetrics.widthPixels*7/10;
         params.height = params.width*3/2;
@@ -127,22 +130,87 @@ public class AtyDiscovery extends BaseActivity {
         tvText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isAnimating) {
+                if (state!=STATE_ANIMATING) {
                     startAnimation();
                 }
             }
         });
         userList = new ArrayList<>();
 
+        flBackground.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismissPopup();
+            }
+        });
 
+    }
+
+    private void dismissPopup(){
+        if(popupWindow!=null && popupWindow.isShowing()){
+            popupWindow.dismiss();
+        }
     }
 
 
     private void ivMoreClicked(){
-        // todo
+        if(state!=STATE_READY){
+            return;
+        }
+        if(popupWindow!=null&&popupWindow.isShowing()){
+            popupWindow.dismiss();
+        }else{
+            initPopupWindow();
+            popupWindow.showAtLocation(flBackground, Gravity.BOTTOM, 0, 0);
+        }
     }
 
+    private void initPopupWindow(){
+        View content = LayoutInflater.from(this).inflate(R.layout.aty_discovery_option,flBackground,false);
+        popupWindow = new PopupWindow(content,displayMetrics.widthPixels,DimensionUtils.dp2px(152));
+        popupWindow.setAnimationStyle(R.style.PopupWindowAnimation);
+        View.OnClickListener popupListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String id = userList.get(currentIndex).ID + "";
+                if(v.getId()==R.id.aty_discovery_option_message){
+                    Intent i = new Intent(AtyDiscovery.this,AtyMessageReply.class);
+                    i.putExtra(AtyMessageReply.INTENT_ID,id);
+                    startActivity(i);
+                }else if(v.getId() == R.id.aty_discovery_option_follow){
+                    followUser(id);
+                }
+                dismissPopup();
+            }
+        };
+        content.findViewById(R.id.aty_discovery_option_cancel).setOnClickListener(popupListener);
+        content.findViewById(R.id.aty_discovery_option_follow).setOnClickListener(popupListener);
+        content.findViewById(R.id.aty_discovery_option_message).setOnClickListener(popupListener);
+    }
 
+    private void followUser(String id){
+        ArrayMap<String,String> param = new ArrayMap<>();
+        param.put("token", StrUtils.token());
+        param.put("id", id);
+        OkHttpUtils.post(StrUtils.FOLLOW_USER, param, TAG, new OkHttpUtils.SimpleOkCallBack() {
+            @Override
+            public void onFailure(IOException e) {
+                Toast.makeText(AtyDiscovery.this, R.string.follow_fail, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(String s) {
+                JSONObject j = OkHttpUtils.parseJSON(AtyDiscovery.this, s);
+                if (j == null) {
+                    Toast.makeText(AtyDiscovery.this, R.string.follow_fail, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(AtyDiscovery.this, R.string.follow_success, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    @SuppressWarnings("deprecation")
     public void setBackground(final Bitmap b){
         LogUtils.i("Time","Label 1 : " + System.currentTimeMillis());
         if(b == null){
@@ -171,7 +239,6 @@ public class AtyDiscovery extends BaseActivity {
 
 
     private void startAnimation(){
-        isAnimating = true;
         currentIndex++;
         if(currentIndex>=userList.size()&& !isLoading){
             fetchUser();
@@ -202,24 +269,25 @@ public class AtyDiscovery extends BaseActivity {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                isAnimating = false;
+                state=STATE_READY;
             }
 
             @Override
             public void onAnimationCancel(Animator animation) {
-                isAnimating = false;
+                state=STATE_READY;
             }
 
             @Override
             public void onAnimationRepeat(Animator animation) {
             }
         });
-        if(mFirstAnimation){
-            mFirstAnimation = false;
+        if(state==STATE_FIRST){
+            state=STATE_ANIMATING;
             AnimatorSet set = new AnimatorSet();
             set.playSequentially(a1, a2);
             set.start();
         }else{
+            state=STATE_ANIMATING;
             ObjectAnimator a3 = ObjectAnimator.ofFloat(mCard,"RotationX",180,0).setDuration(500);
             a3.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
@@ -271,6 +339,12 @@ public class AtyDiscovery extends BaseActivity {
     @Override
     protected String tag() {
         return TAG;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        dismissPopup();
     }
 
     @Override
