@@ -42,6 +42,7 @@
         <activity android:name=".ui.user.AtyMessageReply" />
         <activity android:name=".ui.user.AtyUserActivity"/>
         <activity android:name=".ui.user.AtyDiscovery" />
+        <activity android:name=".ui.user.AtyDiscoveryFood" />
 
         <activity android:name="me.nereo.multi_image_selector.MultiImageSelectorActivity" />
 

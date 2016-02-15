@@ -316,7 +316,12 @@ public class AtyDiscovery extends BaseActivity {
         isLoading = true;
         ArrayMap<String,String> param = new ArrayMap<>();
         param.put("token", StrUtils.token());
-        OkHttpUtils.post(StrUtils.GET_RECOMMAND_USER,param,TAG_USER,new OkHttpUtils.SimpleOkCallBack(){
+        OkHttpUtils.post(StrUtils.GET_RECOMMEND_USER,param,TAG_USER,new OkHttpUtils.SimpleOkCallBack(){
+            @Override
+            public void onFailure(IOException e) {
+                isLoading = false;
+            }
+
             @Override
             public void onResponse(String s) {
                 LogUtils.i(TAG,s);
@@ -325,6 +330,7 @@ public class AtyDiscovery extends BaseActivity {
                 if(j == null){
                     return;
                 }
+                userList.clear();
                 JSONArray array = j.optJSONArray("result");
                 for(int i = 0; i <array.length(); i++){
                     userList.add(User.fromJSON(array.optJSONObject(i)));

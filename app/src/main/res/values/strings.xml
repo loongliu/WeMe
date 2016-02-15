@@ -77,6 +77,7 @@
     <string name="cancel">取消</string>
     <string name="follow_fail">关注失败</string>
     <string name="follow_success">关注成功</string>
+    <string name="recommend">推荐</string>
 
 
     <string-array name="aty_info_tabs">

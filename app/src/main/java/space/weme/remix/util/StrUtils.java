@@ -92,9 +92,13 @@ public final class StrUtils {
 
     public static final String GET_LIKE_ACTIVITY = BASE_URL + "getlikeactivity";
 
-    public static final String GET_RECOMMAND_USER = BASE_URL + "getrecommenduser";
+    public static final String GET_RECOMMEND_USER = BASE_URL + "getrecommenduser";
 
     public static final String FOLLOW_USER = BASE_URL + "follow";
+
+    public static final String GET_RECOMMEND_FOOD = BASE_URL + "getfoodcard";
+
+    public static final String LIKE_FOOD_URL = BASE_URL + "likefoodcard";
 
 
 

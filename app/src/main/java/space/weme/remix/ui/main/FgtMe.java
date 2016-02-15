@@ -21,6 +21,7 @@ import space.weme.remix.R;
 import space.weme.remix.model.User;
 import space.weme.remix.ui.base.BaseFragment;
 import space.weme.remix.ui.user.AtyDiscovery;
+import space.weme.remix.ui.user.AtyDiscoveryFood;
 import space.weme.remix.ui.user.AtyFriend;
 import space.weme.remix.ui.user.AtyInfo;
 import space.weme.remix.ui.user.AtyMessage;
@@ -159,7 +160,7 @@ public class FgtMe extends BaseFragment {
                         getActivity().startActivity(new Intent(getActivity(), AtyDiscovery.class));
                         break;
                     case R.id.fgt_me_food:
-                        LogUtils.i(TAG,"food");
+                        getActivity().startActivity(new Intent(getActivity(), AtyDiscoveryFood.class));
                         break;
                     case R.id.fgt_me_setting:
                         logout();
