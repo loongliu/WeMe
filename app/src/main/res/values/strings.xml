@@ -78,6 +78,9 @@
     <string name="follow_fail">关注失败</string>
     <string name="follow_success">关注成功</string>
     <string name="recommend">推荐</string>
+    <string name="pre_people">人均&#160;</string>
+    <string name="come_from">来自&#160;</string>
+    <string name="add_food_card">编辑一张美食卡片，分享吧</string>
 
 
     <string-array name="aty_info_tabs">

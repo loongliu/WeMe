@@ -25,7 +25,6 @@
         <TextView
             android:layout_margin="4dp"
             android:textColor="@color/white"
-            android:text="5"
             android:gravity="center"
             android:id="@+id/card_food_like_number"
             android:layout_alignParentEnd="true"
@@ -68,7 +67,6 @@
                 android:textSize="18sp"
                 android:id="@+id/card_food_name"
                 android:layout_gravity="center_horizontal"
-                android:text="千层雪"
                 android:textColor="@color/black"
                 android:layout_weight="2"
                 android:layout_width="wrap_content"
@@ -79,7 +77,6 @@
                 android:layout_height="16dp">
                 <TextView
                     android:textSize="15sp"
-                    android:text="1000km"
                     android:id="@+id/card_food_distance"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
@@ -94,4 +91,106 @@
             </FrameLayout>
         </LinearLayout>
     </RelativeLayout>
+
+    <LinearLayout
+        android:background="#f1f1f1"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:layout_margin="16dp"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/card_food_detail_picture"
+            app:placeholderImage="@mipmap/default_avatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+        <LinearLayout
+            android:background="@color/white"
+            android:id="@+id/card_food_detail_location"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="48dp">
+            <ImageView
+                android:src="@mipmap/location"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="4dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_margin="4dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp" />
+            <TextView
+                android:textSize="18sp"
+                android:id="@+id/card_food_detail_location_text"
+                android:textColor="@color/black"
+                android:layout_gravity="center_vertical"
+                android:lines="1"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:layout_gravity="center_vertical"
+                android:src="@mipmap/forward"
+                android:layout_margin="8dp"
+                android:layout_width="16dp"
+                android:layout_height="16dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:background="@color/white"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="48dp">
+            <ImageView
+                android:layout_gravity="center_vertical"
+                android:src="@mipmap/yuan"
+                android:layout_margin="8dp"
+                android:layout_width="16dp"
+                android:layout_height="16dp" />
+            <TextView
+                android:textSize="18sp"
+                android:lines="1"
+                android:id="@+id/card_food_detail_price"
+                android:textColor="@color/black"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_margin="16dp"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/card_food_detail_comment"
+            android:layout_width="wrap_content"
+            android:gravity="top"
+            android:layout_weight="1"
+            android:layout_height="0dp" />
+        <FrameLayout
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="32dp">
+            <ImageView
+                android:layout_gravity="center_vertical"
+                android:id="@+id/card_food_detail_backward"
+                android:src="@mipmap/backward"
+                android:padding="8dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp" />
+            <TextView
+                android:id="@+id/card_food_detail_user"
+                android:layout_gravity="end|center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </FrameLayout>
+
+    </LinearLayout>
 </app:space.weme.remix.widgt.CardFood>

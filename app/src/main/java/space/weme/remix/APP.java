@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 
+
 /**
  * Created by Liujilong on 16/1/20.
  * liujilong.me@gmail.com
@@ -20,4 +21,5 @@ public class APP extends Application {
         Fresco.initialize(this);
         mSingleton = this;
     }
+
 }

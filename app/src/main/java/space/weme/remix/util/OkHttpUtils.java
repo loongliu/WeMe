@@ -54,6 +54,10 @@ public final class OkHttpUtils {
         return mInstance;
     }
 
+    public static OkHttpClient getClient(){
+        return getInstance().mClient;
+    }
+
     @SuppressWarnings("unused")
     public static void post(String url, Map<String,String> params, OkCallBack callback){
         post(url, params, null, callback);

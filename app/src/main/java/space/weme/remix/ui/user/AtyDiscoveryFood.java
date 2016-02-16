@@ -12,9 +12,11 @@ import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.CardView;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -63,6 +65,8 @@ public class AtyDiscoveryFood extends BaseActivity {
     private List<Food> foodList;
     private int currentIndex = 0;
     private boolean isLoading = false;
+
+    private PopupWindow popupWindow;
 
     @Override
     @SuppressWarnings("deprecation")
@@ -124,6 +128,12 @@ public class AtyDiscoveryFood extends BaseActivity {
 
         foodList = new ArrayList<>();
 
+        flBackground.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismissPopup();
+            }
+        });
 
     }
 
@@ -167,17 +177,17 @@ public class AtyDiscoveryFood extends BaseActivity {
         exec.execute(new Runnable() {
             @Override
             public void run() {
-                LogUtils.i("Time","Label 2 : " + System.currentTimeMillis());
+                LogUtils.i("Time", "Label 2 : " + System.currentTimeMillis());
                 Bitmap sized = BitmapUtils.scale(b, 40, 40 * b.getHeight() / b.getWidth());
-                LogUtils.i("Time","Label 3 : " + System.currentTimeMillis());
+                LogUtils.i("Time", "Label 3 : " + System.currentTimeMillis());
                 final int radius = 5;
-                final Bitmap blur = BitmapUtils.blur(sized,radius);
+                final Bitmap blur = BitmapUtils.blur(sized, radius);
                 LogUtils.i("Time", "Label 4 : " + System.currentTimeMillis());
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        LogUtils.i("Time","Label 5 : " + System.currentTimeMillis());
-                        flBackground.setBackgroundDrawable(new BitmapDrawable(getResources(),blur));
+                        LogUtils.i("Time", "Label 5 : " + System.currentTimeMillis());
+                        flBackground.setBackgroundDrawable(new BitmapDrawable(getResources(), blur));
                     }
                 });
             }
@@ -200,9 +210,9 @@ public class AtyDiscoveryFood extends BaseActivity {
                 float value = (float) animation.getAnimatedValue();
 
                 mCard.resize();
-                if (preValue<90 && value > 90) {
-                    mCard.turnOver();
-                    if(foodList.size()!=0) {
+                if (preValue < 90 && value > 90) {
+                    mCard.turnToFront();
+                    if (foodList.size() != 0) {
                         mCard.showFood(foodList.get(currentIndex));
                     }
                 }
@@ -216,12 +226,12 @@ public class AtyDiscoveryFood extends BaseActivity {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                state=STATE_READY;
+                state = STATE_READY;
             }
 
             @Override
             public void onAnimationCancel(Animator animation) {
-                state=STATE_READY;
+                state = STATE_READY;
             }
 
             @Override
@@ -243,7 +253,7 @@ public class AtyDiscoveryFood extends BaseActivity {
 
                     mCard.resize();
                     if (preValue>90 && value < 90) {
-                        mCard.turnOver();
+                        mCard.turnToBack();
                     }
                     preValue = value;
                 }
@@ -259,7 +269,36 @@ public class AtyDiscoveryFood extends BaseActivity {
 
 
     private void ivMoreClicked(){
-        // todo
+        if(popupWindow!=null&&popupWindow.isShowing()){
+            popupWindow.dismiss();
+        }else{
+            initPopupWindow();
+            popupWindow.showAtLocation(flBackground, Gravity.BOTTOM, 0, 0);
+        }
+    }
+
+    private void initPopupWindow(){
+        View content = LayoutInflater.from(this).inflate(R.layout.aty_discovery_food_option,flBackground,false);
+        popupWindow = new PopupWindow(content,displayMetrics.widthPixels,DimensionUtils.dp2px(102));
+        popupWindow.setAnimationStyle(R.style.PopupWindowAnimation);
+        View.OnClickListener popupListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(v.getId()==R.id.aty_discovery_option_add){
+                    LogUtils.i(TAG,"add food card");
+                    // todo
+                }
+                dismissPopup();
+            }
+        };
+        content.findViewById(R.id.aty_discovery_option_cancel).setOnClickListener(popupListener);
+        content.findViewById(R.id.aty_discovery_option_add).setOnClickListener(popupListener);
+    }
+
+    private void dismissPopup(){
+        if(popupWindow!=null && popupWindow.isShowing()){
+            popupWindow.dismiss();
+        }
     }
 
     @Override

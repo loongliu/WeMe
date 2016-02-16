@@ -12,7 +12,7 @@ import android.support.annotation.ColorInt;
  * Created by Liujilong on 16/1/24.
  * liujilong.me@gmail.com
  */
-public class BitmapUtils {
+public final class BitmapUtils {
     public static Bitmap changeColor(Bitmap b, @ColorInt int color){
         Bitmap resultBitmap = Bitmap.createBitmap(b, 0, 0,
                 b.getWidth() - 1, b.getHeight() - 1);
