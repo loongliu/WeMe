@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -95,6 +94,8 @@ public final class StrUtils {
     public static final String GET_RECOMMEND_USER = BASE_URL + "getrecommenduser";
 
     public static final String FOLLOW_USER = BASE_URL + "follow";
+
+    public static final String UNFOLLOW_USER = BASE_URL + "unfollow";
 
     public static final String GET_RECOMMEND_FOOD = BASE_URL + "getfoodcard";
 

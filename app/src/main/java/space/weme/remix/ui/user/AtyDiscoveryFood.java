@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -14,9 +15,9 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -66,7 +67,6 @@ public class AtyDiscoveryFood extends BaseActivity {
     private int currentIndex = 0;
     private boolean isLoading = false;
 
-    private PopupWindow popupWindow;
 
     @Override
     @SuppressWarnings("deprecation")
@@ -128,12 +128,6 @@ public class AtyDiscoveryFood extends BaseActivity {
 
         foodList = new ArrayList<>();
 
-        flBackground.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismissPopup();
-            }
-        });
 
     }
 
@@ -269,37 +263,29 @@ public class AtyDiscoveryFood extends BaseActivity {
 
 
     private void ivMoreClicked(){
-        if(popupWindow!=null&&popupWindow.isShowing()){
-            popupWindow.dismiss();
-        }else{
-            initPopupWindow();
-            popupWindow.showAtLocation(flBackground, Gravity.BOTTOM, 0, 0);
-        }
-    }
-
-    private void initPopupWindow(){
+        final Dialog dialog = new Dialog(AtyDiscoveryFood.this,R.style.DialogSlideAnim);
         View content = LayoutInflater.from(this).inflate(R.layout.aty_discovery_food_option,flBackground,false);
-        popupWindow = new PopupWindow(content,displayMetrics.widthPixels,DimensionUtils.dp2px(102));
-        popupWindow.setAnimationStyle(R.style.PopupWindowAnimation);
         View.OnClickListener popupListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(v.getId()==R.id.aty_discovery_option_add){
-                    LogUtils.i(TAG,"add food card");
+                    LogUtils.i(TAG, "add food card");
                     // todo
                 }
-                dismissPopup();
+                dialog.dismiss();
             }
         };
         content.findViewById(R.id.aty_discovery_option_cancel).setOnClickListener(popupListener);
         content.findViewById(R.id.aty_discovery_option_add).setOnClickListener(popupListener);
+        dialog.setContentView(content);
+        WindowManager.LayoutParams wmlp = dialog.getWindow().getAttributes();
+        wmlp.gravity = Gravity.BOTTOM | Gravity.START;
+        wmlp.x = 0;   //x position
+        wmlp.y = 0;   //y position
+        wmlp.width = DimensionUtils.getDisplay().widthPixels;
+        dialog.show();
     }
 
-    private void dismissPopup(){
-        if(popupWindow!=null && popupWindow.isShowing()){
-            popupWindow.dismiss();
-        }
-    }
 
     @Override
     public String tag() {

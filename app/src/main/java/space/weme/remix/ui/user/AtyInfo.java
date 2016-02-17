@@ -1,5 +1,8 @@
 package space.weme.remix.ui.user;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,17 +11,19 @@ import android.support.v4.util.ArrayMap;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -58,6 +63,7 @@ public class AtyInfo extends SwipeActivity {
     private ImageView mIvGender;
     private View[] mPagerViews;
     private ViewPager mViewPager;
+    LinearLayout mWholeLayout;
 
     private SwipeRefreshLayout swipe_2;
     private SwipeRefreshLayout swipe_3;
@@ -74,6 +80,8 @@ public class AtyInfo extends SwipeActivity {
     List<UserImage> userImageList;
     UserImageAdapter mUserImageAdapter;
 
+    WindowListener mWindowListener;
+
 
 
     @Override
@@ -86,6 +94,8 @@ public class AtyInfo extends SwipeActivity {
         mSwipeBackLayout.setEdgeSize(DimensionUtils.getDisplay().widthPixels / 2);
         mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
 
+
+        mWholeLayout = (LinearLayout) findViewById(R.id.aty_info_layout);
 
 
         mTvVisit = (TextView) findViewById(R.id.aty_info_visit);
@@ -110,9 +120,15 @@ public class AtyInfo extends SwipeActivity {
         GenericDraweeHierarchy hierarchy = mDrawBackground.getHierarchy();
         hierarchy.setPlaceholderImage(R.mipmap.info_default);
 
+        mWindowListener = new WindowListener();
+        mDrawBackground.setOnClickListener(mWindowListener);
+
+        findViewById(R.id.aty_info_more).setOnClickListener(mWindowListener);
+
         fireInfo();
 
         setUpPagerViews();
+
     }
 
     private void fireInfo(){
@@ -176,17 +192,12 @@ public class AtyInfo extends SwipeActivity {
                 TextView tvName = (TextView) mPagerViews[0].findViewById(R.id.aty_info_name);
                 tvName.setText(user.name);
                 TextView tvBirth = (TextView) mPagerViews[0].findViewById(R.id.aty_info_birth);
-                if (birthFlag == -1) {
-                    tvBirth.setText(R.string.larger_than_you);
-                } else if (birthFlag == 0) {
-                    tvBirth.setText(R.string.the_same_birth);
-                } else if (birthFlag == 1) {
-                    tvBirth.setText(R.string.smaller_than_you);
-                }
+                tvBirth.setText(user.birthday);
+
                 TextView tvSchool = (TextView) mPagerViews[0].findViewById(R.id.aty_info_school);
                 tvSchool.setText(user.school);
                 TextView tvEducation = (TextView) mPagerViews[0].findViewById(R.id.aty_info_education);
-                tvEducation.setText(user.enrollment);
+                tvEducation.setText(user.degree);
                 TextView tvMajor = (TextView) mPagerViews[0].findViewById(R.id.aty_info_major);
                 tvMajor.setText(user.department);
 
@@ -203,6 +214,7 @@ public class AtyInfo extends SwipeActivity {
                 if (mId.equals(StrUtils.id())) {
                     btnFollow.setVisibility(View.GONE);
                 } else {
+                    btnFollow.setVisibility(View.VISIBLE);
                     boolean isHe = user.gender.equals("\u7537");
                     switch (followFlag) {
                         case 1:
@@ -214,7 +226,7 @@ public class AtyInfo extends SwipeActivity {
                         case 3:
                             btnFollow.setText(R.string.has_follow_each_other);
                             break;
-                        case 4:
+                        case 0:
                             btnFollow.setText(R.string.add_follow);
                     }
                     btnFollow.setOnClickListener(new View.OnClickListener() {
@@ -351,12 +363,64 @@ public class AtyInfo extends SwipeActivity {
     }
 
     private void unfollow(){
-        //todo
-        LogUtils.i(TAG, mUser.name);
+        // todo dialog theme
+        new AlertDialog.Builder(AtyInfo.this)
+                .setMessage(getString(R.string.sure_to_unfollow))
+                .setPositiveButton(R.string.unfollow, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        ArrayMap<String,String> param = new ArrayMap<>();
+                        param.put("token",StrUtils.token());
+                        param.put("id", mUser.ID+"");
+                        OkHttpUtils.post(StrUtils.UNFOLLOW_USER, param, TAG, new OkHttpUtils.SimpleOkCallBack(){
+                            @Override
+                            public void onFailure(IOException e) {
+                                Toast.makeText(AtyInfo.this, R.string.unfollow_fail, Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onResponse(String s) {
+                                JSONObject j = OkHttpUtils.parseJSON(AtyInfo.this, s);
+                                if (j == null) {
+                                    Toast.makeText(AtyInfo.this, R.string.unfollow_fail, Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(AtyInfo.this, R.string.unfollow_success, Toast.LENGTH_SHORT).show();
+                                    configView1();
+                                }
+                            }
+                        });
+                    }
+                })
+                .setNegativeButton(R.string.not_unfollow, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     private void follow(){
-        //todo
+
+        ArrayMap<String,String> param = new ArrayMap<>();
+        param.put("token", StrUtils.token());
+        param.put("id", mUser.ID+"");
+        OkHttpUtils.post(StrUtils.FOLLOW_USER, param, TAG, new OkHttpUtils.SimpleOkCallBack() {
+            @Override
+            public void onFailure(IOException e) {
+                Toast.makeText(AtyInfo.this, R.string.follow_fail, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(String s) {
+                JSONObject j = OkHttpUtils.parseJSON(AtyInfo.this, s);
+                if (j == null) {
+                    Toast.makeText(AtyInfo.this, R.string.follow_fail, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(AtyInfo.this, R.string.follow_success, Toast.LENGTH_SHORT).show();
+                    configView1();
+                }
+            }
+        });
     }
 
     @Override
@@ -482,6 +546,93 @@ public class AtyInfo extends SwipeActivity {
                 draw = (SimpleDraweeView) itemView;
             }
         }
+    }
+
+    private class WindowListener implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v) {
+            View content;
+            View.OnClickListener listener;
+            final Dialog dialog = new Dialog(AtyInfo.this,R.style.DialogSlideAnim);
+            if(v.getId()==R.id.aty_info_background){
+                content = LayoutInflater.from(AtyInfo.this).inflate(R.layout.aty_info_option1,mWholeLayout,false);
+                listener = new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(v.getId() == R.id.aty_info_option_change_background){
+                            changeBackground();
+                        }
+                        dialog.dismiss();
+                    }
+                };
+                content.findViewById(R.id.aty_info_option_cancel).setOnClickListener(listener);
+                content.findViewById(R.id.aty_info_option_change_background).setOnClickListener(listener);
+                dialog.setContentView(content);
+            }else if(v.getId()==R.id.aty_info_more){
+                if(Integer.parseInt(StrUtils.id())==mUser.ID){
+                    content = LayoutInflater.from(AtyInfo.this).inflate(R.layout.aty_info_option3,mWholeLayout,false);
+                    listener = new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if(v.getId() == R.id.aty_info_option_change_background){
+                                changeBackground();
+                            }else if(v.getId() == R.id.aty_info_option_qrcode){
+                                showMyQRCode();
+                            }else if(v.getId() == R.id.aty_info_option_edit_info){
+                                editMyInfo();
+                            }
+                            dialog.dismiss();
+                        }
+                    };
+                    content.findViewById(R.id.aty_info_option_cancel).setOnClickListener(listener);
+                    content.findViewById(R.id.aty_info_option_qrcode).setOnClickListener(listener);
+                    content.findViewById(R.id.aty_info_option_change_background).setOnClickListener(listener);
+                    content.findViewById(R.id.aty_info_option_edit_info).setOnClickListener(listener);
+                    dialog.setContentView(content);
+                }else{
+                    content = LayoutInflater.from(AtyInfo.this).inflate(R.layout.aty_info_option2,mWholeLayout,false);
+                    listener = new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if(v.getId() == R.id.aty_info_option_change_background){
+                                sendMessage();
+                            }
+                            dialog.dismiss();
+                        }
+                    };
+                    content.findViewById(R.id.aty_info_option_cancel).setOnClickListener(listener);
+                    content.findViewById(R.id.aty_info_option_message).setOnClickListener(listener);
+                    dialog.setContentView(content);
+                }
+            }
+            WindowManager.LayoutParams wmlp = dialog.getWindow().getAttributes();
+            wmlp.gravity = Gravity.BOTTOM | Gravity.START;
+            wmlp.x = 0;   //x position
+            wmlp.y = 0;   //y position
+            wmlp.width = DimensionUtils.getDisplay().widthPixels;
+            dialog.show();
+        }
+    }
+
+    private void changeBackground(){
+        // todo
+        LogUtils.i(TAG,"changeBackground");
+    }
+
+    private void sendMessage(){
+        //todo
+        LogUtils.i(TAG,"sendMessage");
+    }
+
+    private void showMyQRCode(){
+        // // TODO: 2016/2/17
+        LogUtils.i(TAG,"qrcode");
+    }
+
+    private void editMyInfo(){
+        // // TODO: 2016/2/17
+        LogUtils.i(TAG,"edit my info");
     }
 
 }

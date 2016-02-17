@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -15,9 +16,9 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -75,7 +76,6 @@ public class AtyDiscovery extends BaseActivity {
     ExecutorService exec;
     private Handler mHandler;
 
-    private PopupWindow popupWindow;
 
     @Override
     @SuppressWarnings("deprecation")
@@ -124,7 +124,7 @@ public class AtyDiscovery extends BaseActivity {
 
         CardView cardView = (CardView) findViewById(R.id.aty_discovery_card);
         cardView.setLayoutParams(params);
-        cardView.setTranslationY(mTranslationY-DimensionUtils.dp2px(64));
+        cardView.setTranslationY(mTranslationY - DimensionUtils.dp2px(64));
 
         TextView tvText = (TextView) findViewById(R.id.aty_discovery_text);
         tvText.setOnClickListener(new View.OnClickListener() {
@@ -137,38 +137,17 @@ public class AtyDiscovery extends BaseActivity {
         });
         userList = new ArrayList<>();
 
-        flBackground.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismissPopup();
-            }
-        });
-
     }
 
-    private void dismissPopup(){
-        if(popupWindow!=null && popupWindow.isShowing()){
-            popupWindow.dismiss();
-        }
-    }
+
 
 
     private void ivMoreClicked(){
         if(state!=STATE_READY){
             return;
         }
-        if(popupWindow!=null&&popupWindow.isShowing()){
-            popupWindow.dismiss();
-        }else{
-            initPopupWindow();
-            popupWindow.showAtLocation(flBackground, Gravity.BOTTOM, 0, 0);
-        }
-    }
-
-    private void initPopupWindow(){
+        final Dialog dialog = new Dialog(AtyDiscovery.this,R.style.DialogSlideAnim);
         View content = LayoutInflater.from(this).inflate(R.layout.aty_discovery_option,flBackground,false);
-        popupWindow = new PopupWindow(content,displayMetrics.widthPixels,DimensionUtils.dp2px(152));
-        popupWindow.setAnimationStyle(R.style.PopupWindowAnimation);
         View.OnClickListener popupListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -180,13 +159,21 @@ public class AtyDiscovery extends BaseActivity {
                 }else if(v.getId() == R.id.aty_discovery_option_follow){
                     followUser(id);
                 }
-                dismissPopup();
+                dialog.dismiss();
             }
         };
         content.findViewById(R.id.aty_discovery_option_cancel).setOnClickListener(popupListener);
         content.findViewById(R.id.aty_discovery_option_follow).setOnClickListener(popupListener);
         content.findViewById(R.id.aty_discovery_option_message).setOnClickListener(popupListener);
+        dialog.setContentView(content);
+        WindowManager.LayoutParams wmlp = dialog.getWindow().getAttributes();
+        wmlp.gravity = Gravity.BOTTOM | Gravity.START;
+        wmlp.x = 0;   //x position
+        wmlp.y = 0;   //y position
+        wmlp.width = DimensionUtils.getDisplay().widthPixels;
+        dialog.show();
     }
+
 
     private void followUser(String id){
         ArrayMap<String,String> param = new ArrayMap<>();
@@ -350,7 +337,6 @@ public class AtyDiscovery extends BaseActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        dismissPopup();
     }
 
     @Override

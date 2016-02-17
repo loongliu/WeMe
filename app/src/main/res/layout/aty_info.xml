@@ -2,6 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/aty_info_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -17,6 +18,14 @@
             android:layout_height="match_parent"
             app:actualImageScaleType="centerCrop" />
 
+        <ImageView
+            android:id="@+id/aty_info_more"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:padding="12dp"
+            android:src="@mipmap/more"
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/aty_info_avatar"
             android:layout_width="80dp"

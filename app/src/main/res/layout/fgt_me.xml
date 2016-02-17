@@ -20,15 +20,15 @@
                 app:placeholderImage="@mipmap/default_avatar"
                 android:id="@+id/fgt_me_avatar"
                 android:layout_margin="16dp"
-                android:layout_width="64dp"
-                android:layout_height="64dp" />
+                android:layout_width="48dp"
+                android:layout_height="48dp" />
 
             <TextView
                 android:id="@+id/fgt_me_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
         </LinearLayout>
 
         <View
@@ -42,8 +42,8 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="12dp"
@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="@string/friend"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
         </LinearLayout>
 
         <View
@@ -73,8 +73,8 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="12dp"
@@ -86,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="@string/message"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
             <TextView
                 android:id="@+id/fgt_me_count"
                 android:background="@drawable/bg_fgt_me_message_unread"
@@ -117,8 +117,8 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="12dp"
@@ -130,7 +130,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="@string/activity"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
         </LinearLayout>
 
         <View
@@ -144,8 +144,8 @@
             <!--android:layout_height="wrap_content">-->
 
             <!--<ImageView-->
-                <!--android:layout_width="32dp"-->
-                <!--android:layout_height="32dp"-->
+                <!--android:layout_width="24dp"-->
+                <!--android:layout_height="24dp"-->
                 <!--android:layout_marginLeft="16dp"-->
                 <!--android:layout_marginRight="16dp"-->
                 <!--android:layout_marginTop="12dp"-->
@@ -157,7 +157,7 @@
                 <!--android:layout_height="wrap_content"-->
                 <!--android:layout_gravity="center_vertical"-->
                 <!--android:text="@string/location"-->
-                <!--android:textSize="20sp" />-->
+                <!--android:textSize="18sp" />-->
         <!--</LinearLayout>-->
 
         <!--<View-->
@@ -175,8 +175,8 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="12dp"
@@ -188,7 +188,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="@string/discovery"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
         </LinearLayout>
 
         <View
@@ -206,8 +206,8 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="12dp"
@@ -219,7 +219,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="@string/food"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
         </LinearLayout>
 
 
@@ -234,8 +234,8 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="12dp"
@@ -247,7 +247,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="@string/setting"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
         </LinearLayout>
         <View
             android:layout_width="match_parent"

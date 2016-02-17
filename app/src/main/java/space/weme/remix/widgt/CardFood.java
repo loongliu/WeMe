@@ -56,7 +56,6 @@ public class CardFood extends CardView {
     private TextView mFrontLocationText;
 
     private SimpleDraweeView mDetailPicture;
-    private LinearLayout mDetailLocationLayout;
     private TextView mDetailLocation;
     private TextView mDetailPrice;
     private TextView mDetailComment;
@@ -116,6 +115,8 @@ public class CardFood extends CardView {
         mDetail.setVisibility(INVISIBLE);
 
         state = STATE_BACK;
+
+        setRotationY(0);
     }
 
     public void turnToDetail(){
@@ -160,7 +161,7 @@ public class CardFood extends CardView {
         mFrontLocationImage.setOnClickListener(mDetailListener);
 
         mDetailPicture = (SimpleDraweeView) mDetail.findViewById(R.id.card_food_detail_picture);
-        mDetailLocationLayout = (LinearLayout) mDetail.findViewById(R.id.card_food_detail_location);
+        LinearLayout mDetailLocationLayout = (LinearLayout) mDetail.findViewById(R.id.card_food_detail_location);
         mDetailLocation = (TextView) mDetail.findViewById(R.id.card_food_detail_location_text);
         mDetailPrice = (TextView) mDetail.findViewById(R.id.card_food_detail_price);
         mDetailComment = (TextView) mDetail.findViewById(R.id.card_food_detail_comment);
@@ -215,6 +216,7 @@ public class CardFood extends CardView {
         mMapListener.setFood(food);
     }
 
+    @SuppressWarnings("unchecked")
     private void showPicture(Food food){
         ControllerListener controllerListener = new BaseControllerListener<ImageInfo>() {
             @Override
