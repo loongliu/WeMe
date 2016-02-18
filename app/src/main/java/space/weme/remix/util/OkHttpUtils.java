@@ -65,7 +65,6 @@ public final class OkHttpUtils {
 
     public static void post(String url, Map<String,String> params,String tag, OkCallBack callback){
         JSONObject j = new JSONObject(params);
-        LogUtils.d(tag,j.toString());
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), j.toString());
         Request.Builder builder = new Request.Builder().url(url).post(body);
         if(tag!=null) builder.tag(tag);
@@ -129,14 +128,14 @@ public final class OkHttpUtils {
         String tag = (String) call.request().tag();
         if(tag!=null){
             synchronized (mRunningCalls) {
-                LogUtils.d(TAG,"start caching Call: " + printCall(call) + " \ncurrent running calls: "+printRunningCalls());
+                //LogUtils.d(TAG,"start caching Call: " + printCall(call) + " \ncurrent running calls: "+printRunningCalls());
                 Set<Call> calls = mRunningCalls.get(tag);
                 if (calls == null) {
                     calls = new HashSet<>();
                 }
                 calls.add(call);
                 mRunningCalls.put(tag, calls);
-                LogUtils.d(TAG,"finish caching Call: " + printCall(call) + " \ncurrent running calls: "+printRunningCalls());
+                //LogUtils.d(TAG,"finish caching Call: " + printCall(call) + " \ncurrent running calls: "+printRunningCalls());
             }
         }
     }
@@ -155,14 +154,14 @@ public final class OkHttpUtils {
         String tag = (String) call.request().tag();
         if(tag==null) return false;
         synchronized (mRunningCalls) {
-            LogUtils.d(TAG,"start remove Call: " + printCall(call) + " \ncurrent running calls: "+printRunningCalls());
+            //LogUtils.d(TAG,"start remove Call: " + printCall(call) + " \ncurrent running calls: "+printRunningCalls());
             Set<Call> calls = mRunningCalls.get(tag);
             if (calls == null || !calls.contains(call)) return true;
             if(remove) {
                 calls.remove(call);
                 if (calls.isEmpty()) {
                     mRunningCalls.remove(tag);
-                    LogUtils.d(TAG, "finish remove Call: " + printCall(call) + " \ncurrent running calls: " + printRunningCalls());
+                    //LogUtils.d(TAG, "finish remove Call: " + printCall(call) + " \ncurrent running calls: " + printRunningCalls());
                 }
             }
         }
@@ -170,9 +169,9 @@ public final class OkHttpUtils {
     }
 
     public static void cancel(String tag){
-        LogUtils.d(TAG,"start remove Calls with tag: " + tag + " \ncurrent running calls: "+printRunningCalls());
+        //LogUtils.d(TAG,"start remove Calls with tag: " + tag + " \ncurrent running calls: "+printRunningCalls());
         getInstance().mRunningCalls.remove(tag);
-        LogUtils.d(TAG, "finish remove Calls with tag: " + tag + " \ncurrent running calls: " + printRunningCalls());
+        //LogUtils.d(TAG, "finish remove Calls with tag: " + tag + " \ncurrent running calls: " + printRunningCalls());
     }
 
     public interface OkCallBack{

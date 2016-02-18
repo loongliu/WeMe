@@ -11,6 +11,7 @@ import android.support.v4.util.ArrayMap;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -70,9 +71,16 @@ public class AtyInfo extends SwipeActivity {
 
     int birthFlag;
     int followFlag;
+
+
     boolean isLoading_2 = false;
     boolean canLoadMore_2 = true;
     int page_2;
+
+    boolean isLoading_3 = false;
+    boolean canLoadMore_3 = true;
+    int page_3;
+    final int GRID_COUNT = 3;
 
     List<TimeLine> timeLineList;
     TimeLineAdapter mTimeLineAdapter;
@@ -81,6 +89,7 @@ public class AtyInfo extends SwipeActivity {
     UserImageAdapter mUserImageAdapter;
 
     WindowListener mWindowListener;
+    UserImageListener mUserImageListener;
 
 
 
@@ -129,6 +138,8 @@ public class AtyInfo extends SwipeActivity {
 
         setUpPagerViews();
 
+        mUserImageListener = new UserImageListener();
+
     }
 
     private void fireInfo(){
@@ -168,7 +179,7 @@ public class AtyInfo extends SwipeActivity {
 
         configView2();
 
-        //configView3();
+        configView3();
     }
 
     private void configView1(){
@@ -178,7 +189,7 @@ public class AtyInfo extends SwipeActivity {
         OkHttpUtils.post(StrUtils.GET_PROFILE_BY_ID, param, TAG, new OkHttpUtils.SimpleOkCallBack() {
             @Override
             public void onResponse(String s) {
-                LogUtils.i(TAG, s);
+                //LogUtils.i(TAG, s);
                 JSONObject j = OkHttpUtils.parseJSON(AtyInfo.this, s);
                 if (j == null) {
                     return;
@@ -264,7 +275,6 @@ public class AtyInfo extends SwipeActivity {
                 }
             }
         });
-        // todo page = 2 excepiton
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -287,7 +297,7 @@ public class AtyInfo extends SwipeActivity {
         param.put("token",StrUtils.token());
         param.put("userid", mId);
         param.put("page", String.format("%d", page));
-        LogUtils.d(TAG, param.toString());
+        //LogUtils.d(TAG, param.toString());
         isLoading_2 = true;
         OkHttpUtils.post(StrUtils.GET_TIME_LINE_URL, param, TAG, new OkHttpUtils.SimpleOkCallBack() {
             @Override
@@ -300,7 +310,7 @@ public class AtyInfo extends SwipeActivity {
             public void onResponse(String s) {
                 isLoading_2 = false;
                 swipe_2.setRefreshing(false);
-                LogUtils.i(TAG, s);
+                //LogUtils.i(TAG, s);
                 JSONObject j = OkHttpUtils.parseJSON(AtyInfo.this, s);
                 if (j == null) {
                     return;
@@ -327,37 +337,78 @@ public class AtyInfo extends SwipeActivity {
 
 
     private void configView3(){
-//        swipe_3 = (SwipeRefreshLayout) mPagerViews[2];
-//        RecyclerView recyclerView = (RecyclerView) swipe_3.findViewById(R.id.aty_info_view3_recycler);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(AtyInfo.this));
-//        recyclerView.setHasFixedSize(true);
-//        mUserImageAdapter = new UserImageAdapter();
-//        userImageList = new ArrayList<>();
-//        mUserImageAdapter.setUserImageList(userImageList);
-//        recyclerView.setAdapter(mUserImageAdapter);
-//
-//
-//        getUserImages(1);
+        swipe_3 = (SwipeRefreshLayout) mPagerViews[2];
+        RecyclerView recyclerView = (RecyclerView) swipe_3.findViewById(R.id.aty_info_view3_recycler);
+        recyclerView.setLayoutManager(new GridLayoutManager(AtyInfo.this, GRID_COUNT));
+        recyclerView.setHasFixedSize(true);
+        mUserImageAdapter = new UserImageAdapter();
+        userImageList = new ArrayList<>();
+        mUserImageAdapter.setUserImageList(userImageList);
+        recyclerView.setAdapter(mUserImageAdapter);
+        swipe_3.setColorSchemeResources(R.color.colorPrimary);
+        swipe_3.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (!isLoading_3) {
+                    getUserImages(1);
+                }
+            }
+        });
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int visibleItemCount = recyclerView.getChildCount();
+                int totalItemCount = layoutManager.getItemCount();
+                int firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
+                if (!isLoading_3 && (totalItemCount - visibleItemCount)
+                        <= (firstVisibleItem + 2) && canLoadMore_3) {
+                    Log.i(TAG, "scroll to end  load page " + (page_3 + 1));
+                    getUserImages(page_3 + 1);
+                }
+            }
+        });
+        getUserImages(1);
     }
 
-    private void getUserImages(int page){
+    private void getUserImages(final int page){
         ArrayMap<String,String> param = new ArrayMap<>();
         param.put("token",StrUtils.token());
         param.put("userid",mId);
         param.put("page", String.format("%d",page));
+        isLoading_3 = true;
         OkHttpUtils.post(StrUtils.GET_USER_IMAGES_URL, param, TAG, new OkHttpUtils.SimpleOkCallBack() {
             @Override
+            public void onFailure(IOException e) {
+                isLoading_3= false;
+            }
+
+            @Override
             public void onResponse(String s) {
-                LogUtils.i(TAG, s);
+                //LogUtils.i(TAG, s);
+                isLoading_3 = false;
+                swipe_3.setRefreshing(false);
                 JSONObject j = OkHttpUtils.parseJSON(AtyInfo.this, s);
                 if (j == null) {
                     return;
                 }
+                if (page == 1) {
+                    userImageList.clear();
+                }
+                page_3 = page;
                 JSONArray result = j.optJSONArray("result");
+                int size = result.length();
+                int preCount = userImageList.size();
+                canLoadMore_3 = size!=0;
                 for (int i = 0; i < result.length(); i++) {
                     userImageList.add(UserImage.fromJSON(result.optJSONObject(i)));
                 }
-                mUserImageAdapter.notifyDataSetChanged();
+                if (preCount == 0) {
+                    mUserImageAdapter.notifyDataSetChanged();
+                } else {
+                    mUserImageAdapter.notifyItemRangeInserted(preCount, size);
+                }
             }
         });
     }
@@ -524,14 +575,21 @@ public class AtyInfo extends SwipeActivity {
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            SimpleDraweeView draweeView = new SimpleDraweeView(AtyInfo.this);
-            return new VH(draweeView);
+            View v = LayoutInflater.from(AtyInfo.this).inflate(R.layout.aty_info_view3_cell,parent,false);
+            int size = DimensionUtils.getDisplay().widthPixels / GRID_COUNT;
+            ViewGroup.LayoutParams params = v.getLayoutParams();
+            params.height = size;
+            params.width = size;
+            v.setLayoutParams(params);
+            v.setOnClickListener(mUserImageListener);
+            return new VH(v);
         }
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             VH vh = (VH) holder;
             vh.draw.setImageURI(Uri.parse(userImageList.get(position).thumbnail));
+            vh.itemView.setTag(position);
         }
 
         @Override
@@ -543,7 +601,7 @@ public class AtyInfo extends SwipeActivity {
             SimpleDraweeView draw;
             public VH(View itemView) {
                 super(itemView);
-                draw = (SimpleDraweeView) itemView;
+                draw = (SimpleDraweeView) itemView.findViewById(R.id.aty_info_view3_cell_image);
             }
         }
     }
@@ -633,6 +691,23 @@ public class AtyInfo extends SwipeActivity {
     private void editMyInfo(){
         // // TODO: 2016/2/17
         LogUtils.i(TAG,"edit my info");
+    }
+
+    private class UserImageListener implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v) {
+            JSONArray array = new JSONArray();
+            for(UserImage image : userImageList){
+                array.put(image.toJSON());
+            }
+            int index = (int) v.getTag();
+            Intent i = new Intent(AtyInfo.this,AtyImagePager.class);
+            i.putExtra(AtyImagePager.INTENT_CONTENT,array.toString());
+            i.putExtra(AtyImagePager.INTENT_INDEX,index);
+            startActivity(i);
+
+        }
     }
 
 }
