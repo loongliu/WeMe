@@ -51,7 +51,8 @@ public class MessageDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
                 String sendId = (String) v.getTag();
                 Intent i = new Intent(mContext,AtyMessageReply.class);
                 i.putExtra(AtyMessageReply.INTENT_ID, sendId);
-                ((Activity)mContext).startActivityForResult(i,AtyMessageDetail.REQUEST_CODE);
+                i.putExtra(AtyMessageReply.INTENT_REPLY,true);
+                ((Activity)mContext).startActivityForResult(i, AtyMessageDetail.REQUEST_CODE);
             }
         };
         mImageListener = new View.OnClickListener(){

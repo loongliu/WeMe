@@ -26,8 +26,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.core.ImagePipeline;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -37,12 +39,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
+import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 import space.weme.remix.R;
 import space.weme.remix.model.TimeLine;
 import space.weme.remix.model.User;
 import space.weme.remix.model.UserImage;
 import space.weme.remix.ui.base.SwipeActivity;
 import space.weme.remix.ui.community.AtyPost;
+import space.weme.remix.ui.intro.AtyEditInfo;
 import space.weme.remix.util.DimensionUtils;
 import space.weme.remix.util.LogUtils;
 import space.weme.remix.util.OkHttpUtils;
@@ -55,6 +59,7 @@ import space.weme.remix.util.StrUtils;
 public class AtyInfo extends SwipeActivity {
     private static final String TAG = "AtyInfo";
     public static final String ID_INTENT = "id";
+    private static final int REQUEST_IMAGE = 0xef;
 
     private String mId;
     private User mUser;
@@ -64,7 +69,9 @@ public class AtyInfo extends SwipeActivity {
     private ImageView mIvGender;
     private View[] mPagerViews;
     private ViewPager mViewPager;
+    private SimpleDraweeView mDrawAvatar;
     LinearLayout mWholeLayout;
+    SimpleDraweeView mDrawBackground;
 
     private SwipeRefreshLayout swipe_2;
     private SwipeRefreshLayout swipe_3;
@@ -110,13 +117,13 @@ public class AtyInfo extends SwipeActivity {
         mTvVisit = (TextView) findViewById(R.id.aty_info_visit);
         mTvConstellation = (TextView) findViewById(R.id.aty_info_constellation);
         mIvGender = (ImageView) findViewById(R.id.aty_info_gender);
-        SimpleDraweeView mDrawAvatar = (SimpleDraweeView) findViewById(R.id.aty_info_avatar);
+        mDrawAvatar = (SimpleDraweeView) findViewById(R.id.aty_info_avatar);
         TabLayout mTabLayout = (TabLayout) findViewById(R.id.aty_info_tabs);
         mViewPager = (ViewPager) findViewById(R.id.aty_info_pager);
         mViewPager.setAdapter(new InfoAdapter());
         mTabLayout.setupWithViewPager(mViewPager);
 
-        mDrawAvatar.setImageURI(Uri.parse(StrUtils.thumForID(mId)));
+
 
 
         View view = findViewById(R.id.aty_info_top);
@@ -124,7 +131,7 @@ public class AtyInfo extends SwipeActivity {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, width*3/5);
         view.setLayoutParams(params);
 
-        SimpleDraweeView mDrawBackground = (SimpleDraweeView) findViewById(R.id.aty_info_background);
+        mDrawBackground = (SimpleDraweeView) findViewById(R.id.aty_info_background);
         mDrawBackground.setImageURI(Uri.parse(StrUtils.backgroundForID(mId)));
         GenericDraweeHierarchy hierarchy = mDrawBackground.getHierarchy();
         hierarchy.setPlaceholderImage(R.mipmap.info_default);
@@ -134,12 +141,19 @@ public class AtyInfo extends SwipeActivity {
 
         findViewById(R.id.aty_info_more).setOnClickListener(mWindowListener);
 
-        fireInfo();
 
-        setUpPagerViews();
 
         mUserImageListener = new UserImageListener();
 
+        setUpPagerViews();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        fireInfo();
+        configView();
+        mDrawAvatar.setImageURI(Uri.parse(StrUtils.thumForID(mId)));
     }
 
     private void fireInfo(){
@@ -175,6 +189,10 @@ public class AtyInfo extends SwipeActivity {
         mPagerViews[1] = v1;
         mPagerViews[2] = v2;
 
+
+    }
+
+    private void configView(){
         configView1();
 
         configView2();
@@ -199,7 +217,8 @@ public class AtyInfo extends SwipeActivity {
                 birthFlag = j.optInt("birthflag");
                 followFlag = j.optInt("followflag");
                 mTvConstellation.setText(user.constellation);
-                mIvGender.setImageResource(user.gender.equals("\u7537") ? R.mipmap.boy : R.mipmap.girl);
+                boolean male = getResources().getString(R.string.male).equals(mUser.gender);
+                mIvGender.setImageResource(male? R.mipmap.boy : R.mipmap.girl);
                 TextView tvName = (TextView) mPagerViews[0].findViewById(R.id.aty_info_name);
                 tvName.setText(user.name);
                 TextView tvBirth = (TextView) mPagerViews[0].findViewById(R.id.aty_info_birth);
@@ -451,7 +470,6 @@ public class AtyInfo extends SwipeActivity {
     }
 
     private void follow(){
-
         ArrayMap<String,String> param = new ArrayMap<>();
         param.put("token", StrUtils.token());
         param.put("id", mUser.ID+"");
@@ -635,8 +653,6 @@ public class AtyInfo extends SwipeActivity {
                         public void onClick(View v) {
                             if(v.getId() == R.id.aty_info_option_change_background){
                                 changeBackground();
-                            }else if(v.getId() == R.id.aty_info_option_qrcode){
-                                showMyQRCode();
                             }else if(v.getId() == R.id.aty_info_option_edit_info){
                                 editMyInfo();
                             }
@@ -644,7 +660,6 @@ public class AtyInfo extends SwipeActivity {
                         }
                     };
                     content.findViewById(R.id.aty_info_option_cancel).setOnClickListener(listener);
-                    content.findViewById(R.id.aty_info_option_qrcode).setOnClickListener(listener);
                     content.findViewById(R.id.aty_info_option_change_background).setOnClickListener(listener);
                     content.findViewById(R.id.aty_info_option_edit_info).setOnClickListener(listener);
                     dialog.setContentView(content);
@@ -653,7 +668,7 @@ public class AtyInfo extends SwipeActivity {
                     listener = new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if(v.getId() == R.id.aty_info_option_change_background){
+                            if(v.getId() == R.id.aty_info_option_message){
                                 sendMessage();
                             }
                             dialog.dismiss();
@@ -674,23 +689,27 @@ public class AtyInfo extends SwipeActivity {
     }
 
     private void changeBackground(){
-        // todo
-        LogUtils.i(TAG,"changeBackground");
+        Intent intent = new Intent(AtyInfo.this, MultiImageSelectorActivity.class);
+        intent.putExtra(MultiImageSelectorActivity.EXTRA_SHOW_CAMERA, true);
+        intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_COUNT, 1);
+        intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_MODE, MultiImageSelectorActivity.MODE_SINGLE);
+        startActivityForResult(intent, REQUEST_IMAGE);
     }
 
     private void sendMessage(){
-        //todo
-        LogUtils.i(TAG,"sendMessage");
+        Intent i = new Intent(AtyInfo.this, AtyMessageReply.class);
+        i.putExtra(AtyMessageReply.INTENT_ID,mUser.ID+"");
+        startActivity(i);
     }
 
-    private void showMyQRCode(){
-        // // TODO: 2016/2/17
-        LogUtils.i(TAG,"qrcode");
-    }
+
 
     private void editMyInfo(){
-        // // TODO: 2016/2/17
-        LogUtils.i(TAG,"edit my info");
+        LogUtils.i(TAG, "edit my info");
+        Intent i = new Intent(AtyInfo.this, AtyEditInfo.class);
+        i.putExtra(AtyEditInfo.INTENT_EDIT,true);
+        i.putExtra(AtyEditInfo.INTENT_INFO,mUser.toJSONString());
+        startActivity(i);
     }
 
     private class UserImageListener implements View.OnClickListener{
@@ -706,7 +725,34 @@ public class AtyInfo extends SwipeActivity {
             i.putExtra(AtyImagePager.INTENT_CONTENT,array.toString());
             i.putExtra(AtyImagePager.INTENT_INDEX,index);
             startActivity(i);
+        }
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode != RESULT_OK){
+            return;
+        }
+        if(requestCode == REQUEST_IMAGE){
+            List<String> paths=data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
+            String mAvatarPath = paths.get(0);
+            mDrawBackground.setImageURI(Uri.parse("file://" + mAvatarPath));
+            ArrayMap<String,String> map = new ArrayMap<>();
+            map.put("token", StrUtils.token());
+            map.put("type","-1");
+            map.put("number","1");
+            OkHttpUtils.uploadFile(StrUtils.UPLOAD_AVATAR_URL,map,mAvatarPath,StrUtils.MEDIA_TYPE_IMG,TAG,new OkHttpUtils.SimpleOkCallBack(){
+                @Override
+                public void onResponse(String s) {
+                    LogUtils.d(TAG,s);
+                    JSONObject j = OkHttpUtils.parseJSON(AtyInfo.this,s);
+                    if(j == null){
+                        return;
+                    }
+                    ImagePipeline imagePipeline = Fresco.getImagePipeline();
+                    imagePipeline.evictFromCache(Uri.parse(StrUtils.backgroundForID(mId)));
+                }
+            });
         }
     }
 

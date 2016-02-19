@@ -1,21 +1,39 @@
 package space.weme.remix.ui.main;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.util.ArrayMap;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.generic.RoundingParams;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import org.json.JSONObject;
+
+import java.util.EnumMap;
+import java.util.Map;
 
 import space.weme.remix.R;
 import space.weme.remix.model.User;
@@ -26,6 +44,7 @@ import space.weme.remix.ui.user.AtyFriend;
 import space.weme.remix.ui.user.AtyInfo;
 import space.weme.remix.ui.user.AtyMessage;
 import space.weme.remix.ui.user.AtyUserActivity;
+import space.weme.remix.util.DimensionUtils;
 import space.weme.remix.util.LogUtils;
 import space.weme.remix.util.OkHttpUtils;
 import space.weme.remix.util.StrUtils;
@@ -39,10 +58,14 @@ public class FgtMe extends BaseFragment {
     private static final String TAG = "FgtMe";
 
     SimpleDraweeView mDraweeAvatar;
+    LinearLayout llLayout;
     TextView mTvName;
     TextView mTvCount;
 
     View.OnClickListener mListener;
+    User me;
+
+    Bitmap mQRBitmap;
 
 
 
@@ -59,6 +82,7 @@ public class FgtMe extends BaseFragment {
         mDraweeAvatar = (SimpleDraweeView) rootView.findViewById(R.id.fgt_me_avatar);
         mTvName = (TextView) rootView.findViewById(R.id.fgt_me_name);
         mTvCount = (TextView) rootView.findViewById(R.id.fgt_me_count);
+        llLayout = (LinearLayout) rootView.findViewById(R.id.fgt_me_layout);
 
         RoundingParams roundingParams = RoundingParams.fromCornersRadius(5f);
         roundingParams.setRoundAsCircle(true);
@@ -68,6 +92,15 @@ public class FgtMe extends BaseFragment {
         setClickListener(rootView);
 
         fetchNameInfo();
+        
+        rootView.findViewById(R.id.fgt_me_qrcode).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showQRCode();
+            }
+        });
+        drawQRCodeInBackground();
+
 
         return rootView;
     }
@@ -125,7 +158,7 @@ public class FgtMe extends BaseFragment {
                 if(j == null){
                     return;
                 }
-                User me = User.fromJSON(j);
+                me = User.fromJSON(j);
                 mTvName.setText(me.name);
             }
         });
@@ -184,12 +217,105 @@ public class FgtMe extends BaseFragment {
         sp.edit().remove(StrUtils.SP_USER_ID).remove(StrUtils.SP_USER_TOKEN).apply();
         Intent i = new Intent(getActivity(), AtyMain.class);
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        i.putExtra(AtyMain.INTENT_LOGOUT,true);
+        i.putExtra(AtyMain.INTENT_LOGOUT, true);
         startActivity(i);
     }
 
     @Override
     protected String tag() {
         return TAG;
+    }
+    
+    private void showQRCode(){
+        LogUtils.i(TAG, "showQRCode");
+        final Dialog dialog = new Dialog(getActivity(),R.style.Dialog);
+        View v = LayoutInflater.from(getActivity()).inflate(R.layout.qrcode_user,llLayout);
+        final int size = DimensionUtils.getDisplay().widthPixels*4/5-DimensionUtils.dp2px(32);
+        final ImageView qr_code = (ImageView) v.findViewById(R.id.qr_code);
+        ViewGroup.LayoutParams param = qr_code.getLayoutParams();
+        param.width = size;
+        param.height = size;
+
+        if(mQRBitmap!=null){
+            qr_code.setImageBitmap(mQRBitmap);
+        }else{
+            drawQRCodeWithCallBack(qr_code);
+        }
+
+        SimpleDraweeView avatar = (SimpleDraweeView) v.findViewById(R.id.avatar);
+        avatar.setImageURI(Uri.parse(StrUtils.thumForID(StrUtils.id())));
+        TextView name = (TextView) v.findViewById(R.id.name);
+        name.setText(me.name);
+        TextView school = (TextView) v.findViewById(R.id.school);
+        school.setText(me.school);
+        ImageView iv = (ImageView) v.findViewById(R.id.gender);
+
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        boolean male = getResources().getString(R.string.male).equals(me.gender);
+        iv.setImageResource(male? R.mipmap.boy : R.mipmap.girl);
+
+        dialog.setContentView(v);
+        WindowManager.LayoutParams wmlp = dialog.getWindow().getAttributes();
+        wmlp.gravity = Gravity.CENTER;
+        dialog.show();
+    }
+
+    private void drawQRCodeInBackground(){
+        new Thread(){
+            @Override
+            public void run() {
+                try {
+                    drawQRCode();
+                } catch (WriterException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.run();
+
+    }
+
+    private void drawQRCode() throws WriterException {
+        QRCodeWriter writer = new QRCodeWriter();
+            String data = "weme://user/" + StrUtils.id();
+            Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
+            hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
+            hints.put(EncodeHintType.MARGIN, 0); /* default = 4 */
+            hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+            final int size = DimensionUtils.getDisplay().widthPixels*4/5-DimensionUtils.dp2px(32);
+            BitMatrix bitMatrix = writer.encode(data, BarcodeFormat.QR_CODE, size, size, hints);
+            mQRBitmap = Bitmap.createBitmap(size, size, Bitmap.Config.RGB_565);
+            for (int x = 0; x < size; x++) {
+                for (int y = 0; y < size; y++) {
+                    if (bitMatrix.get(x, y))
+                        mQRBitmap.setPixel(x, y, 0x3e5d9e);
+                    else
+                        mQRBitmap.setPixel(x, y, Color.WHITE);
+                }
+            }
+    }
+    private void drawQRCodeWithCallBack(final ImageView iv){
+        new Thread(){
+            @Override
+            public void run() {
+                try {
+                    drawQRCode();
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            iv.setImageBitmap(mQRBitmap);
+                        }
+                    });
+                } catch (WriterException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.run();
     }
 }

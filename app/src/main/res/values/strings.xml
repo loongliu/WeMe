@@ -66,8 +66,8 @@
     <string name="phone_not_empty">手机号不能为空</string>
     <string name="school_not_empty">学校不能为空</string>
     <string name="choose_degree">请选择学历</string>
-    <string name="male"><![CDATA[ 男]]></string>
-    <string name="femail">女</string>
+    <string name="male">男></string>
+    <string name="female">女</string>
     <string name="person_info">个人信息</string>
     <string name="boy">男</string>
     <string name="people_see_me">关注我的人</string>
@@ -89,6 +89,8 @@
     <string name="change_background">改变背景照</string>
     <string name="my_qrcode">我的二维码</string>
     <string name="edit_info">修改个人信息</string>
+    <string name="reply_message">回复私信</string>
+    <string name="birth">生日</string>
 
 
     <string-array name="aty_info_tabs">

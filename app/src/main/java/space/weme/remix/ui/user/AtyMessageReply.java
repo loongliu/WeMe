@@ -34,6 +34,7 @@ import space.weme.remix.widgt.GridLayout;
 public class AtyMessageReply extends AtyImage {
     private static final String TAG = "AtyMessageReply";
     public static final String INTENT_ID = "intent_id";
+    public static final String INTENT_REPLY = "intent_reply";
     private String sendID;
 
     TextView mSend;
@@ -49,6 +50,14 @@ public class AtyMessageReply extends AtyImage {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.aty_message_reply);
         sendID = getIntent().getStringExtra(INTENT_ID);
+        boolean reply = getIntent().getBooleanExtra(INTENT_REPLY,false);
+
+        TextView tvTitle = (TextView) findViewById(R.id.aty_message_reply_title);
+        if(reply){
+            tvTitle.setText(R.string.reply_message);
+        }else{
+            tvTitle.setText(R.string.message);
+        }
 
         mDrawAddImage = (SimpleDraweeView) findViewById(R.id.add_image);
         mDrawAddImage.setImageURI(Uri.parse("res:/" + R.mipmap.add_image));

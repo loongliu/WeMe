@@ -6,12 +6,13 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/fgt_me_me"
+        android:id="@+id/fgt_me_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
+        <FrameLayout
+            android:id="@+id/fgt_me_me"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -20,16 +21,27 @@
                 app:placeholderImage="@mipmap/default_avatar"
                 android:id="@+id/fgt_me_avatar"
                 android:layout_margin="16dp"
-                android:layout_width="48dp"
-                android:layout_height="48dp" />
+                android:layout_width="56dp"
+                android:layout_height="56dp" />
 
             <TextView
+                android:layout_marginLeft="96dp"
+                android:layout_marginStart="96dp"
                 android:id="@+id/fgt_me_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:textSize="18sp" />
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/fgt_me_qrcode"
+                android:layout_marginRight="12dp"
+                android:layout_marginEnd="12dp"
+                android:padding="12dp"
+                android:layout_gravity="center_vertical|end"
+                android:src="@mipmap/qrcode"
+                android:layout_width="56dp"
+                android:layout_height="56dp" />
+        </FrameLayout>
 
         <View
             android:layout_width="match_parent"

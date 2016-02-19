@@ -10,14 +10,14 @@
         android:background="@color/colorPrimary">
 
         <TextView
+            android:id="@+id/aty_message_reply_title"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
             android:gravity="center_vertical"
-            android:text="回复私信"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/send"

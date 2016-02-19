@@ -18,8 +18,11 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.core.ImagePipeline;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -27,6 +30,7 @@ import java.util.List;
 
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 import space.weme.remix.R;
+import space.weme.remix.model.User;
 import space.weme.remix.ui.base.BaseActivity;
 import space.weme.remix.ui.community.DatePickerFragment;
 import space.weme.remix.util.LogUtils;
@@ -39,6 +43,12 @@ import space.weme.remix.util.StrUtils;
  */
 public class AtyEditInfo extends BaseActivity {
     private static final String TAG = "AtyEditInfo";
+
+    public static final String INTENT_EDIT = "intent_edit";
+    public static final String INTENT_INFO = "intent_info";
+    private boolean mEdit;
+    private User mUser;
+    //private boolean
 
     private static final int REQUEST_IMAGE = 0xef;
     private static final int REQUEST_CITY = 0xff;
@@ -68,6 +78,17 @@ public class AtyEditInfo extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.aty_editinfo_toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
         bindViews();
+
+        mEdit = getIntent().getBooleanExtra(INTENT_EDIT,false);
+        if(mEdit){
+            String info = getIntent().getStringExtra(INTENT_INFO);
+            try {
+                mUser = User.fromJSON(new JSONObject(info));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            showUserInfo();
+        }
     }
 
     private void bindViews(){
@@ -148,6 +169,31 @@ public class AtyEditInfo extends BaseActivity {
         });
     }
 
+    private void showUserInfo(){
+        mDrawAvatar.setImageURI(Uri.parse(StrUtils.thumForID(mUser.ID + "")));
+        etName.setText(mUser.name);
+        boolean male = getResources().getString(R.string.male).equals(mUser.gender);
+        swGender.setChecked(male);
+        tvBirth.setText(mUser.birthday);
+        etPhone.setText(mUser.phone);
+        tvSchool.setText(mUser.school);
+        switch (mUser.degree) {
+            case "本科":
+                spEducation.setSelection(1);
+                break;
+            case "硕士":
+                spEducation.setSelection(2);
+                break;
+            case "博士":
+                spEducation.setSelection(3);
+                break;
+        }
+        etMajor.setText(mUser.department);
+        etWeChat.setText(mUser.wechat);
+        etQQ.setText(mUser.qq);
+        etHome.setText(mUser.hometown);
+    }
+
     private void commit(){
         //LogUtils.d(TAG, swGender.isChecked()+"");
         if(etName.getText().toString().length()==0){
@@ -179,7 +225,7 @@ public class AtyEditInfo extends BaseActivity {
         if(etMajor.getText().length()!=0){
             param.put("department", etMajor.getText().toString());
         }
-        param.put("gender", swGender.isChecked()?getResources().getString(R.string.male):getResources().getString(R.string.femail));
+        param.put("gender", swGender.isChecked()?getResources().getString(R.string.male):getResources().getString(R.string.female));
         if(etHome.getText().length()!=0){
             param.put("hometown",etHome.getText().toString());
         }
@@ -223,14 +269,20 @@ public class AtyEditInfo extends BaseActivity {
             @Override
             public void onResponse(String s) {
                 uploadImageReturned();
+                ImagePipeline imagePipeline = Fresco.getImagePipeline();
+                imagePipeline.evictFromCache(Uri.parse(StrUtils.thumForID(mUser.ID+"")));
             }
         });
     }
     private void uploadImageReturned(){
-        Intent i = new Intent(AtyEditInfo.this, AtyLogin.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        i.putExtra(AtyLogin.INTENT_CLEAR, true);
-        startActivity(i);
+        if(mEdit){
+            finish();
+        }else {
+            Intent i = new Intent(AtyEditInfo.this, AtyLogin.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            i.putExtra(AtyLogin.INTENT_CLEAR, true);
+            startActivity(i);
+        }
     }
 
     private void makeToast(int string_id){

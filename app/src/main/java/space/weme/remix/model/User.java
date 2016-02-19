@@ -52,4 +52,32 @@ public class User {
         user.avatar = j.optString("avatar");
         return user;
     }
+
+    public String toJSONString(){
+        JSONObject j = new JSONObject();
+        try {
+            j.put("birthday", birthday);
+            j.put("degree",degree);
+            j.put("department",department);
+            j.put("enrollment",enrollment);
+            j.put("gender",gender);
+            j.put("hobby",hobby);
+            j.put("hometown",hometown);
+            j.put("id",ID);
+            j.put("lookcount",lookcount);
+            j.put("name",name);
+            j.put("phone",phone);
+            j.put("preference", preference);
+            j.put("qq",qq);
+            j.put("school",school);
+            j.put("username",username);
+            j.put("wechat",wechat);
+            j.put("weme",weme);
+            j.put("constellation",constellation);
+            j.put("avatar",avatar);
+        }catch(Exception e){
+            // ignore
+        }
+        return j.toString();
+    }
 }
