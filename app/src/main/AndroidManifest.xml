@@ -5,6 +5,13 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.ACCESS_GPS" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:name=".APP"
         android:allowBackup="true"
@@ -44,11 +51,18 @@
         <activity android:name=".ui.user.AtyDiscovery" />
         <activity android:name=".ui.user.AtyDiscoveryFood" />
         <activity android:name=".ui.user.AtyImagePager" />
+        <activity android:name=".ui.user.AtyNearBy" />
 
         <activity android:name="me.nereo.multi_image_selector.MultiImageSelectorActivity" />
 
+
+        <service android:name="com.amap.api.location.APSService"/>
+
         <meta-data android:value="56ad96c667e58ef41100249d" android:name="UMENG_APPKEY"/>
         <meta-data android:value="seu" android:name="UMENG_CHANNEL"/>
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="fb85887c5598e510ac43099cd1eefc9a"/>
 
     </application>
 </manifest>

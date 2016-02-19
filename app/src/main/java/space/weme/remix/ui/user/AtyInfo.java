@@ -44,6 +44,7 @@ import space.weme.remix.R;
 import space.weme.remix.model.TimeLine;
 import space.weme.remix.model.User;
 import space.weme.remix.model.UserImage;
+import space.weme.remix.ui.AtyImage;
 import space.weme.remix.ui.base.SwipeActivity;
 import space.weme.remix.ui.community.AtyPost;
 import space.weme.remix.ui.intro.AtyEditInfo;
@@ -123,7 +124,14 @@ public class AtyInfo extends SwipeActivity {
         mViewPager.setAdapter(new InfoAdapter());
         mTabLayout.setupWithViewPager(mViewPager);
 
-
+        mDrawAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(AtyInfo.this, AtyImage.class);
+                i.putExtra(AtyImage.URL_INTENT,StrUtils.avatarForID(mId));
+                startActivity(i);
+            }
+        });
 
 
         View view = findViewById(R.id.aty_info_top);

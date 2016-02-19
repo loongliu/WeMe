@@ -43,6 +43,7 @@ import space.weme.remix.ui.user.AtyDiscoveryFood;
 import space.weme.remix.ui.user.AtyFriend;
 import space.weme.remix.ui.user.AtyInfo;
 import space.weme.remix.ui.user.AtyMessage;
+import space.weme.remix.ui.user.AtyNearBy;
 import space.weme.remix.ui.user.AtyUserActivity;
 import space.weme.remix.util.DimensionUtils;
 import space.weme.remix.util.LogUtils;
@@ -99,8 +100,6 @@ public class FgtMe extends BaseFragment {
                 showQRCode();
             }
         });
-        drawQRCodeInBackground();
-
 
         return rootView;
     }
@@ -186,9 +185,9 @@ public class FgtMe extends BaseFragment {
                     case R.id.fgt_me_activity:
                         getActivity().startActivity(new Intent(getActivity(), AtyUserActivity.class));
                         break;
-//                    case R.id.fgt_me_location:
-//                        LogUtils.i(TAG,"location");
-//                        break;
+                    case R.id.fgt_me_location:
+                        getActivity().startActivity(new Intent(getActivity(),AtyNearBy.class));
+                        break;
                     case R.id.fgt_me_discovery:
                         getActivity().startActivity(new Intent(getActivity(), AtyDiscovery.class));
                         break;
@@ -205,7 +204,7 @@ public class FgtMe extends BaseFragment {
         rootView.findViewById(R.id.fgt_me_friend).setOnClickListener(mListener);
         rootView.findViewById(R.id.fgt_me_message).setOnClickListener(mListener);
         rootView.findViewById(R.id.fgt_me_activity).setOnClickListener(mListener);
-        //rootView.findViewById(R.id.fgt_me_location).setOnClickListener(mListener);
+        rootView.findViewById(R.id.fgt_me_location).setOnClickListener(mListener);
         rootView.findViewById(R.id.fgt_me_discovery).setOnClickListener(mListener);
         rootView.findViewById(R.id.fgt_me_food).setOnClickListener(mListener);
         rootView.findViewById(R.id.fgt_me_setting).setOnClickListener(mListener);
@@ -229,7 +228,7 @@ public class FgtMe extends BaseFragment {
     private void showQRCode(){
         LogUtils.i(TAG, "showQRCode");
         final Dialog dialog = new Dialog(getActivity(),R.style.Dialog);
-        View v = LayoutInflater.from(getActivity()).inflate(R.layout.qrcode_user,llLayout);
+        View v = LayoutInflater.from(getActivity()).inflate(R.layout.qrcode_user,llLayout,false);
         final int size = DimensionUtils.getDisplay().widthPixels*4/5-DimensionUtils.dp2px(32);
         final ImageView qr_code = (ImageView) v.findViewById(R.id.qr_code);
         ViewGroup.LayoutParams param = qr_code.getLayoutParams();
@@ -266,19 +265,7 @@ public class FgtMe extends BaseFragment {
         dialog.show();
     }
 
-    private void drawQRCodeInBackground(){
-        new Thread(){
-            @Override
-            public void run() {
-                try {
-                    drawQRCode();
-                } catch (WriterException e) {
-                    e.printStackTrace();
-                }
-            }
-        }.run();
 
-    }
 
     private void drawQRCode() throws WriterException {
         QRCodeWriter writer = new QRCodeWriter();

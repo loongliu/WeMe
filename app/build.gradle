@@ -31,4 +31,7 @@ dependencies {
     compile project(':multi-image-selector')
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile files('libs/zxing.jar')
+    compile files('libs/AMap_Search_V2.8.0_20160105.jar')
+    compile files('libs/AMap_2DMap_V2.8.1_20160202.jar')
+    compile files('libs/AMap_Location_v2.3.0_20160112.jar')
 }
