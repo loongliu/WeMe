@@ -20,6 +20,12 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
+import com.amap.api.maps2d.model.LatLng;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -55,7 +61,6 @@ public class AtyDiscoveryFood extends BaseActivity {
     private CardFood mCard;
     private FrameLayout flBackground;
 
-    private DisplayMetrics displayMetrics;
     private float mTranslationY;
 
     ExecutorService exec;
@@ -66,6 +71,8 @@ public class AtyDiscoveryFood extends BaseActivity {
     private List<Food> foodList;
     private int currentIndex = 0;
     private boolean isLoading = false;
+
+    AMapLocation mapLocation;
 
 
     @Override
@@ -101,7 +108,7 @@ public class AtyDiscoveryFood extends BaseActivity {
 
 
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(0,0);
-        displayMetrics = DimensionUtils.getDisplay();
+        DisplayMetrics displayMetrics = DimensionUtils.getDisplay();
 
         params.width = displayMetrics.widthPixels*7/10;
         params.height = params.width*3/2;
@@ -129,6 +136,27 @@ public class AtyDiscoveryFood extends BaseActivity {
         foodList = new ArrayList<>();
 
 
+        // get current location
+        final AMapLocationClient mLocationClient = new AMapLocationClient(getApplicationContext());
+        AMapLocationListener mLocationListener = new AMapLocationListener() {
+
+            @Override
+            public void onLocationChanged(AMapLocation aMapLocation) {
+                mapLocation = aMapLocation;
+                mLocationClient.stopLocation();
+            }
+        };
+        mLocationClient.setLocationListener(mLocationListener);
+        AMapLocationClientOption mLocationOption = new AMapLocationClientOption();
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+        mLocationOption.setNeedAddress(true);
+        mLocationOption.setOnceLocation(true);
+        mLocationOption.setWifiActiveScan(true);
+        mLocationOption.setMockEnable(false);
+        mLocationOption.setInterval(2000);
+        mLocationClient.setLocationOption(mLocationOption);
+        mLocationClient.startLocation();
+
     }
 
 
@@ -136,7 +164,7 @@ public class AtyDiscoveryFood extends BaseActivity {
         isLoading = true;
         ArrayMap<String,String> map = new ArrayMap<>();
         map.put("token", StrUtils.token());
-        OkHttpUtils.post(StrUtils.GET_RECOMMEND_FOOD,map,TAG, new OkHttpUtils.SimpleOkCallBack(){
+        OkHttpUtils.post(StrUtils.GET_RECOMMEND_FOOD, map, TAG, new OkHttpUtils.SimpleOkCallBack() {
             @Override
             public void onFailure(IOException e) {
                 isLoading = false;
@@ -145,17 +173,17 @@ public class AtyDiscoveryFood extends BaseActivity {
             @Override
             public void onResponse(String s) {
                 isLoading = false;
-                LogUtils.i(TAG,s);
-                JSONObject j = OkHttpUtils.parseJSON(AtyDiscoveryFood.this,s);
-                if(j == null){
+                LogUtils.i(TAG, s);
+                JSONObject j = OkHttpUtils.parseJSON(AtyDiscoveryFood.this, s);
+                if (j == null) {
                     return;
                 }
                 foodList.clear();
                 JSONArray array = j.optJSONArray("result");
-                for(int i = 0; i <array.length(); i++) {
+                for (int i = 0; i < array.length(); i++) {
                     foodList.add(Food.fromJSON(array.optJSONObject(i)));
                 }
-                if(foodList.size()>0){
+                if (foodList.size() > 0) {
                     mCard.showFood(foodList.get(0));
                 }
             }
@@ -284,6 +312,14 @@ public class AtyDiscoveryFood extends BaseActivity {
         wmlp.y = 0;   //y position
         wmlp.width = DimensionUtils.getDisplay().widthPixels;
         dialog.show();
+    }
+
+    public LatLng getCurrentLatLng(){
+        if(mapLocation==null){
+            return null;
+        }else {
+            return new LatLng(mapLocation.getLatitude(), mapLocation.getLongitude());
+        }
     }
 
 

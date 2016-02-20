@@ -91,6 +91,9 @@
     <string name="edit_info">修改个人信息</string>
     <string name="reply_message">回复私信</string>
     <string name="birth">生日</string>
+    <string name="hunderds_meters">百米</string>
+    <string name="thousand_meters">千米</string>
+    <string name="distance_unknown">距离未知</string>
 
 
     <string-array name="aty_info_tabs">

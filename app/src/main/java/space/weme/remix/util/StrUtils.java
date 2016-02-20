@@ -157,6 +157,14 @@ public final class StrUtils {
         }
     }
 
+    public static String distanceTransfer(double distance){
+        if(distance<1000){
+            return (int)(distance/100)+APP.context().getString(R.string.hunderds_meters);
+        }else{
+            return (int)(distance/1000)+APP.context().getString(R.string.thousand_meters);
+        }
+    }
+
 
 
 

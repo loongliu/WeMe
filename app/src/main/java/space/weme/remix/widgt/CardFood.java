@@ -20,6 +20,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.amap.api.maps2d.AMapUtils;
+import com.amap.api.maps2d.model.LatLng;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.controller.BaseControllerListener;
 import com.facebook.drawee.controller.ControllerListener;
@@ -202,7 +204,15 @@ public class CardFood extends CardView {
         String name = food.author + aty.getResources().getString(R.string.recommend);
         mFrontUserName.setText(name);
         mFrontName.setText(food.title);
-        mFrontLocationText.setText("unknown"); // todo
+        LatLng foodLL = new LatLng(food.latitude,food.longitude);
+        LatLng curLL = aty.getCurrentLatLng();
+        if(curLL==null) {
+            mFrontLocationText.setText(R.string.distance_unknown);
+        }else{
+            float meters = AMapUtils.calculateLineDistance(foodLL, curLL);
+            String distance = StrUtils.distanceTransfer(meters);
+            mFrontLocationText.setText(distance);
+        }
         mLikeListener.setFood(food);
 
         mDetailPicture.setImageURI(Uri.parse(food.url));

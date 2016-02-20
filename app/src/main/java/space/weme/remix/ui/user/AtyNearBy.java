@@ -1,6 +1,7 @@
 package space.weme.remix.ui.user;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -62,8 +63,8 @@ public class AtyNearBy extends BaseActivity {
         mLocationListener = new AMapLocationListener(){
             @Override
             public void onLocationChanged(AMapLocation aMapLocation) {
-                LogUtils.i(TAG,"location changed: " + aMapLocation.toString());
-                showLocation(aMapLocation.getLatitude(),aMapLocation.getLongitude());
+                LogUtils.i(TAG, "location changed: " + aMapLocation.toString());
+                showLocation(aMapLocation.getLatitude(), aMapLocation.getLongitude());
                 uploadUserInfo(aMapLocation.getLatitude(), aMapLocation.getLongitude());
                 fetchUserInfo(aMapLocation.getLatitude(), aMapLocation.getLongitude());
                 mLocationClient.stopLocation();
@@ -158,7 +159,7 @@ public class AtyNearBy extends BaseActivity {
 
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         mapView.onSaveInstanceState(outState);
     }
@@ -168,6 +169,9 @@ public class AtyNearBy extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
+        if(mLocationClient!=null){
+            mLocationClient.stopLocation();
+        }
     }
 
 
