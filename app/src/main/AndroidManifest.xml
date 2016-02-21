@@ -48,10 +48,12 @@
         <activity android:name=".ui.user.AtyMessageDetail" android:theme="@style/AppTheme.Translucent" />
         <activity android:name=".ui.user.AtyMessageReply" />
         <activity android:name=".ui.user.AtyUserActivity"/>
-        <activity android:name=".ui.user.AtyDiscovery" />
-        <activity android:name=".ui.user.AtyDiscoveryFood" />
+        <activity android:name=".ui.find.AtyDiscovery" />
+        <activity android:name=".ui.find.AtyDiscoveryFood" />
         <activity android:name=".ui.user.AtyImagePager" />
         <activity android:name=".ui.user.AtyNearBy" />
+        <activity android:name=".ui.find.AtyFoodMap" />
+        <activity android:name=".ui.user.AtySetting" />
 
         <activity android:name="me.nereo.multi_image_selector.MultiImageSelectorActivity" />
 

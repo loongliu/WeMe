@@ -24,7 +24,7 @@ import com.facebook.imagepipeline.image.ImageInfo;
 
 import space.weme.remix.R;
 import space.weme.remix.model.User;
-import space.weme.remix.ui.user.AtyDiscovery;
+import space.weme.remix.ui.find.AtyDiscovery;
 import space.weme.remix.ui.user.AtyInfo;
 import space.weme.remix.util.StrUtils;
 

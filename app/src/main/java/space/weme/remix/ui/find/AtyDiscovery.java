@@ -1,10 +1,11 @@
-package space.weme.remix.ui.user;
+package space.weme.remix.ui.find;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -19,12 +20,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.amap.api.location.AMapLocation;
-import com.amap.api.location.AMapLocationClient;
-import com.amap.api.location.AMapLocationClientOption;
-import com.amap.api.location.AMapLocationListener;
-import com.amap.api.maps2d.model.LatLng;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -36,21 +32,25 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import space.weme.remix.R;
-import space.weme.remix.model.Food;
+import space.weme.remix.model.User;
 import space.weme.remix.ui.base.BaseActivity;
+import space.weme.remix.ui.user.AtyMessageReply;
 import space.weme.remix.util.BitmapUtils;
 import space.weme.remix.util.DimensionUtils;
 import space.weme.remix.util.LogUtils;
 import space.weme.remix.util.OkHttpUtils;
 import space.weme.remix.util.StrUtils;
-import space.weme.remix.widgt.CardFood;
+import space.weme.remix.widgt.Card;
 
 /**
  * Created by Liujilong on 16/2/14.
  * liujilong.me@gmail.com
  */
-public class AtyDiscoveryFood extends BaseActivity {
-    private static final String TAG = "AtyDiscoveryFood";
+public class AtyDiscovery extends BaseActivity {
+
+    private static final String TAG = "AtyDiscovery";
+
+    private static final String TAG_USER = TAG + "_USER";
 
     private static final int STATE_FIRST = 0x1;
     private static final int STATE_ANIMATING = 0x2;
@@ -58,28 +58,31 @@ public class AtyDiscoveryFood extends BaseActivity {
 
     private int state = STATE_FIRST;
 
-    private CardFood mCard;
+
+    private DisplayMetrics displayMetrics;
+
+    private Card mCard;
     private FrameLayout flBackground;
 
     private float mTranslationY;
 
-    ExecutorService exec;
-    private Handler mHandler;
 
-    private float preValue;
-
-    private List<Food> foodList;
-    private int currentIndex = 0;
     private boolean isLoading = false;
 
-    AMapLocation mapLocation;
+    private float preValue = 0;
+
+    private List<User> userList;
+    private int currentIndex = 0;
+
+    ExecutorService exec;
+    private Handler mHandler;
 
 
     @Override
     @SuppressWarnings("deprecation")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.aty_discovery_food);
+        setContentView(R.layout.aty_discovery);
 
         ImageView ivBack = (ImageView) findViewById(R.id.aty_discovery_back);
         ivBack.setOnClickListener(new View.OnClickListener() {
@@ -106,85 +109,90 @@ public class AtyDiscoveryFood extends BaseActivity {
             setBackground(b.getBitmap());
         }
 
-
+        mCard = Card.fromXML(this, flBackground);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(0,0);
-        DisplayMetrics displayMetrics = DimensionUtils.getDisplay();
+        displayMetrics = DimensionUtils.getDisplay();
 
         params.width = displayMetrics.widthPixels*7/10;
         params.height = params.width*3/2;
         params.gravity= Gravity.CENTER;
-        mCard = CardFood.fromXML(this, flBackground, params);
+        mCard.setLayoutParams(params);
+        mCard.setAvatarSize();
         flBackground.addView(mCard);
 
         mTranslationY = displayMetrics.heightPixels / 2 + 21 * displayMetrics.widthPixels / 40;
+        mCard.setTranslationY(mTranslationY);
+
         CardView cardView = (CardView) findViewById(R.id.aty_discovery_card);
         cardView.setLayoutParams(params);
         cardView.setTranslationY(mTranslationY - DimensionUtils.dp2px(64));
-
-        mCard.setTranslationY(mTranslationY);
 
         TextView tvText = (TextView) findViewById(R.id.aty_discovery_text);
         tvText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (state != STATE_ANIMATING) {
+                if (state!=STATE_ANIMATING) {
                     startAnimation();
                 }
             }
         });
-
-        foodList = new ArrayList<>();
-
-
-        // get current location
-        final AMapLocationClient mLocationClient = new AMapLocationClient(getApplicationContext());
-        AMapLocationListener mLocationListener = new AMapLocationListener() {
-
-            @Override
-            public void onLocationChanged(AMapLocation aMapLocation) {
-                mapLocation = aMapLocation;
-                mLocationClient.stopLocation();
-            }
-        };
-        mLocationClient.setLocationListener(mLocationListener);
-        AMapLocationClientOption mLocationOption = new AMapLocationClientOption();
-        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
-        mLocationOption.setNeedAddress(true);
-        mLocationOption.setOnceLocation(true);
-        mLocationOption.setWifiActiveScan(true);
-        mLocationOption.setMockEnable(false);
-        mLocationOption.setInterval(2000);
-        mLocationClient.setLocationOption(mLocationOption);
-        mLocationClient.startLocation();
+        userList = new ArrayList<>();
 
     }
 
 
-    private void fetchFood(){
-        isLoading = true;
-        ArrayMap<String,String> map = new ArrayMap<>();
-        map.put("token", StrUtils.token());
-        OkHttpUtils.post(StrUtils.GET_RECOMMEND_FOOD, map, TAG, new OkHttpUtils.SimpleOkCallBack() {
+
+
+    private void ivMoreClicked(){
+        if(state!=STATE_READY){
+            return;
+        }
+        final Dialog dialog = new Dialog(AtyDiscovery.this,R.style.DialogSlideAnim);
+        View content = LayoutInflater.from(this).inflate(R.layout.aty_discovery_option,flBackground,false);
+        View.OnClickListener popupListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String id = userList.get(currentIndex).ID + "";
+                if(v.getId()==R.id.aty_discovery_option_message){
+                    Intent i = new Intent(AtyDiscovery.this,AtyMessageReply.class);
+                    i.putExtra(AtyMessageReply.INTENT_ID,id);
+                    startActivity(i);
+                }else if(v.getId() == R.id.aty_discovery_option_follow){
+                    followUser(id);
+                }
+                dialog.dismiss();
+            }
+        };
+        content.findViewById(R.id.aty_discovery_option_cancel).setOnClickListener(popupListener);
+        content.findViewById(R.id.aty_discovery_option_follow).setOnClickListener(popupListener);
+        content.findViewById(R.id.aty_discovery_option_message).setOnClickListener(popupListener);
+        dialog.setContentView(content);
+        WindowManager.LayoutParams wmlp = dialog.getWindow().getAttributes();
+        wmlp.gravity = Gravity.BOTTOM | Gravity.START;
+        wmlp.x = 0;   //x position
+        wmlp.y = 0;   //y position
+        wmlp.width = DimensionUtils.getDisplay().widthPixels;
+        dialog.show();
+    }
+
+
+    private void followUser(String id){
+        ArrayMap<String,String> param = new ArrayMap<>();
+        param.put("token", StrUtils.token());
+        param.put("id", id);
+        OkHttpUtils.post(StrUtils.FOLLOW_USER, param, TAG, new OkHttpUtils.SimpleOkCallBack() {
             @Override
             public void onFailure(IOException e) {
-                isLoading = false;
+                Toast.makeText(AtyDiscovery.this, R.string.follow_fail, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onResponse(String s) {
-                isLoading = false;
-                LogUtils.i(TAG, s);
-                JSONObject j = OkHttpUtils.parseJSON(AtyDiscoveryFood.this, s);
+                JSONObject j = OkHttpUtils.parseJSON(AtyDiscovery.this, s);
                 if (j == null) {
-                    return;
-                }
-                foodList.clear();
-                JSONArray array = j.optJSONArray("result");
-                for (int i = 0; i < array.length(); i++) {
-                    foodList.add(Food.fromJSON(array.optJSONObject(i)));
-                }
-                if (foodList.size() > 0) {
-                    mCard.showFood(foodList.get(0));
+                    Toast.makeText(AtyDiscovery.this, R.string.follow_fail, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(AtyDiscovery.this, R.string.follow_success, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -192,24 +200,24 @@ public class AtyDiscoveryFood extends BaseActivity {
 
     @SuppressWarnings("deprecation")
     public void setBackground(final Bitmap b){
-        LogUtils.i("Time", "Label 1 : " + System.currentTimeMillis());
+        LogUtils.i("Time","Label 1 : " + System.currentTimeMillis());
         if(b == null){
             return;
         }
         exec.execute(new Runnable() {
             @Override
             public void run() {
-                LogUtils.i("Time", "Label 2 : " + System.currentTimeMillis());
-                Bitmap sized = BitmapUtils.scale(b, 40, 40 * b.getHeight() / b.getWidth());
-                LogUtils.i("Time", "Label 3 : " + System.currentTimeMillis());
+                LogUtils.i("Time","Label 2 : " + System.currentTimeMillis());
+                Bitmap sized = BitmapUtils.scale(b,40,40*b.getHeight()/b.getWidth());
+                LogUtils.i("Time","Label 3 : " + System.currentTimeMillis());
                 final int radius = 5;
-                final Bitmap blur = BitmapUtils.blur(sized, radius);
+                final Bitmap blur = BitmapUtils.blur(sized,radius);
                 LogUtils.i("Time", "Label 4 : " + System.currentTimeMillis());
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        LogUtils.i("Time", "Label 5 : " + System.currentTimeMillis());
-                        flBackground.setBackgroundDrawable(new BitmapDrawable(getResources(), blur));
+                        LogUtils.i("Time","Label 5 : " + System.currentTimeMillis());
+                        flBackground.setBackgroundDrawable(new BitmapDrawable(getResources(),blur));
                     }
                 });
             }
@@ -217,10 +225,11 @@ public class AtyDiscoveryFood extends BaseActivity {
     }
 
 
+
     private void startAnimation(){
         currentIndex++;
-        if(currentIndex>=foodList.size()&& !isLoading){
-            fetchFood();
+        if(currentIndex>=userList.size()&& !isLoading){
+            fetchUser();
             currentIndex=0;
         }
         ObjectAnimator a1 =  ObjectAnimator.ofFloat(mCard, "TranslationY", mTranslationY, 0)
@@ -229,13 +238,13 @@ public class AtyDiscoveryFood extends BaseActivity {
         a2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
+                mCard.setAvatarSize();
                 float value = (float) animation.getAnimatedValue();
 
-                mCard.resize();
-                if (preValue < 90 && value > 90) {
-                    mCard.turnToFront();
-                    if (foodList.size() != 0) {
-                        mCard.showFood(foodList.get(currentIndex));
+                if (preValue<90 && value > 90) {
+                    mCard.turnOver();
+                    if(userList.size()!=0) {
+                        mCard.showUser(userList.get(currentIndex));
                     }
                 }
                 preValue = value;
@@ -248,12 +257,12 @@ public class AtyDiscoveryFood extends BaseActivity {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                state = STATE_READY;
+                state=STATE_READY;
             }
 
             @Override
             public void onAnimationCancel(Animator animation) {
-                state = STATE_READY;
+                state=STATE_READY;
             }
 
             @Override
@@ -271,11 +280,11 @@ public class AtyDiscoveryFood extends BaseActivity {
             a3.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
+                    mCard.setAvatarSize();
                     float value = (float) animation.getAnimatedValue();
 
-                    mCard.resize();
                     if (preValue>90 && value < 90) {
-                        mCard.turnToBack();
+                        mCard.turnOver();
                     }
                     preValue = value;
                 }
@@ -287,44 +296,54 @@ public class AtyDiscoveryFood extends BaseActivity {
             set.playSequentially(a3, a4, a1, a2);
             set.start();
         }
+
     }
 
-
-    private void ivMoreClicked(){
-        final Dialog dialog = new Dialog(AtyDiscoveryFood.this,R.style.DialogSlideAnim);
-        View content = LayoutInflater.from(this).inflate(R.layout.aty_discovery_food_option,flBackground,false);
-        View.OnClickListener popupListener = new View.OnClickListener() {
+    private void fetchUser(){
+        OkHttpUtils.cancel(TAG_USER);
+        isLoading = true;
+        ArrayMap<String,String> param = new ArrayMap<>();
+        param.put("token", StrUtils.token());
+        OkHttpUtils.post(StrUtils.GET_RECOMMEND_USER,param,TAG_USER,new OkHttpUtils.SimpleOkCallBack(){
             @Override
-            public void onClick(View v) {
-                if(v.getId()==R.id.aty_discovery_option_add){
-                    LogUtils.i(TAG, "add food card");
-                    // todo
-                }
-                dialog.dismiss();
+            public void onFailure(IOException e) {
+                isLoading = false;
             }
-        };
-        content.findViewById(R.id.aty_discovery_option_cancel).setOnClickListener(popupListener);
-        content.findViewById(R.id.aty_discovery_option_add).setOnClickListener(popupListener);
-        dialog.setContentView(content);
-        WindowManager.LayoutParams wmlp = dialog.getWindow().getAttributes();
-        wmlp.gravity = Gravity.BOTTOM | Gravity.START;
-        wmlp.x = 0;   //x position
-        wmlp.y = 0;   //y position
-        wmlp.width = DimensionUtils.getDisplay().widthPixels;
-        dialog.show();
-    }
 
-    public LatLng getCurrentLatLng(){
-        if(mapLocation==null){
-            return null;
-        }else {
-            return new LatLng(mapLocation.getLatitude(), mapLocation.getLongitude());
-        }
+            @Override
+            public void onResponse(String s) {
+                LogUtils.i(TAG,s);
+                isLoading = false;
+                JSONObject j = OkHttpUtils.parseJSON(AtyDiscovery.this, s);
+                if(j == null){
+                    return;
+                }
+                userList.clear();
+                JSONArray array = j.optJSONArray("result");
+                for(int i = 0; i <array.length(); i++){
+                    userList.add(User.fromJSON(array.optJSONObject(i)));
+                }
+                if(userList.size()>0){
+                    mCard.showUser(userList.get(0));
+                }
+            }
+        });
     }
-
 
     @Override
-    public String tag() {
+    protected String tag() {
         return TAG;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        OkHttpUtils.cancel(TAG_USER);
+        exec.shutdown();
     }
 }

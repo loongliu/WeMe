@@ -3,6 +3,7 @@ package space.weme.remix.widgt;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Animatable;
 import android.net.Uri;
@@ -10,7 +11,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +34,8 @@ import org.json.JSONObject;
 
 import space.weme.remix.R;
 import space.weme.remix.model.Food;
-import space.weme.remix.ui.user.AtyDiscoveryFood;
+import space.weme.remix.ui.find.AtyFoodMap;
+import space.weme.remix.ui.find.AtyDiscoveryFood;
 import space.weme.remix.util.DimensionUtils;
 import space.weme.remix.util.OkHttpUtils;
 import space.weme.remix.util.StrUtils;
@@ -330,8 +331,10 @@ public class CardFood extends CardView {
         }
         @Override
         public void onClick(View v) {
-            // todo goto map
-            Log.i(aty.tag(),"todo");
+            Intent i = new Intent(aty, AtyFoodMap.class);
+            i.putExtra(AtyFoodMap.INTENT_LAT,currentFood.latitude);
+            i.putExtra(AtyFoodMap.INTENT_LON, currentFood.longitude);
+            aty.startActivity(i);
         }
     }
 

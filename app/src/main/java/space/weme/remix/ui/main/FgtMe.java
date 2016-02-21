@@ -38,12 +38,11 @@ import java.util.Map;
 import space.weme.remix.R;
 import space.weme.remix.model.User;
 import space.weme.remix.ui.base.BaseFragment;
-import space.weme.remix.ui.user.AtyDiscovery;
-import space.weme.remix.ui.user.AtyDiscoveryFood;
 import space.weme.remix.ui.user.AtyFriend;
 import space.weme.remix.ui.user.AtyInfo;
 import space.weme.remix.ui.user.AtyMessage;
 import space.weme.remix.ui.user.AtyNearBy;
+import space.weme.remix.ui.user.AtySetting;
 import space.weme.remix.ui.user.AtyUserActivity;
 import space.weme.remix.util.DimensionUtils;
 import space.weme.remix.util.LogUtils;
@@ -188,14 +187,8 @@ public class FgtMe extends BaseFragment {
                     case R.id.fgt_me_location:
                         getActivity().startActivity(new Intent(getActivity(),AtyNearBy.class));
                         break;
-                    case R.id.fgt_me_discovery:
-                        getActivity().startActivity(new Intent(getActivity(), AtyDiscovery.class));
-                        break;
-                    case R.id.fgt_me_food:
-                        getActivity().startActivity(new Intent(getActivity(), AtyDiscoveryFood.class));
-                        break;
                     case R.id.fgt_me_setting:
-                        logout();
+                        getActivity().startActivity(new Intent(getActivity(),AtySetting.class));
                         break;
                 }
             }
@@ -205,20 +198,11 @@ public class FgtMe extends BaseFragment {
         rootView.findViewById(R.id.fgt_me_message).setOnClickListener(mListener);
         rootView.findViewById(R.id.fgt_me_activity).setOnClickListener(mListener);
         rootView.findViewById(R.id.fgt_me_location).setOnClickListener(mListener);
-        rootView.findViewById(R.id.fgt_me_discovery).setOnClickListener(mListener);
-        rootView.findViewById(R.id.fgt_me_food).setOnClickListener(mListener);
         rootView.findViewById(R.id.fgt_me_setting).setOnClickListener(mListener);
 
     }
 
-    private void logout(){
-        SharedPreferences sp = getActivity().getSharedPreferences(StrUtils.SP_USER, Context.MODE_PRIVATE);
-        sp.edit().remove(StrUtils.SP_USER_ID).remove(StrUtils.SP_USER_TOKEN).apply();
-        Intent i = new Intent(getActivity(), AtyMain.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        i.putExtra(AtyMain.INTENT_LOGOUT, true);
-        startActivity(i);
-    }
+
 
     @Override
     protected String tag() {

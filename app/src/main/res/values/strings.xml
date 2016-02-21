@@ -94,6 +94,12 @@
     <string name="hunderds_meters">百米</string>
     <string name="thousand_meters">千米</string>
     <string name="distance_unknown">距离未知</string>
+    <string name="food_location">美食地点</string>
+    <string name="find">寻觅</string>
+    <string name="cache_removed">清空缓存完毕</string>
+    <string name="edit_fail">修改设置失败</string>
+    <string name="shown_in_find">您将出现在发现列表中</string>
+    <string name="not_shown_in_found">您将不会出现在发现列表中</string>
 
 
     <string-array name="aty_info_tabs">

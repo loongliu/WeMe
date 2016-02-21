@@ -23,11 +23,12 @@ public class AtyMain extends BaseActivity {
     private static final String TAG = "AtyMain";
     public static final String INTENT_LOGOUT = "intent_lougout";
 
-    private static final int PAGE_COUNT = 3;
+    private static final int PAGE_COUNT = 4;
 
     private int[] mTitleTexts = new int[]{
             R.string.activity,
             R.string.community,
+            R.string.find,
             R.string.me
     };
 
@@ -51,10 +52,11 @@ public class AtyMain extends BaseActivity {
     }
 
     private void bindViews(){
-        tabItems = new TabItem[3];
+        tabItems = new TabItem[4];
         tabItems[0] = (TabItem) findViewById(R.id.main_item_activity);
         tabItems[1] = (TabItem) findViewById(R.id.main_item_community);
-        tabItems[2] = (TabItem) findViewById(R.id.main_item_me);
+        tabItems[2] = (TabItem) findViewById(R.id.main_item_find);
+        tabItems[3] = (TabItem) findViewById(R.id.main_item_me);
         tabItems[0].setEnable(true);
 
         mPager = (ViewPager) findViewById(R.id.main_pager);
@@ -103,9 +105,11 @@ public class AtyMain extends BaseActivity {
                 case 1:
                     return FgtCommunity.newInstance();
                 case 2:
+                    return FgtFind.newInstance();
+                case 3:
                     return FgtMe.newInstance();
                 default:
-                    throw new RuntimeException("position can not be larger than 2");
+                    throw new RuntimeException("position can not be larger than 3");
             }
         }
 

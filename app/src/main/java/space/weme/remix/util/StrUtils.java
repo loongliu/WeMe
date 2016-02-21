@@ -101,6 +101,8 @@ public final class StrUtils {
 
     public static final String LIKE_FOOD_URL = BASE_URL + "likefoodcard";
 
+    public static final String EDIT_CARD_SETTING = BASE_URL + "editprofile/editcardsetting";
+
 
 
 
@@ -126,6 +128,7 @@ public final class StrUtils {
     public static final String SP_USER = "StrUtils_sp_user";
     public static final String SP_USER_TOKEN = SP_USER + "_token";
     public static final String SP_USER_ID = SP_USER + "_id";
+    public static final String SP_USER_CAN_FOUND = SP_USER +"_can_found";
 
 
 
