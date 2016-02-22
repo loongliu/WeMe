@@ -102,6 +102,20 @@ public final class StrUtils {
     public static final String LIKE_FOOD_URL = BASE_URL + "likefoodcard";
 
 
+    public static final String GET_ACTIVITY_DETAIL_URL=BASE_URL+"getactivitydetail";
+
+    public static final String DEL_SIGN_ACTIVITY=BASE_URL+"deletesignup";
+
+    public static final String UNLIKE_ACTIVITY=BASE_URL+"unlikeactivity";
+
+    public static final String LIKE_ACTIVITY=BASE_URL+"likeactivity";
+
+    public static final String SIGN_ACTIVITY=BASE_URL+"signup";
+
+    public static final String PUBLISH_ACTIVITY=BASE_URL+"publishactivity";
+
+    public static final String SEARCH_ACTIVITY=BASE_URL+"searchactivity";
+
 
 
     public static final String GET_AVATAR = BASE_URL_NGINX + "avatar/";

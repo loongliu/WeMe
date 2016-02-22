@@ -39,6 +39,10 @@
         <activity android:name=".ui.user.AtySeeMe" android:theme="@style/AppTheme.Translucent" />
         <activity android:name=".ui.user.AtyMessage" android:theme="@style/AppTheme.Translucent" />
         <activity android:name=".ui.user.AtyMessageDetail" android:theme="@style/AppTheme.Translucent" />
+        <activity android:name=".ui.aty.ActivityDetail" android:theme="@style/AppTheme.Translucent" />
+        <activity android:name=".ui.aty.AtyPublicActivity" android:theme="@style/AppTheme.Translucent"/>
+        <activity android:name=".ui.aty.AtySearchActivity" android:theme="@style/AppTheme.Translucent"/>
+
         <activity android:name=".ui.user.AtyMessageReply" />
         <activity android:name=".ui.user.AtyUserActivity"/>
         <activity android:name=".ui.user.AtyDiscovery" />
