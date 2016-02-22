@@ -1,6 +1,7 @@
 package space.weme.remix.util;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.util.ArrayMap;
@@ -9,7 +10,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map;
@@ -71,12 +72,27 @@ public final class OkHttpUtils {
         Request request = builder.build();
         getInstance().firePost(request, callback);
     }
-    @SuppressWarnings("unused")
-    public static void uploadFile(String url,Map<String,String> param, String path,MediaType type,OkCallBack callBack){
-        uploadFile(url, param, path,type, null, callBack);
-    }
+
+
+
+    /**
+     * upload image file to the server
+     * @param url url
+     * @param param param
+     * @param path file path
+     * @param type image type
+     * @param tag tag of context, where the function called.
+     * @param callBack callback
+     */
     public static void uploadFile(String url,Map<String,String> param, String path,MediaType type, String tag, OkCallBack callBack){
+        uploadBitmap(url,param,BitmapUtils.readFromFileAndSize(path),type,tag,callBack);
+    }
+
+    public static void uploadBitmap(String url,Map<String,String> param, Bitmap bitmap,MediaType type, String tag, OkCallBack callBack){
         JSONObject jsonObject = new JSONObject(param);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
         RequestBody requestBody=new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addPart(
@@ -84,7 +100,7 @@ public final class OkHttpUtils {
                         RequestBody.create(MediaType.parse("application/json"), jsonObject.toString()))
                 .addPart(
                         Headers.of("Content-Disposition", "form-data; name=\"avatar\";filename=\"file.jpg\""),
-                        RequestBody.create(type, new File(path))
+                        RequestBody.create(type, byteArray)
                 ).build();
         Request.Builder builder = new Request.Builder().url(url).post(requestBody);
         if(tag!=null) builder.tag(tag);

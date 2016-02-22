@@ -2,7 +2,9 @@ package space.weme.remix.ui.intro;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.core.ImagePipeline;
@@ -25,6 +28,7 @@ import com.facebook.imagepipeline.core.ImagePipeline;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -33,6 +37,7 @@ import space.weme.remix.R;
 import space.weme.remix.model.User;
 import space.weme.remix.ui.base.BaseActivity;
 import space.weme.remix.ui.community.DatePickerFragment;
+import space.weme.remix.util.BitmapUtils;
 import space.weme.remix.util.LogUtils;
 import space.weme.remix.util.OkHttpUtils;
 import space.weme.remix.util.StrUtils;
@@ -52,8 +57,11 @@ public class AtyEditInfo extends BaseActivity {
 
     private static final int REQUEST_IMAGE = 0xef;
     private static final int REQUEST_CITY = 0xff;
+    private final int REQUEST_CROP = 400;
 
     private String mAvatarPath;
+    private Bitmap avatarBitmap;
+
     private String education;
 
     SimpleDraweeView mDrawAvatar;
@@ -225,7 +233,7 @@ public class AtyEditInfo extends BaseActivity {
         if(etMajor.getText().length()!=0){
             param.put("department", etMajor.getText().toString());
         }
-        param.put("gender", swGender.isChecked()?getResources().getString(R.string.male):getResources().getString(R.string.female));
+        param.put("gender", swGender.isChecked() ? getResources().getString(R.string.male) : getResources().getString(R.string.female));
         if(etHome.getText().length()!=0){
             param.put("hometown",etHome.getText().toString());
         }
@@ -246,9 +254,9 @@ public class AtyEditInfo extends BaseActivity {
                 if (j == null) {
                     return;
                 }
-                if(mAvatarPath==null){
+                if (mAvatarPath == null) {
                     uploadImageReturned();
-                }else {
+                } else {
                     uploadAvatar();
                 }
             }
@@ -260,7 +268,7 @@ public class AtyEditInfo extends BaseActivity {
         p.put("token",StrUtils.token());
         p.put("type","0");
         p.put("number","0");
-        OkHttpUtils.uploadFile(StrUtils.UPLOAD_AVATAR_URL, p, mAvatarPath, StrUtils.MEDIA_TYPE_IMG, TAG, new OkHttpUtils.SimpleOkCallBack() {
+        OkHttpUtils.uploadBitmap(StrUtils.UPLOAD_AVATAR_URL, p, avatarBitmap, StrUtils.MEDIA_TYPE_IMG, TAG, new OkHttpUtils.SimpleOkCallBack() {
             @Override
             public void onFailure(IOException e) {
                 uploadImageReturned();
@@ -270,7 +278,7 @@ public class AtyEditInfo extends BaseActivity {
             public void onResponse(String s) {
                 uploadImageReturned();
                 ImagePipeline imagePipeline = Fresco.getImagePipeline();
-                imagePipeline.evictFromCache(Uri.parse(StrUtils.thumForID(mUser.ID+"")));
+                imagePipeline.evictFromCache(Uri.parse(StrUtils.thumForID(mUser.ID + "")));
             }
         });
     }
@@ -297,10 +305,46 @@ public class AtyEditInfo extends BaseActivity {
         if(requestCode == REQUEST_IMAGE){
             List<String> paths=data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
             mAvatarPath = paths.get(0);
-            mDrawAvatar.setImageURI(Uri.parse("file://"+mAvatarPath));
+            performCrop(mAvatarPath);
+            //mDrawAvatar.setImageURI(Uri.parse("file://"+mAvatarPath));
         }else if(requestCode == REQUEST_CITY){
             String name = data.getStringExtra(AtySearchCity.INTENT_UNIVERSITY);
             tvSchool.setText(name);
+        }else if (requestCode == REQUEST_CROP){
+            Bundle extras = data.getExtras();
+            avatarBitmap = extras.getParcelable("data");
+            mDrawAvatar.setImageBitmap(BitmapUtils.roundBitmap(avatarBitmap));
+
+        }
+    }
+
+    private void performCrop(String picUri) {
+        try {
+            //Start Crop Activity
+
+            Intent cropIntent = new Intent("com.android.camera.action.CROP");
+            // indicate image type and Uri
+            File f = new File(picUri);
+            Uri contentUri = Uri.fromFile(f);
+
+            cropIntent.setDataAndType(contentUri, "image/*");
+            // set crop properties
+            cropIntent.putExtra("crop", "true");
+            // indicate aspect of desired crop
+            cropIntent.putExtra("aspectX", 1);
+            cropIntent.putExtra("aspectY", 1);
+
+            // retrieve data on return
+            cropIntent.putExtra("return-data", true);
+            // start the activity - we handle returning in onActivityResult
+            startActivityForResult(cropIntent, REQUEST_CROP);
+        }
+        // respond to users whose devices do not support the crop action
+        catch (ActivityNotFoundException anfe) {
+            // display an error message
+            String errorMessage = "your device doesn't support the crop action!";
+            Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
+            toast.show();
         }
     }
 

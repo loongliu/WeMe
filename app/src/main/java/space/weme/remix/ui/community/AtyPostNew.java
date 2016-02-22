@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
-import okhttp3.MediaType;
 import space.weme.remix.R;
 import space.weme.remix.ui.base.AtyImage;
 import space.weme.remix.util.LogUtils;
