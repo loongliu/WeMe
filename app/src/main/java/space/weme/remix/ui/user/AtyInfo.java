@@ -130,6 +130,7 @@ public class AtyInfo extends SwipeActivity {
                 Intent i = new Intent(AtyInfo.this, AtyImage.class);
                 i.putExtra(AtyImage.URL_INTENT,StrUtils.avatarForID(mId));
                 startActivity(i);
+                overridePendingTransition(0, 0);
             }
         });
 
@@ -145,7 +146,9 @@ public class AtyInfo extends SwipeActivity {
         hierarchy.setPlaceholderImage(R.mipmap.info_default);
 
         mWindowListener = new WindowListener();
-        mDrawBackground.setOnClickListener(mWindowListener);
+        if(StrUtils.id().equals(mId)) {
+            mDrawBackground.setOnClickListener(mWindowListener);
+        }
 
         findViewById(R.id.aty_info_more).setOnClickListener(mWindowListener);
 

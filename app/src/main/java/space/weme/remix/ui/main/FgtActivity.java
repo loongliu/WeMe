@@ -1,6 +1,7 @@
 package space.weme.remix.ui.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -27,6 +28,7 @@ import java.util.List;
 
 import space.weme.remix.R;
 import space.weme.remix.model.Activity;
+import space.weme.remix.ui.aty.ActivityDetail;
 import space.weme.remix.ui.base.BaseFragment;
 import space.weme.remix.util.DimensionUtils;
 import space.weme.remix.util.LogUtils;
@@ -98,6 +100,16 @@ public class FgtActivity extends BaseFragment {
 
 
         mTopAdapter = new TopAdapter(getActivity());
+        mTopAdapter.setListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int id = (int) v.getTag();
+                Intent detail = new Intent(getActivity(), ActivityDetail.class);
+                detail.putExtra("activityid", id);
+                //LogUtils.d(TAG, "id:" + mActivityList.get(getAdapterPosition() - 1).activityID);
+                startActivity(detail);
+            }
+        });
         mRvAdapter = new Adapter();
         mRecyclerView.setAdapter(mRvAdapter);
         refresh();
@@ -247,6 +259,15 @@ public class FgtActivity extends BaseFragment {
 
             public ItemViewHolder(View itemView) {
                 super(itemView);
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent detail = new Intent(getActivity(), ActivityDetail.class);
+                        detail.putExtra("activityid", mActivityList.get(getAdapterPosition() - 1).activityID);
+                        LogUtils.d(TAG, "id:" + mActivityList.get(getAdapterPosition() - 1).activityID);
+                        startActivity(detail);
+                    }
+                });
                 mAvatar = (SimpleDraweeView) itemView.findViewById(R.id.fgt_activity_item_image);
                 RoundingParams roundingParams = RoundingParams.fromCornersRadius(5f);
                 roundingParams.setRoundAsCircle(true);

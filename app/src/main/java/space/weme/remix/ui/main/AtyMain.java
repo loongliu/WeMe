@@ -6,10 +6,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import space.weme.remix.R;
+import space.weme.remix.ui.aty.AtyPublicActivity;
+import space.weme.remix.ui.aty.AtySearchActivity;
 import space.weme.remix.ui.base.BaseActivity;
 import space.weme.remix.ui.intro.AtyLogin;
 import space.weme.remix.widgt.TabItem;
@@ -18,7 +22,7 @@ import space.weme.remix.widgt.TabItem;
  * Created by Liujilong on 16/1/24.
  * liujilong.me@gmail.com
  */
-public class AtyMain extends BaseActivity {
+public class AtyMain extends BaseActivity implements Toolbar.OnMenuItemClickListener {
 
     private static final String TAG = "AtyMain";
     public static final String INTENT_LOGOUT = "intent_lougout";
@@ -35,6 +39,7 @@ public class AtyMain extends BaseActivity {
     private TabItem[] tabItems;
     private ViewPager mPager;
     private TextView mTvTitle;
+    private Toolbar toolbar;
 
 
     @Override
@@ -59,6 +64,10 @@ public class AtyMain extends BaseActivity {
         tabItems[3] = (TabItem) findViewById(R.id.main_item_me);
         tabItems[0].setEnable(true);
 
+        toolbar= (Toolbar) findViewById(R.id.toolbar_main);
+        toolbar.inflateMenu(R.menu.menu_main);
+        toolbar.setOnMenuItemClickListener(this);
+
         mPager = (ViewPager) findViewById(R.id.main_pager);
         mTvTitle = (TextView) findViewById(R.id.main_title);
         mTvTitle.setText(R.string.activity);
@@ -73,6 +82,11 @@ public class AtyMain extends BaseActivity {
                 mTvTitle.setText(mTitleTexts[position]);
                 for(int i = 0;i<PAGE_COUNT; i++){
                     tabItems[i].setEnable(i==position);
+                }
+                if (position==0)
+                    toolbar.inflateMenu(R.menu.menu_main);
+                else {
+                    toolbar.getMenu().clear();
                 }
             }
             @Override
@@ -89,6 +103,25 @@ public class AtyMain extends BaseActivity {
             tabItems[i].setTag(i);
             tabItems[i].setOnClickListener(mTabItemClickListener);
         }
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_search:
+                Intent search=new Intent(AtyMain.this, AtySearchActivity.class);
+                startActivity(search);
+                return true;
+            case R.id.action_public:
+                Intent publicActivity=new Intent(AtyMain.this, AtyPublicActivity.class);
+                startActivity(publicActivity);
+                return true;
+            case R.id.action_2code:
+                return true;
+            default:
+                break;
+        }
+        return false;
     }
 
     public class Adapter extends FragmentPagerAdapter {

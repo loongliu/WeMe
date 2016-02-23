@@ -55,6 +55,11 @@
         <activity android:name=".ui.find.AtyFoodMap" />
         <activity android:name=".ui.user.AtySetting" />
 
+        <activity android:name=".ui.aty.ActivityDetail" android:theme="@style/AppTheme.Translucent" />
+        <activity android:name=".ui.aty.AtyPublicActivity" android:theme="@style/AppTheme.Translucent"/>
+        <activity android:name=".ui.aty.AtySearchActivity" android:theme="@style/AppTheme.Translucent"/>
+
+
         <activity android:name="me.nereo.multi_image_selector.MultiImageSelectorActivity" />
 
 
