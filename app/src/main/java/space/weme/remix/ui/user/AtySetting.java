@@ -6,10 +6,10 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.util.ArrayMap;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -36,9 +36,8 @@ public class AtySetting extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.aty_setting);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.setting);
-        toolbar.setTitleTextColor(Color.WHITE);
+        TextView toolbar = (TextView) findViewById(R.id.toolbar);
+        toolbar.setText(R.string.setting);
         findViewById(R.id.aty_setting_cache_layout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

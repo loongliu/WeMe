@@ -2,7 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-<android.support.v7.widget.Toolbar
+<TextView
+    android:gravity="center_vertical"
+    android:textSize="16sp"
+    android:textColor="@color/white"
     android:id="@+id/toolbar"
     android:background="@color/colorPrimary"
     android:layout_width="match_parent"

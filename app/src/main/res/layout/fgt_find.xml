@@ -30,6 +30,7 @@
         <TextView
             android:gravity="center_horizontal"
             android:text="觅食"
+            android:textSize="14sp"
             android:textColor="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -48,6 +49,7 @@
         <TextView
             android:gravity="center_horizontal"
             android:text="觅友"
+            android:textSize="14sp"
             android:textColor="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

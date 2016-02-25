@@ -57,9 +57,9 @@ public class TabItem extends LinearLayout {
 
         mImageView = new ImageView(mContext);
         mImageView.setBackgroundDrawable(mDrawableCommon);
-        LayoutParams params = new LayoutParams(DimensionUtils.dp2px(30), DimensionUtils.dp2px(30));
+        LayoutParams params = new LayoutParams(DimensionUtils.dp2px(20), DimensionUtils.dp2px(20));
         params.gravity = Gravity.CENTER_HORIZONTAL;
-        params.setMargins(0, DimensionUtils.dp2px(2), 0, 0);
+        params.setMargins(0, DimensionUtils.dp2px(2), 0,DimensionUtils.dp2px(4));
         addView(mImageView, params);
 
         mTextView = new TextView(mContext);

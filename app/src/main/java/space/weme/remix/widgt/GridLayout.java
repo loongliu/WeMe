@@ -108,7 +108,7 @@ public class GridLayout extends ViewGroup {
         //int rows = (getChildCount()-1)/numInRow +1;
         //  set gap size to 1/CELL_SIZE_DIVIDE_GAP_SIZE of cell size
         //  so width equals to numInRow * cellSize + (numInRow+1)*cellSize/CELL_SIZE_DIVIDE_GAP_SIZE
-        return CELL_SIZE_DIVIDE_GAP_SIZE*width / ((CELL_SIZE_DIVIDE_GAP_SIZE+1)*numInRow+1);
+        return CELL_SIZE_DIVIDE_GAP_SIZE*width / ((CELL_SIZE_DIVIDE_GAP_SIZE+1)*numInRow-1);
     }
 
     private int calculateDesiredHeight(int cellSize){
@@ -116,7 +116,7 @@ public class GridLayout extends ViewGroup {
         if(getChildCount()==0){
             return 0;
         }else {
-            return cellSize * rows + (cellSize / CELL_SIZE_DIVIDE_GAP_SIZE) * (rows + 1);
+            return cellSize * rows + (cellSize / CELL_SIZE_DIVIDE_GAP_SIZE) * (rows - 1);
         }
     }
 
@@ -124,15 +124,15 @@ public class GridLayout extends ViewGroup {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int width = r - l;
-        int cellSizeDivided = width / ((CELL_SIZE_DIVIDE_GAP_SIZE+1)*numInRow+1);
+        int cellSizeDivided = width / ((CELL_SIZE_DIVIDE_GAP_SIZE+1)*numInRow-1);
         int count = getChildCount();
         for(int i = 0; i<count; i++){
             View child = getChildAt(i);
             int x = i%numInRow;
             int y = i/numInRow;
-            int left = x*cellSizeDivided*(CELL_SIZE_DIVIDE_GAP_SIZE+1)+cellSizeDivided;
+            int left = x*cellSizeDivided*(CELL_SIZE_DIVIDE_GAP_SIZE+1);
             int right = left + cellSizeDivided*CELL_SIZE_DIVIDE_GAP_SIZE;
-            int top = y*cellSizeDivided*(CELL_SIZE_DIVIDE_GAP_SIZE+1)+cellSizeDivided;
+            int top = y*cellSizeDivided*(CELL_SIZE_DIVIDE_GAP_SIZE+1);
             int bottom = top + cellSizeDivided*CELL_SIZE_DIVIDE_GAP_SIZE;
             child.layout(left, top, right, bottom);
         }

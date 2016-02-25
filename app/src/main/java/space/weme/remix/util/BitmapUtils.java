@@ -12,6 +12,8 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.support.annotation.ColorInt;
 
+import space.weme.remix.APP;
+
 /**
  * Created by Liujilong on 16/1/24.
  * liujilong.me@gmail.com
@@ -104,6 +106,16 @@ public final class BitmapUtils {
         return BitmapFactory.decodeFile(path,options);
     }
 
+    public static Bitmap fromResoursAndSize(int resId, int w, int h ){
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(APP.context().getResources(), resId, options);
+        int resize = calculateInSampleSize(options, w, h);
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = resize;
+        return BitmapFactory.decodeResource(APP.context().getResources(), resId, options);
+    }
+
     private static int calculateInSampleSize(
             BitmapFactory.Options options) {
         // Raw height and width of image
@@ -117,6 +129,18 @@ public final class BitmapUtils {
             inSampleSize*=2;
         }
         LogUtils.d("BitmapUtils", "inSampleSize: " + inSampleSize);
+        return inSampleSize;
+    }
+    private static int calculateInSampleSize(
+            BitmapFactory.Options options, int w, int h) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        while(height/inSampleSize>h && width/inSampleSize>w){
+            inSampleSize*=2;
+        }
         return inSampleSize;
     }
 

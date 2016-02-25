@@ -31,7 +31,6 @@ public class AtyUserActivity extends BaseActivity {
         adapter = new ActivityPagerAdapter(getFragmentManager());
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
-        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
     }
 
     @Override

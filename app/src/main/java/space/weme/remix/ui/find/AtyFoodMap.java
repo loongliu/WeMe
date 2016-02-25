@@ -1,9 +1,8 @@
 package space.weme.remix.ui.find;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
 
 import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.CameraUpdate;
@@ -34,9 +33,8 @@ public class AtyFoodMap extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.aty_food_map);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.food_location);
-        toolbar.setTitleTextColor(Color.WHITE);
+        TextView toolbar = (TextView) findViewById(R.id.toolbar);
+        toolbar.setText(R.string.food_location);
 
         double lat = getIntent().getDoubleExtra(INTENT_LAT,0);
         double lon = getIntent().getDoubleExtra(INTENT_LON,0);

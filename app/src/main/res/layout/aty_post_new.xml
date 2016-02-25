@@ -17,7 +17,7 @@
             android:gravity="center_vertical"
             android:text="@string/new_post"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/aty_post_new_send"
@@ -29,12 +29,16 @@
             android:gravity="center_vertical"
             android:text="@string/send"
             android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:textSize="12sp" />
     </FrameLayout>
 
     <EditText
         android:hint="@string/please_input_title"
-        android:layout_margin="16dp"
+        android:textSize="16sp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:background="@null"
         android:id="@+id/aty_post_new_title"
         android:layout_width="match_parent"
@@ -49,10 +53,10 @@
         android:background="@null"
         android:layout_margin="16dp"
         android:gravity="top"
+        android:textSize="14sp"
         android:id="@+id/aty_post_new_content"
-        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="0dp" />
+        android:layout_height="150dp" />
 
     <space.weme.remix.widgt.GridLayout
         android:id="@+id/aty_post_new_images"
@@ -63,6 +67,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </space.weme.remix.widgt.GridLayout>
+    <View
+        android:background="@color/grey_gap"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"/>
 
 
 </LinearLayout>

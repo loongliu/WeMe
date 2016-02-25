@@ -5,13 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fafafa"
-    android:padding="16dp">
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp"
+    android:paddingRight="16dp"
+    android:paddingLeft="16dp">
 
     <com.facebook.drawee.view.SimpleDraweeView
         app:placeholderImage="@mipmap/default_avatar"
         android:id="@+id/aty_post_reply_avatar"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         app:roundAsCircle="true" />
@@ -24,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/aty_post_reply_avatar"
         android:layout_toRightOf="@+id/aty_post_reply_avatar"
-        android:textSize="16sp" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/aty_post_reply_university"
@@ -53,7 +56,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:textColor="@color/black"
-        android:textSize="14sp"
+        android:textSize="12sp"
         android:layout_below="@id/aty_post_reply_time" />
 
     <space.weme.remix.widgt.GridLayout
@@ -94,9 +97,7 @@
             android:id="@+id/aty_post_reply_commit_image"
             android:layout_width="16dp"
             android:layout_height="16dp"
-            android:layout_marginEnd="4dp"
             android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
             android:layout_marginStart="4dp"
             android:src="@mipmap/reply" />
 
@@ -105,10 +106,9 @@
             android:id="@+id/aty_post_reply_comment_number"
             android:layout_width="wrap_content"
             android:layout_height="16dp"
+            android:textSize="12sp"
             android:paddingEnd="4dp"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
-            android:paddingStart="4dp" />
+            android:paddingRight="4dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -127,21 +127,18 @@
             android:id="@+id/aty_post_reply_like_image"
             android:layout_width="16dp"
             android:layout_height="16dp"
-            android:layout_marginEnd="4dp"
             android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
             android:layout_marginStart="4dp"
             android:src="@mipmap/like_on" />
 
         <TextView
             android:gravity="center"
+            android:textSize="12sp"
             android:id="@+id/aty_post_reply_like_number"
             android:layout_width="wrap_content"
             android:layout_height="16dp"
             android:paddingEnd="4dp"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
-            android:paddingStart="4dp" />
+            android:paddingRight="4dp" />
     </LinearLayout>
 
     <View

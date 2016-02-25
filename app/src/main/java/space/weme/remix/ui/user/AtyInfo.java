@@ -38,14 +38,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 import space.weme.remix.R;
 import space.weme.remix.model.TimeLine;
 import space.weme.remix.model.User;
 import space.weme.remix.model.UserImage;
 import space.weme.remix.ui.AtyImage;
-import space.weme.remix.ui.base.SwipeActivity;
+import space.weme.remix.ui.base.BaseActivity;
 import space.weme.remix.ui.community.AtyPost;
 import space.weme.remix.ui.intro.AtyEditInfo;
 import space.weme.remix.util.DimensionUtils;
@@ -57,7 +56,7 @@ import space.weme.remix.util.StrUtils;
  * Created by Liujilong on 2016/1/29.
  * liujilong.me@gmail.com
  */
-public class AtyInfo extends SwipeActivity {
+public class AtyInfo extends BaseActivity {
     private static final String TAG = "AtyInfo";
     public static final String ID_INTENT = "id";
     private static final int REQUEST_IMAGE = 0xef;
@@ -107,10 +106,6 @@ public class AtyInfo extends SwipeActivity {
         mId = getIntent().getStringExtra(ID_INTENT);
         setContentView(R.layout.aty_info);
 
-        SwipeBackLayout mSwipeBackLayout = getSwipeBackLayout();
-        mSwipeBackLayout.setEdgeSize(DimensionUtils.getDisplay().widthPixels / 2);
-        mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
-
 
         mWholeLayout = (LinearLayout) findViewById(R.id.aty_info_layout);
 
@@ -119,10 +114,11 @@ public class AtyInfo extends SwipeActivity {
         mTvConstellation = (TextView) findViewById(R.id.aty_info_constellation);
         mIvGender = (ImageView) findViewById(R.id.aty_info_gender);
         mDrawAvatar = (SimpleDraweeView) findViewById(R.id.aty_info_avatar);
-        TabLayout mTabLayout = (TabLayout) findViewById(R.id.aty_info_tabs);
+        final TabLayout mTabLayout = (TabLayout) findViewById(R.id.aty_info_tabs);
         mViewPager = (ViewPager) findViewById(R.id.aty_info_pager);
         mViewPager.setAdapter(new InfoAdapter());
         mTabLayout.setupWithViewPager(mViewPager);
+        mTabLayout.setSelectedTabIndicatorHeight(0);
 
         mDrawAvatar.setOnClickListener(new View.OnClickListener() {
             @Override

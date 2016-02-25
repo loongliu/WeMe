@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
-    android:padding="8dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingTop="2dp"
+    android:paddingBottom="2dp"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
     <com.facebook.drawee.view.SimpleDraweeView
@@ -34,16 +37,17 @@
     <TextView
         android:layout_centerHorizontal="true"
         android:layout_marginTop="4dp"
+        android:textColor="#3e3e3e"
         android:layout_below="@id/community_topic_cell_image"
         android:id="@+id/community_topic_cell_theme"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <TextView
         android:textColor="#b1b1b1"
         android:layout_centerHorizontal="true"
         android:lines="1"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="2dp"
         android:layout_below="@id/community_topic_cell_theme"
         android:id="@+id/community_topic_cell_note"
         android:textSize="10sp"

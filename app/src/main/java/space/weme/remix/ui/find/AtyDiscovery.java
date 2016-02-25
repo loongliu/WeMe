@@ -59,8 +59,6 @@ public class AtyDiscovery extends BaseActivity {
     private int state = STATE_FIRST;
 
 
-    private DisplayMetrics displayMetrics;
-
     private Card mCard;
     private FrameLayout flBackground;
 
@@ -111,7 +109,7 @@ public class AtyDiscovery extends BaseActivity {
 
         mCard = Card.fromXML(this, flBackground);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(0,0);
-        displayMetrics = DimensionUtils.getDisplay();
+        DisplayMetrics displayMetrics = DimensionUtils.getDisplay();
 
         params.width = displayMetrics.widthPixels*7/10;
         params.height = params.width*3/2;
@@ -252,8 +250,7 @@ public class AtyDiscovery extends BaseActivity {
         });
         a2.addListener(new Animator.AnimatorListener() {
             @Override
-            public void onAnimationStart(Animator animation) {
-            }
+            public void onAnimationStart(Animator animation) {    }
 
             @Override
             public void onAnimationEnd(Animator animation) {

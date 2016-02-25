@@ -1,28 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:background="@color/white"
+    android:background="@null"
     android:layout_height="match_parent">
     <TextView
+        android:background="@color/white"
         android:id="@+id/aty_info_option_message"
-        android:textSize="20sp"
+        android:textSize="16sp"
         android:textColor="@color/colorPrimary"
         android:gravity="center"
         android:text="@string/message"
         android:layout_width="match_parent"
-        android:layout_height="48dp" />
+        android:layout_height="40dp" />
 
     <View
-        android:background="@color/grey_gap"
+        android:background="@null"
         android:layout_width="match_parent"
         android:layout_height="6dp"/>
 
     <TextView
+        android:background="@color/white"
         android:id="@+id/aty_info_option_cancel"
-        android:textSize="20sp"
+        android:textSize="16sp"
         android:textColor="@color/colorPrimary"
         android:gravity="center"
         android:text="@string/cancel"
         android:layout_width="match_parent"
-        android:layout_height="48dp" />
+        android:layout_height="40dp" />
 </LinearLayout>

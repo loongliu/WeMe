@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +31,6 @@ import space.weme.remix.ui.base.BaseFragment;
 import space.weme.remix.ui.community.AtyPost;
 import space.weme.remix.ui.community.AtyTopic;
 import space.weme.remix.util.DimensionUtils;
-import space.weme.remix.util.LogUtils;
 import space.weme.remix.util.OkHttpUtils;
 import space.weme.remix.util.StrUtils;
 import space.weme.remix.widgt.PageIndicator;
@@ -44,7 +42,6 @@ import space.weme.remix.widgt.PageIndicator;
 public class FgtCommunity extends BaseFragment {
     private static final String TAG = "FgtCommunity";
 
-    SwipeRefreshLayout mSwipeLayout;
     GridLayout mGridLayout;
     ViewPager mVpTop;
     PageIndicator mIndicator;
@@ -67,16 +64,6 @@ public class FgtCommunity extends BaseFragment {
         mGridLayout = (GridLayout) rootView.findViewById(R.id.fgt_community_grid_layout);
         mVpTop = (ViewPager) rootView.findViewById(R.id.top_pager_view);
         mIndicator = (PageIndicator) rootView.findViewById(R.id.top_pager_indicator);
-        mSwipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.fgt_community_swipe);
-        mSwipeLayout.setColorSchemeResources(R.color.colorPrimary);
-        mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if(!isRefreshing){
-                    fireTopics();
-                }
-            }
-        });
         View v = rootView.findViewById(R.id.top_container);
         ViewGroup.LayoutParams params = v.getLayoutParams();
         params.height = DimensionUtils.getDisplay().widthPixels/2;
@@ -146,14 +133,12 @@ public class FgtCommunity extends BaseFragment {
             @Override
             public void onFailure(IOException e) {
                 isRefreshing = false;
-                mSwipeLayout.setRefreshing(false);
             }
 
             @Override
             public void onResponse(String s) {
-                LogUtils.i(TAG, s);
+                //LogUtils.i(TAG, s);
                 isRefreshing = false;
-                mSwipeLayout.setRefreshing(false);
                 JSONObject j = OkHttpUtils.parseJSON(getActivity(),s);
                 if(j==null) {
                     return;

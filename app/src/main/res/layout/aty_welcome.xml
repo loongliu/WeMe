@@ -4,7 +4,7 @@
     android:layout_width="match_parent" android:layout_height="match_parent">
     <!-- todo memory-->
     <ImageView
-        android:src="@mipmap/splash_background"
+        android:id="@+id/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

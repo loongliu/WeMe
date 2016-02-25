@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import space.weme.remix.ui.base.BaseFragment;
+import space.weme.remix.util.LogUtils;
 import space.weme.remix.widgt.FindFoodPath;
 
 /**
@@ -27,6 +28,7 @@ public class FgtFind extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        LogUtils.d(TAG,"onCreateView: savedInstanceState " + (savedInstanceState==null?"null":"not null"));
         path = FindFoodPath.fromXML(inflater,container);
         return path;
     }
@@ -35,6 +37,17 @@ public class FgtFind extends BaseFragment {
     public void onDestroy() {
         super.onDestroy();
         path.stopAnimation();
+    }
+
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        LogUtils.d(TAG, "onSaveInstanceState");
+        super.onSaveInstanceState(outState);
     }
 
     @Override

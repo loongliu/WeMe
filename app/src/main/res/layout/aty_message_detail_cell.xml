@@ -9,13 +9,12 @@
         android:layout_margin="8dp"
         android:id="@+id/aty_message_detail_cell_avatar"
         app:placeholderImage="@mipmap/default_avatar"
-        android:layout_width="48dp"
-        android:layout_height="48dp" />
+        android:layout_width="56dp"
+        android:layout_height="56dp" />
     <TextView
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:id="@+id/aty_message_detail_cell_name"
-        android:text="liujilong"
         android:textSize="16sp"
         android:textColor="@color/colorPrimary"
         android:layout_alignTop="@+id/aty_message_detail_cell_avatar"
@@ -27,9 +26,8 @@
     <TextView
         android:layout_marginTop="8dp"
         android:id="@+id/aty_message_detail_cell_text"
-        android:text="text"
         android:textColor="@color/black"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:layout_below="@+id/aty_message_detail_cell_name"
         android:layout_alignLeft="@id/aty_message_detail_cell_name"
         android:layout_alignStart="@id/aty_message_detail_cell_name"
@@ -47,9 +45,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
     <TextView
+        android:textSize="14sp"
         android:id="@+id/aty_message_detail_cell_time"
         android:layout_marginTop="8dp"
-        android:text="abc"
         android:layout_below="@+id/aty_message_detail_cell_images"
         android:layout_alignLeft="@id/aty_message_detail_cell_name"
         android:layout_alignStart="@id/aty_message_detail_cell_name"
@@ -57,8 +55,8 @@
         android:layout_height="wrap_content" />
 
     <TextView
+        android:textSize="14sp"
         android:id="@+id/aty_message_detail_cell_school"
-        android:text="abc"
         android:layout_alignTop="@+id/aty_message_detail_cell_name"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
@@ -74,8 +72,9 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:src="@mipmap/reply_message"
-        android:layout_width="24dp"
-        android:layout_height="24dp" />
+        android:paddingBottom="2dp"
+        android:layout_width="16dp"
+        android:layout_height="18dp" />
     <View
         android:layout_marginTop="4dp"
         android:layout_below="@id/aty_message_detail_cell_time"

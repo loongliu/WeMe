@@ -33,7 +33,6 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:layout_gravity="center"
-            android:text="name"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -55,8 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:text="1992-10-04" />
+                android:layout_marginRight="16dp"/>
 
         </FrameLayout>
 
@@ -69,8 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_marginStart="16dp"
-                android:text="dongnandx" />
+                android:layout_marginStart="16dp"/>
 
             <TextView
                 android:id="@+id/card_people_education"
@@ -78,8 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:text="benke" />
+                android:layout_marginRight="16dp" />
 
         </FrameLayout>
 
@@ -101,8 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:text="nanjing" />
+                android:layout_marginRight="16dp" />
 
         </FrameLayout>
 

@@ -44,7 +44,7 @@
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
                 <TextView
-                    android:textSize="22sp"
+                    android:textSize="18sp"
                     android:textColor="@color/white"
                     android:id="@+id/aty_topic_theme"
                     android:gravity="center"
@@ -73,8 +73,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        app:layout_anchor="@id/appbar"
-        app:layout_anchorGravity="bottom|end|right"
+        android:layout_gravity="bottom|end"
         android:src="@mipmap/edit" />
 
 </android.support.design.widget.CoordinatorLayout>

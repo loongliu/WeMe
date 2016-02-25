@@ -82,7 +82,7 @@ public class  ActivityDetail extends SwipeActivity {
         btnLove= (Button) findViewById(R.id.btn_love);
         btnSign.setBackgroundResource(R.drawable.bg_login_btn_pressed);
         btnLove.setBackgroundResource(R.drawable.bg_login_btn_pressed);
-        ((TextView)findViewById(R.id.main_title)).setText("报名");
+        ((TextView)findViewById(R.id.main_title)).setText(R.string.activity_detail);
     }
 
     void initData(){
@@ -99,6 +99,7 @@ public class  ActivityDetail extends SwipeActivity {
                 final AtyDetail detail = AtyDetail.fromJSON(result);
                 RoundingParams roundingParams = RoundingParams.fromCornersRadius(5f);
                 roundingParams.setRoundAsCircle(true);
+                ((TextView)findViewById(R.id.main_title)).setText(detail.title);
                 atyAvatar.getHierarchy().setRoundingParams(roundingParams);
                 atyAvatar.setImageURI(Uri.parse(StrUtils.thumForID(detail.authorid + "")));
                 txtTime.setText(detail.time);

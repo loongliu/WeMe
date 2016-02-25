@@ -1,22 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-<android.support.v7.widget.Toolbar
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:background="@color/colorPrimary"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="56dp">
+    android:layout_height="match_parent">
+
     <TextView
-        android:textSize="18sp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
+        android:background="@color/colorPrimary"
         android:text="@string/friend"
         android:textColor="@color/white"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-</android.support.v7.widget.Toolbar>
+        android:gravity="center"
+        android:textSize="16sp"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize" />
     <FrameLayout
         android:background="@color/grey_gap"
         android:layout_width="match_parent"
@@ -34,24 +29,35 @@
             android:layout_height="match_parent" />
     </FrameLayout>
     <View
-        android:background="#636363"
+        android:background="#a3a3a3"
         android:layout_width="match_parent"
         android:layout_height="1dp"/>
     <FrameLayout
-        android:background="@color/grey_gap"
+        android:background="@color/white"
+        android:id="@+id/aty_friend_see_me"
         android:layout_width="match_parent"
-        android:layout_height="64dp">
+        android:layout_height="48dp">
         <TextView
-            android:id="@+id/aty_friend_see_me"
-            android:background="@color/white"
-            android:paddingLeft="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:gravity="center_vertical"
             android:text="关注我的人"
             android:textColor="@color/black"
-            android:textSize="18sp"
-            android:layout_width="match_parent"
-            android:layout_height="48dp" />
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+        <ImageView
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:src="@mipmap/forward"
+            android:layout_gravity="center_vertical|end"
+            android:layout_width="16dp"
+            android:layout_height="16dp" />
     </FrameLayout>
+    <View
+        android:background="@color/grey_gap"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/aty_friend_recycler"

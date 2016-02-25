@@ -24,7 +24,6 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp" />
             <EditText
-                android:text="zoe"
                 android:id="@+id/login_edit_text_user"
                 android:layout_gravity="center_vertical"
                 android:inputType="text"
@@ -45,7 +44,6 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp" />
             <EditText
-                android:text="zoejiaen"
                 android:id="@+id/login_edit_text_password"
                 android:layout_gravity="center_vertical"
                 android:inputType="textPassword"

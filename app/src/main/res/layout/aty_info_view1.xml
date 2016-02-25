@@ -7,6 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
+            android:textSize="14sp"
             android:gravity="center_vertical"
             android:text="@string/basic_info"
             android:paddingLeft="16dp"
@@ -25,14 +26,13 @@
             <TextView
                 android:layout_gravity="start"
                 android:text="@string/name"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
                 android:id="@+id/aty_info_name"
                 android:layout_gravity="end"
-                android:text="刘继龙"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </FrameLayout>
@@ -46,14 +46,13 @@
             <TextView
                 android:layout_gravity="start"
                 android:text="@string/birth"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
                 android:id="@+id/aty_info_birth"
                 android:layout_gravity="end"
-                android:text="同一天"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </FrameLayout>
@@ -61,6 +60,7 @@
 
 
         <TextView
+            android:textSize="14sp"
             android:gravity="center_vertical"
             android:text="@string/school_info"
             android:paddingLeft="16dp"
@@ -81,14 +81,13 @@
             <TextView
                 android:layout_gravity="start"
                 android:text="@string/school"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
                 android:id="@+id/aty_info_school"
                 android:layout_gravity="end"
-                android:text="东南大学"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </FrameLayout>
@@ -101,14 +100,13 @@
             <TextView
                 android:layout_gravity="start"
                 android:text="@string/education"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
                 android:id="@+id/aty_info_education"
                 android:layout_gravity="end"
-                android:text="硕士"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </FrameLayout>
@@ -122,18 +120,18 @@
             <TextView
                 android:layout_gravity="start"
                 android:text="@string/major"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
                 android:id="@+id/aty_info_major"
                 android:layout_gravity="end"
-                android:text="信息"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </FrameLayout>
         <TextView
+            android:textSize="14sp"
             android:gravity="center_vertical"
             android:text="@string/home_info"
             android:paddingLeft="16dp"
@@ -154,20 +152,20 @@
             <TextView
                 android:layout_gravity="start"
                 android:text="@string/home"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
                 android:id="@+id/aty_info_home"
                 android:layout_gravity="end"
-                android:text="句容"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </FrameLayout>
 
 
         <TextView
+            android:textSize="14sp"
             android:gravity="center_vertical"
             android:text="@string/contact_info"
             android:paddingLeft="16dp"
@@ -186,14 +184,13 @@
             <TextView
                 android:layout_gravity="start"
                 android:text="@string/QQ"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
                 android:id="@+id/aty_info_qq"
                 android:layout_gravity="end"
-                android:text="123456789"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </FrameLayout>
@@ -207,14 +204,13 @@
             <TextView
                 android:layout_gravity="start"
                 android:text="@string/wechat"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
                 android:id="@+id/aty_info_we_chat"
                 android:layout_gravity="end"
-                android:text="ca"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </FrameLayout>

@@ -21,17 +21,17 @@
                 app:placeholderImage="@mipmap/default_avatar"
                 android:id="@+id/fgt_me_avatar"
                 android:layout_margin="16dp"
-                android:layout_width="56dp"
-                android:layout_height="56dp" />
+                android:layout_width="48dp"
+                android:layout_height="48dp" />
 
             <TextView
-                android:layout_marginLeft="96dp"
-                android:layout_marginStart="96dp"
+                android:layout_marginLeft="80dp"
+                android:layout_marginStart="80dp"
                 android:id="@+id/fgt_me_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
             <ImageView
                 android:id="@+id/fgt_me_qrcode"
                 android:layout_marginRight="12dp"
@@ -39,27 +39,28 @@
                 android:padding="12dp"
                 android:layout_gravity="center_vertical|end"
                 android:src="@mipmap/qrcode"
-                android:layout_width="56dp"
-                android:layout_height="56dp" />
+                android:layout_width="48dp"
+                android:layout_height="48dp" />
         </FrameLayout>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="16dp"
+            android:layout_height="12dp"
             android:background="@color/grey_gap" />
 
         <LinearLayout
             android:id="@+id/fgt_me_friend"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="48dp">
 
             <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:src="@mipmap/follow" />
 
             <TextView
@@ -67,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="@string/friend"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
         </LinearLayout>
 
         <View
@@ -82,15 +83,16 @@
         <LinearLayout
             android:id="@+id/fgt_me_message"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="48dp">
 
             <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:src="@mipmap/message" />
 
             <TextView
@@ -98,7 +100,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="@string/message"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
             <TextView
                 android:id="@+id/fgt_me_count"
                 android:background="@drawable/bg_fgt_me_message_unread"
@@ -126,15 +128,16 @@
         <LinearLayout
             android:id="@+id/fgt_me_activity"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="48dp">
 
             <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:src="@mipmap/activity" />
 
             <TextView
@@ -142,26 +145,31 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="@string/activity"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="16dp"
             android:background="@color/grey_gap" />
 
         <LinearLayout
             android:id="@+id/fgt_me_location"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="48dp">
 
             <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:src="@mipmap/location" />
 
             <TextView
@@ -169,7 +177,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="@string/location"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
         </LinearLayout>
 
 
@@ -178,20 +186,21 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="16dp"
+            android:layout_height="12dp"
             android:background="@color/grey_gap" />
         <LinearLayout
             android:id="@+id/fgt_me_setting"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="48dp">
 
             <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:src="@mipmap/setting" />
 
             <TextView
@@ -199,11 +208,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="@string/setting"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
         </LinearLayout>
         <View
             android:layout_width="match_parent"
-            android:layout_height="16dp"
+            android:layout_height="12dp"
             android:background="@color/grey_gap" />
 
     </LinearLayout>

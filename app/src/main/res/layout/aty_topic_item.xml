@@ -14,8 +14,8 @@
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/aty_topic_item_avatar"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             app:roundAsCircle="true" />
@@ -27,7 +27,7 @@
             android:textStyle="bold"
             android:layout_toEndOf="@+id/aty_topic_item_avatar"
             android:layout_toRightOf="@+id/aty_topic_item_avatar"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/aty_topic_item_university"
@@ -61,9 +61,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/gap"
             android:layout_marginTop="8dp"
-            android:text="title"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/aty_topic_item_content"
@@ -72,9 +71,9 @@
             android:layout_below="@id/aty_topic_item_title"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
-            android:text="content"
+            android:maxLines="2"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="12sp" />
 
 
         <space.weme.remix.widgt.GridLayout
@@ -88,7 +87,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/aty_topic_item_grid"
-            android:text="12"
             android:textColor="#f2318e"
             android:textSize="12sp" />
 
@@ -109,7 +107,6 @@
             android:layout_below="@id/aty_topic_item_grid"
             android:layout_toEndOf="@id/aty_topic_item_like_number_text"
             android:layout_toRightOf="@id/aty_topic_item_like_number_text"
-            android:text="234"
             android:textColor="#6ce427"
             android:textSize="12sp" />
 
@@ -126,7 +123,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="16dp"
+        android:layout_height="8dp"
         android:background="@color/grey_gap" />
 </LinearLayout>
 

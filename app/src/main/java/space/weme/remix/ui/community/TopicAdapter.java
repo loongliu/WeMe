@@ -107,7 +107,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             item.like_number.setText(post.likenumber);
             item.comment_number.setText(post.commentnumber);
             item.grid.removeAllViews();
-            for(int i = 0; i<post.thumbnailUrl.size(); i++) {
+            for(int i = 0; i<post.thumbnailUrl.size()&&i<4; i++) {
                 String url = post.thumbnailUrl.get(i);
                 SimpleDraweeView image = new SimpleDraweeView(mContext);
                 item.grid.addView(image);

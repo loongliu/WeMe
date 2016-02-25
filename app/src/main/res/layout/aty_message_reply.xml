@@ -12,12 +12,10 @@
         <TextView
             android:id="@+id/aty_message_reply_title"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:gravity="center_vertical"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/send"
@@ -29,16 +27,15 @@
             android:gravity="center_vertical"
             android:text="发送"
             android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
     </FrameLayout>
     <EditText
         android:background="@null"
         android:layout_margin="16dp"
         android:gravity="top"
         android:id="@+id/main_editor"
-        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="0dp" />
+        android:layout_height="150dp" />
 
     <space.weme.remix.widgt.GridLayout
         android:id="@+id/select_image_view"
@@ -49,6 +46,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </space.weme.remix.widgt.GridLayout>
-
-
+    <View
+        android:background="@color/grey_gap"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"/>
 </LinearLayout>

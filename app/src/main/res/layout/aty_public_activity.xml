@@ -14,22 +14,14 @@
         android:fitsSystemWindows="true"
         android:minHeight="?attr/actionBarSize">
 
-        <TextView
-            android:id="@+id/txt_activity_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:text="取消"
-            android:textColor="@color/white"
-            android:textSize="14sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="活动"
+            android:text="发布活动"
             android:textColor="@color/white"
-            android:textSize="14sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/txt_activity_public"
@@ -53,8 +45,8 @@
 
             <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/img_act_add"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_gravity="center_horizontal"
                 fresco:actualImageScaleType="focusCrop"
                 fresco:placeholderImage="@mipmap/add_image" />
@@ -68,7 +60,7 @@
                 android:hint="活动标题(必填)"
                 android:paddingLeft="10dp"
                 android:textCursorDrawable="@drawable/blue_cursor"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <ImageView
                 android:layout_width="match_parent"
@@ -87,7 +79,7 @@
                 android:hint="活动宣传语(可选)"
                 android:paddingLeft="20dp"
                 android:textCursorDrawable="@drawable/blue_cursor"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
             <ImageView
                 android:layout_width="match_parent"
@@ -106,36 +98,36 @@
                 android:hint="活动详情(必填)..."
                 android:paddingLeft="20dp"
                 android:textCursorDrawable="@drawable/blue_cursor"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="10dp"
+                android:layout_height="8dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/red_grey" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="8dp"
                     android:src="@mipmap/date" />
 
                 <EditText
                     android:id="@+id/edit_time"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="8dp"
                     android:background="@android:color/transparent"
                     android:gravity="center_vertical"
                     android:hint="活动时间(必填)"
                     android:textCursorDrawable="@drawable/blue_cursor"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
@@ -148,26 +140,26 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="8dp"
                     android:src="@mipmap/location" />
 
                 <EditText
                     android:id="@+id/edit_location"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="8dp"
                     android:background="@android:color/transparent"
                     android:gravity="center_vertical"
                     android:hint="活动地点(必填)"
                     android:textCursorDrawable="@drawable/blue_cursor"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
             </LinearLayout>
 
             <ImageView
@@ -179,27 +171,26 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="35dp"
-                    android:layout_height="45dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_gravity="center_vertical"
-
-                    android:layout_marginLeft="10dp"
-                    android:src="@mipmap/activity" />
+                    android:layout_marginLeft="8dp"
+                    android:src="@mipmap/main_tab_item_activity" />
 
                 <EditText
                     android:id="@+id/edit_number"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="8dp"
                     android:background="@android:color/transparent"
                     android:gravity="center_vertical"
                     android:hint="活动人数(必填)"
                     android:textCursorDrawable="@drawable/blue_cursor"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
@@ -212,26 +203,26 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="8dp"
                     android:src="@mipmap/event" />
 
                 <EditText
                     android:id="@+id/edit_labe"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="8dp"
                     android:background="@android:color/transparent"
                     android:gravity="center_vertical"
                     android:hint="活动备注(必填)"
                     android:textCursorDrawable="@drawable/blue_cursor"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
@@ -242,22 +233,22 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="32dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:paddingLeft="10dp"
+                    android:paddingLeft="8dp"
                     android:text="是否需要生活照" />
 
                 <ToggleButton
                     android:id="@+id/tog_btn"
                     android:layout_width="60dp"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_centerVertical="true"
                     android:textOn="@null"
                     android:textOff="@null"
                     android:background="@drawable/toggle_selector" />

@@ -76,7 +76,7 @@ public class FindFoodPath extends FrameLayout implements View.OnClickListener{
     }
 
     private void configView(View v){
-        int size = DimensionUtils.getDisplay().widthPixels /5;
+        int size = DimensionUtils.getDisplay().widthPixels /6;
 
         ivEarth = (ImageView) v.findViewById(R.id.earth);
         ViewGroup.LayoutParams params = ivEarth.getLayoutParams();
@@ -114,9 +114,9 @@ public class FindFoodPath extends FrameLayout implements View.OnClickListener{
     }
 
     public void startThisAnimation(){
-        ObjectAnimator.ofInt(this, "Angle", 0, 360).setDuration(20000).start();
+        ObjectAnimator.ofFloat(this, "Angle", 0, 360).setDuration(20000).start();
 
-        animator = ValueAnimator.ofInt(0, 359).setDuration(20000);
+        animator = ValueAnimator.ofFloat(0, 359).setDuration(20000);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -133,7 +133,7 @@ public class FindFoodPath extends FrameLayout implements View.OnClickListener{
         animator.cancel();
     }
 
-    public void setAngle(int angle){
+    public void setAngle(float angle){
         int size = Math.min(width,height);
         path_friend = new Path();
         RectF rect = new RectF(width/2-size/2,height/2-size/4,width/2+size/2,height/2+size/4);
@@ -164,7 +164,7 @@ public class FindFoodPath extends FrameLayout implements View.OnClickListener{
         if(full_path_food_measure==null){
             configSize(DimensionUtils.getDisplay().widthPixels,DimensionUtils.getDisplay().heightPixels);
         }
-        int value = (int) animator.getAnimatedValue();
+        float value = (float) animator.getAnimatedValue();
         //coordinates will be here
         float fPosition[] = {0f, 0f};
         //get coordinates of the middle point
@@ -212,7 +212,7 @@ public class FindFoodPath extends FrameLayout implements View.OnClickListener{
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        configSize(w,h);
+        configSize(w, h);
     }
     private void configSize(int w, int h){
         width = w;

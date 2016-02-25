@@ -10,16 +10,16 @@
         android:src="@mipmap/card_back"
         android:id="@+id/aty_discovery_back"
         android:padding="16dp"
-        android:layout_width="48dp"
-        android:layout_height="48dp" />
+        android:layout_width="56dp"
+        android:layout_height="56dp" />
 
     <ImageView
         android:src="@mipmap/card_more"
         android:id="@+id/aty_discovery_more"
         android:padding="16dp"
         android:layout_gravity="end|top"
-        android:layout_width="48dp"
-        android:layout_height="48dp" />
+        android:layout_width="56dp"
+        android:layout_height="56dp" />
 
 
 

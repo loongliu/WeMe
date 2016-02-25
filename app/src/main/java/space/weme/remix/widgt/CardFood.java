@@ -220,7 +220,7 @@ public class CardFood extends CardView {
         mDetailLocation.setText(food.location);
         String price = aty.getResources().getString(R.string.pre_people)+food.price+" RMB";
         mDetailPrice.setText(price);
-        mDetailComment.setText(food.comment);
+        mDetailComment.setText("\""+food.comment+"\"");
         String author = aty.getResources().getString(R.string.come_from) + food.author;
         mDetailName.setText(author);
 

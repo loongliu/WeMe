@@ -39,7 +39,6 @@ public class AtyPublicActivity extends SwipeActivity {
 
     private SimpleDraweeView actAdd;
     private TextView txtPublic;
-    private TextView txtCancel;
     private ArrayList<String> path;
 
     private EditText editTitle;
@@ -116,18 +115,11 @@ public class AtyPublicActivity extends SwipeActivity {
             }
         });
 
-        txtCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
 
     }
 
     void initView(){
         txtPublic= (TextView) findViewById(R.id.txt_activity_public);
-        txtCancel= (TextView) findViewById(R.id.txt_activity_cancel);
         actAdd= (SimpleDraweeView) findViewById(R.id.img_act_add);
         editAdvertise= (EditText) findViewById(R.id.edit_advertise);
         editDetail= (EditText) findViewById(R.id.edit_detail);

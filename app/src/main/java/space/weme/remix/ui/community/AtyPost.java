@@ -3,12 +3,10 @@ package space.weme.remix.ui.community;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -69,11 +67,8 @@ public class AtyPost extends SwipeActivity {
         mPostID = getIntent().getStringExtra(POST_INTENT);
         String theme = getIntent().getStringExtra(THEME_INTENT);
         setContentView(R.layout.aty_post);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.post_detail_toolbar);
-        if(toolbar!=null) {
-            toolbar.setTitle(theme);
-            toolbar.setTitleTextColor(Color.WHITE);
-        }
+        TextView toolbar = (TextView) findViewById(R.id.post_detail_toolbar);
+        toolbar.setText(theme);
         SwipeBackLayout mSwipeBackLayout = getSwipeBackLayout();
         mSwipeBackLayout.setEdgeSize(DimensionUtils.getDisplay().widthPixels / 2);
         mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);

@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <TextView
+        android:textSize="14sp"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
@@ -12,6 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <TextView
+        android:textSize="14sp"
         android:text="@string/publish_in"
         android:textColor="@color/black"
         android:id="@+id/aty_info_view2_cell_publish"
@@ -21,6 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <TextView
+        android:textSize="14sp"
         android:id="@+id/aty_info_view2_cell_topic"
         android:textColor="@color/black"
         android:layout_toRightOf="@+id/aty_info_view2_cell_publish"
@@ -40,7 +43,7 @@
     <TextView
         android:lines="1"
         android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:id="@+id/aty_info_view2_cell_title"
         android:layout_toEndOf="@id/aty_info_view2_cell_image"
         android:layout_toRightOf="@id/aty_info_view2_cell_image"
@@ -50,6 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <TextView
+        android:textSize="14sp"
         android:id="@+id/aty_info_view2_cell_content"
         android:layout_alignLeft="@id/aty_info_view2_cell_title"
         android:layout_alignStart="@id/aty_info_view2_cell_title"

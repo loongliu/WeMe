@@ -9,7 +9,7 @@
         android:layout_height="?attr/actionBarSize">
         <TextView
             android:id="@+id/main_title"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textColor="@color/white"
             android:layout_gravity="center"
             android:layout_width="wrap_content"
@@ -22,19 +22,19 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingBottom="20dp">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="24dp"
                 android:background="@color/grey_gap"
                 android:gravity="center_vertical"
-                android:paddingLeft="10dp"
+                android:paddingLeft="8dp"
+                android:paddingStart="8dp"
                 android:text="主办方"
                 android:textColor="#515171"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -42,10 +42,11 @@
 
                 <com.facebook.drawee.view.SimpleDraweeView
                     android:id="@+id/sign_pic"
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
                     android:scaleType="centerCrop" />
 
                 <TextView
@@ -53,150 +54,161 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@+id/sign_pic"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="2dp"
                     android:layout_toRightOf="@+id/sign_pic"
                     android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/txt_public_school"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/sign_pic"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginLeft="2dp"
+                    android:layout_below="@+id/txt_public_author"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginStart="4dp"
                     android:layout_toRightOf="@+id/sign_pic"
                     android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
             </RelativeLayout>
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="24dp"
                 android:background="@color/grey_gap"
                 android:gravity="center_vertical"
-                android:paddingLeft="10dp"
+                android:paddingLeft="8dp"
+                android:paddingStart="8dp"
                 android:text="活动详情"
                 android:textColor="#515171"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
             <TextView
                 android:id="@+id/sign_detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
                 android:gravity="center_vertical"
-                android:paddingLeft="15dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
                 android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="24dp"
                 android:background="@color/grey_gap"
                 android:gravity="center_vertical"
-                android:paddingLeft="10dp"
+                android:paddingLeft="8dp"
+                android:paddingStart="8dp"
                 android:text="人数"
                 android:textColor="#515171"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
             <TextView
                 android:id="@+id/sign_number"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="32dp"
                 android:gravity="center_vertical"
-                android:paddingLeft="15dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
                 android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="24dp"
                 android:background="@color/grey_gap"
                 android:gravity="center_vertical"
-                android:paddingLeft="10dp"
+                android:paddingLeft="8dp"
+                android:paddingStart="8dp"
                 android:text="时间"
                 android:textColor="#515171"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
             <TextView
                 android:id="@+id/sign_time"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="32dp"
                 android:gravity="center_vertical"
-                android:paddingLeft="15dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
                 android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="24dp"
                 android:background="@color/grey_gap"
                 android:gravity="center_vertical"
-                android:paddingLeft="10dp"
+                android:paddingLeft="8dp"
+                android:paddingStart="8dp"
                 android:text="地点"
                 android:textColor="#515171"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
             <TextView
                 android:id="@+id/sign_location"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="32dp"
                 android:gravity="center_vertical"
-                android:paddingLeft="15dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
                 android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="24dp"
                 android:background="@color/grey_gap"
                 android:gravity="center_vertical"
-                android:paddingLeft="10dp"
+                android:paddingLeft="8dp"
+                android:paddingStart="8dp"
                 android:text="备注"
                 android:textColor="#515171"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
             <TextView
                 android:id="@+id/sign_remark"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="32dp"
                 android:gravity="center_vertical"
-
-                android:paddingLeft="15dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
                 android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="32dp"
                 android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/btn_sign"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
                     android:layout_weight="1"
                     android:background="@drawable/bg_login_btn"
                     android:text="我要报名"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <Button
                     android:id="@+id/btn_love"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
                     android:layout_weight="1"
                     android:background="@drawable/bg_login_btn"
                     android:text="关注一下"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

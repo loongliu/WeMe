@@ -7,7 +7,7 @@
     <string name="login_success">登录成功</string>
     <string name="activity">活动</string>
     <string name="community">社区</string>
-    <string name="me">我</string>
+    <string name="me">个人</string>
     <string name="network_error">网络异常</string>
     <string name="friend">好友</string>
     <string name="message">私信</string>
@@ -66,7 +66,7 @@
     <string name="phone_not_empty">手机号不能为空</string>
     <string name="school_not_empty">学校不能为空</string>
     <string name="choose_degree">请选择学历</string>
-    <string name="male">男></string>
+    <string name="male">男</string>
     <string name="female">女</string>
     <string name="person_info">个人信息</string>
     <string name="boy">男</string>
@@ -77,9 +77,9 @@
     <string name="cancel">取消</string>
     <string name="follow_fail">关注失败</string>
     <string name="follow_success">关注成功</string>
-    <string name="recommend">推荐</string>
+    <string name="recommend">&#160;推荐</string>
     <string name="pre_people">人均&#160;</string>
-    <string name="come_from">来自&#160;</string>
+    <string name="come_from">By&#160;</string>
     <string name="add_food_card">编辑一张美食卡片，分享吧</string>
     <string name="sure_to_unfollow">确定取消关注吗？</string>
     <string name="unfollow">取消关注</string>
@@ -92,7 +92,7 @@
     <string name="reply_message">回复私信</string>
     <string name="birth">生日</string>
     <string name="hunderds_meters">百米</string>
-    <string name="thousand_meters">千米</string>
+    <string name="thousand_meters">KM</string>
     <string name="distance_unknown">距离未知</string>
     <string name="food_location">美食地点</string>
     <string name="find">寻觅</string>
@@ -100,6 +100,7 @@
     <string name="edit_fail">修改设置失败</string>
     <string name="shown_in_find">您将出现在发现列表中</string>
     <string name="not_shown_in_found">您将不会出现在发现列表中</string>
+    <string name="activity_detail">活动详情</string>
 
 
     <string-array name="aty_info_tabs">
@@ -111,6 +112,6 @@
     <string-array name="aty_user_activity_titles">
         <item >我发布的活动</item>
         <item >我关注的活动</item>
-        <item >我参与的活动</item>
+        <item >我报名的活动</item>
     </string-array>
 </resources>

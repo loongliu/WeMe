@@ -3,7 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
-    <android.support.v7.widget.Toolbar
+    <TextView
+        android:paddingLeft="16dp"
+        android:paddingStart="16dp"
+        android:paddingRight="16dp"
+        android:paddingEnd="16dp"
+        android:gravity="center_vertical"
+        android:textSize="16sp"
+        android:textColor="@color/white"
         android:id="@+id/post_detail_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -47,7 +54,7 @@
             android:id="@+id/activity_post_commit"
             android:textColor="@color/white"
             android:layout_margin="10dp"
-            android:textSize="18sp"
+            android:textSize="14sp"
             android:text="发送"
             android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"

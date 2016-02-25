@@ -1,15 +1,14 @@
 package space.weme.remix.ui.main;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.MessageQueue;
 import android.support.annotation.Nullable;
 import android.support.v4.util.ArrayMap;
 import android.view.Gravity;
@@ -71,10 +70,34 @@ public class FgtMe extends BaseFragment {
 
     public static FgtMe newInstance() {
         Bundle args = new Bundle();
-        FgtMe fragment = new FgtMe();
+        final FgtMe fragment = new FgtMe();
         fragment.setArguments(args);
+        Looper.myQueue().addIdleHandler(new MessageQueue.IdleHandler() {
+            @Override
+            public boolean queueIdle() {
+                LogUtils.i(TAG, "in Idle Handler");
+                new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            fragment.drawQRCode();
+                        } catch (WriterException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }.run();
+                return false;
+            }
+        });
         return fragment;
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -115,7 +138,7 @@ public class FgtMe extends BaseFragment {
         OkHttpUtils.post(StrUtils.GET_UNREAD_MESSAGE_URL, param, TAG, new OkHttpUtils.SimpleOkCallBack() {
             @Override
             public void onResponse(String s) {
-                LogUtils.i(TAG, s);
+                //LogUtils.i(TAG, s);
                 JSONObject j = OkHttpUtils.parseJSON(getActivity(), s);
                 if (j == null) {
                     return;
@@ -151,7 +174,7 @@ public class FgtMe extends BaseFragment {
         OkHttpUtils.post(StrUtils.GET_PERSON_INFO,param,TAG,new OkHttpUtils.SimpleOkCallBack(){
             @Override
             public void onResponse(String s) {
-                LogUtils.i(TAG,s);
+                //LogUtils.i(TAG,s);
                 JSONObject j = OkHttpUtils.parseJSON(getActivity(), s);
                 if(j == null){
                     return;
@@ -252,6 +275,9 @@ public class FgtMe extends BaseFragment {
 
 
     private void drawQRCode() throws WriterException {
+        if(mQRBitmap!=null){
+            return;
+        }
         QRCodeWriter writer = new QRCodeWriter();
             String data = "weme://user/" + StrUtils.id();
             Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
