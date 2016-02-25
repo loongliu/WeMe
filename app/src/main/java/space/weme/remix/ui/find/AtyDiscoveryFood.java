@@ -232,7 +232,8 @@ public class AtyDiscoveryFood extends BaseActivity {
                 float value = (float) animation.getAnimatedValue();
 
                 mCard.resize();
-                if (preValue < 90 && value > 90) {
+                LogUtils.d(TAG,""+value);
+                if (preValue < 90 && value >= 90) {
                     mCard.turnToFront();
                     if (foodList.size() != 0) {
                         mCard.showFood(foodList.get(currentIndex));
@@ -274,7 +275,7 @@ public class AtyDiscoveryFood extends BaseActivity {
                     float value = (float) animation.getAnimatedValue();
 
                     mCard.resize();
-                    if (preValue>90 && value < 90) {
+                    if (preValue>90 && value <= 90) {
                         mCard.turnToBack();
                     }
                     preValue = value;

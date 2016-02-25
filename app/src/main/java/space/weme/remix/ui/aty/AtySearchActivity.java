@@ -143,7 +143,7 @@ public class AtySearchActivity extends SwipeActivity {
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent detail=new Intent(AtySearchActivity.this,ActivityDetail.class);
+                        Intent detail=new Intent(AtySearchActivity.this,AtyActivityDetail.class);
                         detail.putExtra("activityid",mList.get(getAdapterPosition()).activityID);
                         LogUtils.e(TAG, "id:" + mList.get(getAdapterPosition()).activityID);
                         startActivity(detail);

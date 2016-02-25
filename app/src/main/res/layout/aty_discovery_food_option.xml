@@ -18,6 +18,7 @@
         android:layout_height="6dp"/>
 
     <TextView
+        android:background="@color/white"
         android:id="@+id/aty_discovery_option_cancel"
         android:textSize="16sp"
         android:textColor="@color/colorPrimary"

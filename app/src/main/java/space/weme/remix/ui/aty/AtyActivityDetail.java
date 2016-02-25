@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.util.ArrayMap;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,8 +34,9 @@ import space.weme.remix.util.StrUtils;
 
 import static space.weme.remix.R.id.txt_public_author;
 
-public class  ActivityDetail extends SwipeActivity {
+public class AtyActivityDetail extends SwipeActivity {
     private static final String TAG = "AtyDetail";
+    public static final String INTENT = "activityid";
     private static final int MAX_PICTURE=2;
     private static final int REQUEST_IMAGE=2;
     private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
@@ -49,6 +51,8 @@ public class  ActivityDetail extends SwipeActivity {
     private TextView txtSignNumber;
     private Button btnSign;
     private Button btnLove;
+    private SimpleDraweeView avatar;
+    private TextView tvSlogan;
 
     private SimpleDraweeView atyAvatar;
 
@@ -61,7 +65,7 @@ public class  ActivityDetail extends SwipeActivity {
         mSwipeBackLayout.setEdgeSize(DimensionUtils.getDisplay().widthPixels / 2);
         mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
 
-        activityid=getIntent().getIntExtra("activityid",-1);
+        activityid=getIntent().getIntExtra(INTENT,-1);
         LogUtils.d(TAG, "id:" + activityid);
         if (activityid!=-1){
             initView();
@@ -82,7 +86,12 @@ public class  ActivityDetail extends SwipeActivity {
         btnLove= (Button) findViewById(R.id.btn_love);
         btnSign.setBackgroundResource(R.drawable.bg_login_btn_pressed);
         btnLove.setBackgroundResource(R.drawable.bg_login_btn_pressed);
-        ((TextView)findViewById(R.id.main_title)).setText(R.string.activity_detail);
+        avatar = (SimpleDraweeView) findViewById(R.id.image);
+        ViewGroup.LayoutParams params = avatar.getLayoutParams();
+        params.height = DimensionUtils.getDisplay().widthPixels/2;
+        avatar.setLayoutParams(params);
+        tvSlogan = (TextView) findViewById(R.id.slogan);
+        ((TextView) findViewById(R.id.main_title)).setText(R.string.activity_detail);
     }
 
     void initData(){
@@ -92,7 +101,7 @@ public class  ActivityDetail extends SwipeActivity {
         OkHttpUtils.post(StrUtils.GET_ACTIVITY_DETAIL_URL, param, TAG, new SimpleOkCallBack() {
             @Override
             public void onResponse(String s) {
-                JSONObject j = OkHttpUtils.parseJSON(ActivityDetail.this, s);
+                JSONObject j = OkHttpUtils.parseJSON(AtyActivityDetail.this, s);
                 if (j == null)
                     return;
                 JSONObject result = j.optJSONObject("result");
@@ -148,6 +157,8 @@ public class  ActivityDetail extends SwipeActivity {
 
                     }
                 });
+                avatar.setImageURI(Uri.parse(detail.imageurl));
+                tvSlogan.setText(detail.advertise);
 
             }
         });
@@ -155,7 +166,7 @@ public class  ActivityDetail extends SwipeActivity {
     }
 
     protected void Dialog(String title,String msg, final int flag){
-        AlertDialog.Builder builder=new AlertDialog.Builder(ActivityDetail.this);
+        AlertDialog.Builder builder=new AlertDialog.Builder(AtyActivityDetail.this);
         builder.setMessage(msg);
         builder.setTitle(title);
         builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
@@ -205,7 +216,7 @@ public class  ActivityDetail extends SwipeActivity {
         OkHttpUtils.post(url, map, TAG, new SimpleOkCallBack() {
             @Override
             public void onResponse(String s) {
-                JSONObject j = OkHttpUtils.parseJSON(ActivityDetail.this, s);
+                JSONObject j = OkHttpUtils.parseJSON(AtyActivityDetail.this, s);
                 if (j != null)
                     initData();
             }
@@ -214,7 +225,7 @@ public class  ActivityDetail extends SwipeActivity {
     }
 
     void chooseImage(){
-        Intent intent = new Intent(ActivityDetail.this, MultiImageSelectorActivity.class);
+        Intent intent = new Intent(AtyActivityDetail.this, MultiImageSelectorActivity.class);
         // 是否显示拍摄图片
         intent.putExtra(MultiImageSelectorActivity.EXTRA_SHOW_CAMERA, true);
         // 最大可选择图片数量(多图情况下)
@@ -235,15 +246,15 @@ public class  ActivityDetail extends SwipeActivity {
                 map.put("token", StrUtils.token());
                 map.put("type","-10");
                 map.put("activityid",String.valueOf(activityid));
-                Toast.makeText(ActivityDetail.this,"正在上传生活照,请等待",Toast.LENGTH_LONG).show();
+                Toast.makeText(AtyActivityDetail.this,"正在上传生活照,请等待",Toast.LENGTH_LONG).show();
                 for (int i=0;i<path.size();i++){
                     map.put("number",String.valueOf(i+1));
                     OkHttpUtils.uploadFile(StrUtils.UPLOAD_AVATAR_URL, map, path.get(i), MEDIA_TYPE_PNG, TAG, new SimpleOkCallBack() {
                         @Override
                         public void onResponse(String s) {
-                            JSONObject j = OkHttpUtils.parseJSON(ActivityDetail.this, s);
+                            JSONObject j = OkHttpUtils.parseJSON(AtyActivityDetail.this, s);
                             if (j != null)
-                                Toast.makeText(ActivityDetail.this, "上传成功", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AtyActivityDetail.this, "上传成功", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }

@@ -1,7 +1,7 @@
 package space.weme.remix.ui.user;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,6 +23,7 @@ import java.util.List;
 
 import space.weme.remix.R;
 import space.weme.remix.model.Activity;
+import space.weme.remix.ui.aty.AtyActivityDetail;
 import space.weme.remix.ui.base.BaseFragment;
 import space.weme.remix.util.LogUtils;
 import space.weme.remix.util.OkHttpUtils;
@@ -96,7 +97,7 @@ public class FgtUserActivity extends BaseFragment {
         return TAG;
     }
 
-    private static class ActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+    private  class ActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
         List<Activity> activities;
         Context mContext;
@@ -127,14 +128,15 @@ public class FgtUserActivity extends BaseFragment {
             item.mTvTime.setText(activity.time);
             item.mTvLocation.setText(activity.location);
             item.mTvStatus.setText(activity.status);
-            // todo click listener
+            item.itemView.setTag(activity);
+            item.itemView.setOnClickListener(listener);
         }
 
         @Override
         public int getItemCount() {
             return activities==null?0:activities.size();
         }
-        static class VH extends RecyclerView.ViewHolder{
+         class VH extends RecyclerView.ViewHolder{
             SimpleDraweeView mAvatar;
             TextView mTvTitle;
             TextView mTvCount;
@@ -152,5 +154,15 @@ public class FgtUserActivity extends BaseFragment {
             }
         }
     }
+
+    View.OnClickListener listener = new View.OnClickListener(){
+        @Override
+        public void onClick(View v) {
+            Activity activity = (Activity) v.getTag();
+            Intent i = new Intent(getActivity(), AtyActivityDetail.class);
+            i.putExtra(AtyActivityDetail.INTENT,activity.activityID);
+            getActivity().startActivity(i);
+        }
+    };
 
 }

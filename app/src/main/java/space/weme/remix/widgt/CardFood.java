@@ -300,7 +300,7 @@ public class CardFood extends CardView {
                         float value = (float) animation.getAnimatedValue();
 
                         resizeDetail();
-                        if (preValue < 90 && value > 90) {
+                        if (preValue < 90 && value >= 90) {
                             turnToDetail();
                         }
                         preValue = value;
@@ -313,7 +313,7 @@ public class CardFood extends CardView {
                     @Override
                     public void onAnimationUpdate(ValueAnimator animation) {
                         float value = (float) animation.getAnimatedValue();
-                        if (preValue > 90 && value < 90) {
+                        if (preValue > 90 && value <= 90) {
                             turnToFront();
                         }
                         preValue = value;

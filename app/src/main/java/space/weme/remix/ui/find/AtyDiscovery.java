@@ -238,8 +238,8 @@ public class AtyDiscovery extends BaseActivity {
             public void onAnimationUpdate(ValueAnimator animation) {
                 mCard.setAvatarSize();
                 float value = (float) animation.getAnimatedValue();
-
-                if (preValue<90 && value > 90) {
+                LogUtils.d(TAG,value+"");
+                if (preValue<90 && value >= 90) {
                     mCard.turnOver();
                     if(userList.size()!=0) {
                         mCard.showUser(userList.get(currentIndex));
@@ -280,7 +280,7 @@ public class AtyDiscovery extends BaseActivity {
                     mCard.setAvatarSize();
                     float value = (float) animation.getAnimatedValue();
 
-                    if (preValue>90 && value < 90) {
+                    if (preValue>90 && value <= 90) {
                         mCard.turnOver();
                     }
                     preValue = value;

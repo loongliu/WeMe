@@ -28,7 +28,7 @@ import java.util.List;
 
 import space.weme.remix.R;
 import space.weme.remix.model.Activity;
-import space.weme.remix.ui.aty.ActivityDetail;
+import space.weme.remix.ui.aty.AtyActivityDetail;
 import space.weme.remix.ui.base.BaseFragment;
 import space.weme.remix.util.DimensionUtils;
 import space.weme.remix.util.LogUtils;
@@ -104,7 +104,7 @@ public class FgtActivity extends BaseFragment {
             @Override
             public void onClick(View v) {
                 int id = (int) v.getTag();
-                Intent detail = new Intent(getActivity(), ActivityDetail.class);
+                Intent detail = new Intent(getActivity(), AtyActivityDetail.class);
                 detail.putExtra("activityid", id);
                 //LogUtils.d(TAG, "id:" + mActivityList.get(getAdapterPosition() - 1).activityID);
                 startActivity(detail);
@@ -262,8 +262,8 @@ public class FgtActivity extends BaseFragment {
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent detail = new Intent(getActivity(), ActivityDetail.class);
-                        detail.putExtra("activityid", mActivityList.get(getAdapterPosition() - 1).activityID);
+                        Intent detail = new Intent(getActivity(), AtyActivityDetail.class);
+                        detail.putExtra(AtyActivityDetail.INTENT, mActivityList.get(getAdapterPosition() - 1).activityID);
                         LogUtils.d(TAG, "id:" + mActivityList.get(getAdapterPosition() - 1).activityID);
                         startActivity(detail);
                     }
