@@ -11,7 +11,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -71,6 +74,50 @@ public final class OkHttpUtils {
         if(tag!=null) builder.tag(tag);
         Request request = builder.build();
         getInstance().firePost(request, callback);
+    }
+
+    public static void downloadFile(String url, String filePath, OkCallBack callBack){
+        Request request = new Request.Builder().url(url).build();
+        getInstance().fireDownload(request,filePath, callBack);
+
+    }
+    private void fireDownload(Request request,final String filePath,final OkCallBack callback){
+        Call call = getInstance().mClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(final Call call, final IOException e) {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onFailure(e);
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(final Call call, final Response response) throws IOException {
+                InputStream in = response.body().byteStream();
+                try {
+                    OutputStream out = new FileOutputStream(filePath);
+                    byte[] buf = new byte[1024];
+                    int len;
+                    while((len=in.read(buf))>0){
+                        out.write(buf,0,len);
+                    }
+                    out.close();
+                    in.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                response.body().close();
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onResponse("");
+                    }
+                });
+            }
+        });
     }
 
 

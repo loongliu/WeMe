@@ -15,6 +15,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -114,7 +115,9 @@ public class FindFoodPath extends FrameLayout implements View.OnClickListener{
     }
 
     public void startThisAnimation(){
-        ObjectAnimator.ofFloat(this, "Angle", 0, 360).setDuration(20000).start();
+        ObjectAnimator a1 = ObjectAnimator.ofFloat(this, "Angle", 0, 360).setDuration(20000);
+        a1.setInterpolator(new LinearInterpolator());
+        a1.start();
 
         animator = ValueAnimator.ofFloat(0, 359).setDuration(20000);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -125,6 +128,7 @@ public class FindFoodPath extends FrameLayout implements View.OnClickListener{
         });
         animator.setRepeatMode(ValueAnimator.RESTART);
         animator.setRepeatCount(ValueAnimator.INFINITE);
+        animator.setInterpolator(new LinearInterpolator());
         animator.start();
     }
 

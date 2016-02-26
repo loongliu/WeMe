@@ -59,11 +59,15 @@ public class AtyWelcome extends BaseActivity {
     }
 
     private void loginIn(){
-        startActivity(new Intent(AtyWelcome.this, AtyLogin.class));
+        Intent i = new Intent(AtyWelcome.this,AtyLogin.class);
+        i.putExtra(AtyLogin.INTENT_UPDATE,true);
+        startActivity(i);
     }
 
     private void main(){
-        startActivity(new Intent(AtyWelcome.this, AtyMain.class));
+        Intent i = new Intent(AtyWelcome.this, AtyMain.class);
+        i.putExtra(AtyMain.INTENT_UPDATE,true);
+        startActivity(i);
     }
 
 

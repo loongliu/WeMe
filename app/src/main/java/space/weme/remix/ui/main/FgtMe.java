@@ -234,7 +234,7 @@ public class FgtMe extends BaseFragment {
     
     private void showQRCode(){
         LogUtils.i(TAG, "showQRCode");
-        final Dialog dialog = new Dialog(getActivity(),R.style.Dialog);
+        final Dialog dialog = new Dialog(getActivity(),R.style.DialogTransparent);
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.qrcode_user,llLayout,false);
         final int size = DimensionUtils.getDisplay().widthPixels*4/5-DimensionUtils.dp2px(32);
         final ImageView qr_code = (ImageView) v.findViewById(R.id.qr_code);

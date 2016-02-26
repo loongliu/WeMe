@@ -117,6 +117,8 @@ public final class StrUtils {
 
     public static final String SEARCH_ACTIVITY=BASE_URL+"searchactivity";
 
+    public static final String CHECK_UPDATE_URL = BASE_URL + "checkapkversion";
+
 
 
     public static final String GET_AVATAR = BASE_URL_NGINX + "avatar/";
@@ -174,7 +176,7 @@ public final class StrUtils {
     }
 
     public static String distanceTransfer(double distance){
-        return (int)(distance/1000)+APP.context().getString(R.string.thousand_meters);
+        return String.format("%.1f",distance/1000)+APP.context().getString(R.string.thousand_meters);
 
     }
 

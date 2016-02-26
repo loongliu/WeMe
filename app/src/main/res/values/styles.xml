@@ -23,12 +23,17 @@
     </style>
 
     <style name="Dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+    <style name="DialogTransparent" parent="@android:style/Theme.Dialog">
         <item name="android:windowBackground">@null</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowNoTitle">true</item>
     </style>
 
-    <style name="DialogSlideAnim" parent="Dialog">
+    <style name="DialogSlideAnim" parent="DialogTransparent">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowAnimationStyle">@style/PopupWindowAnimation</item>
     </style>

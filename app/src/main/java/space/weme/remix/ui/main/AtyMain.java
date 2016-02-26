@@ -16,6 +16,7 @@ import space.weme.remix.ui.aty.AtyPublicActivity;
 import space.weme.remix.ui.aty.AtySearchActivity;
 import space.weme.remix.ui.base.BaseActivity;
 import space.weme.remix.ui.intro.AtyLogin;
+import space.weme.remix.util.UpdateUtils;
 import space.weme.remix.widgt.TabItem;
 
 /**
@@ -26,6 +27,7 @@ public class AtyMain extends BaseActivity implements Toolbar.OnMenuItemClickList
 
     private static final String TAG = "AtyMain";
     public static final String INTENT_LOGOUT = "intent_lougout";
+    public static final String INTENT_UPDATE = "intent_update";
 
     private static final int PAGE_COUNT = 4;
 
@@ -52,6 +54,9 @@ public class AtyMain extends BaseActivity implements Toolbar.OnMenuItemClickList
             startActivity(i);
             finish();
             return;
+        }
+        if(getIntent().getBooleanExtra(INTENT_UPDATE,false)){
+            UpdateUtils.checkUpdate(AtyMain.this);
         }
         bindViews();
     }

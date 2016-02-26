@@ -101,6 +101,9 @@
     <string name="shown_in_find">您将出现在发现列表中</string>
     <string name="not_shown_in_found">您将不会出现在发现列表中</string>
     <string name="activity_detail">活动详情</string>
+    <string name="new_version_found">发现新版本。</string>
+    <string name="whether_update_or_not">发现新版本,是否更新?</string>
+    <string name="update">更新</string>
 
 
     <string-array name="aty_info_tabs">
