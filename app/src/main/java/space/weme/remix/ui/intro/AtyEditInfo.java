@@ -278,6 +278,7 @@ public class AtyEditInfo extends BaseActivity {
                 uploadImageReturned();
                 ImagePipeline imagePipeline = Fresco.getImagePipeline();
                 imagePipeline.evictFromCache(Uri.parse(StrUtils.thumForID(mUser.ID + "")));
+                imagePipeline.evictFromCache(Uri.parse(StrUtils.avatarForID(mUser.ID+"")));
             }
         });
     }
@@ -320,7 +321,6 @@ public class AtyEditInfo extends BaseActivity {
     private void performCrop(String picUri) {
         try {
             //Start Crop Activity
-
             Intent cropIntent = new Intent("com.android.camera.action.CROP");
             // indicate image type and Uri
             File f = new File(picUri);

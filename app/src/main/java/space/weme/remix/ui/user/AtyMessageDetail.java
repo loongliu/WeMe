@@ -50,13 +50,12 @@ public class AtyMessageDetail extends SwipeActivity {
         messageList = new ArrayList<>();
         adapter = new MessageDetailAdapter(this, id);
         mRecycler.setAdapter(adapter);
-        setHasRead();
         getMessageDetail(1);
     }
 
-    private void setHasRead(){
+    private void setHasRead(String messageId){
         ArrayMap<String,String> param = new ArrayMap<>();
-        param.put("id",id);
+        param.put("id",messageId);
         param.put("token", StrUtils.token());
         OkHttpUtils.post(StrUtils.READ_MESSAGE,param,TAG,new OkHttpUtils.SimpleOkCallBack(){
             @Override
@@ -70,7 +69,8 @@ public class AtyMessageDetail extends SwipeActivity {
         ArrayMap<String,String> param = new ArrayMap<>();
         param.put("token", StrUtils.token());
         param.put("page",String.format("%d", page));
-        param.put("SendId",id);   
+        param.put("SendId",id);
+        // todo load more
         OkHttpUtils.post(StrUtils.GET_MESSAGE_DETAIL,param,TAG, new OkHttpUtils.SimpleOkCallBack(){
             @Override
             public void onResponse(String s) {
@@ -85,7 +85,9 @@ public class AtyMessageDetail extends SwipeActivity {
                 }
                 messageList.clear();
                 for(int i = 0; i<result.length(); i++){
-                    messageList.add(Message.fromJSON(result.optJSONObject(i)));
+                    Message m = Message.fromJSON(result.optJSONObject(i));
+                    messageList.add(m);
+                    setHasRead(m.messageid+"");
                 }
                 adapter.setMessageList(messageList);
                 adapter.notifyDataSetChanged();

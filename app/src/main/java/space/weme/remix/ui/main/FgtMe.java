@@ -106,7 +106,6 @@ public class FgtMe extends BaseFragment {
         RoundingParams roundingParams = RoundingParams.fromCornersRadius(5f);
         roundingParams.setRoundAsCircle(true);
         mDraweeAvatar.getHierarchy().setRoundingParams(roundingParams);
-        mDraweeAvatar.setImageURI(Uri.parse(StrUtils.thumForID(StrUtils.id() + "")));
 
         setClickListener(rootView);
 
@@ -127,6 +126,7 @@ public class FgtMe extends BaseFragment {
     public void onResume() {
         super.onResume();
         fetchUnreadMessage();
+        mDraweeAvatar.setImageURI(Uri.parse(StrUtils.thumForID(StrUtils.id() + "")));
     }
 
     private void fetchUnreadMessage(){

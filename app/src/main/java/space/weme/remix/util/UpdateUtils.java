@@ -20,7 +20,7 @@ import space.weme.remix.widgt.WDialog;
  */
 public class UpdateUtils {
     private static String v1 = "1";
-    private static String v2 = "1";
+    private static String v2 = "3";
     private static String v3 = "0";
 
     public static void checkUpdate(final Context context){

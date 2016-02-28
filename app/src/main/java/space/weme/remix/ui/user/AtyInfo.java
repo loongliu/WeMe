@@ -159,6 +159,11 @@ public class AtyInfo extends BaseActivity {
         super.onStart();
         fireInfo();
         configView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         mDrawAvatar.setImageURI(Uri.parse(StrUtils.thumForID(mId)));
     }
 
