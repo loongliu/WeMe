@@ -78,7 +78,7 @@ public class WDialog extends Dialog {
             tvContext.setText(message);
             TextView tvPositive = (TextView) contextView.findViewById(R.id.wdialog_positive);
             if(positiveText==null){
-                tvPositive.setText(android.R.string.ok);
+                tvPositive.setText(R.string.ok);
             }else {
                 tvPositive.setText(positiveText);
             }
@@ -93,7 +93,7 @@ public class WDialog extends Dialog {
             });
             TextView tvNegative = (TextView) contextView.findViewById(R.id.wdialog_negative);
             if(negativeText==null){
-                tvNegative.setText(android.R.string.cancel);
+                tvNegative.setText(R.string.cancel);
             }else {
                 tvNegative.setText(negativeText);
             }

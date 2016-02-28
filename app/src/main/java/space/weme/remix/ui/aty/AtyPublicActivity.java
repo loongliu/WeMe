@@ -1,17 +1,13 @@
 package space.weme.remix.ui.aty;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.util.ArrayMap;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
@@ -31,6 +27,8 @@ import space.weme.remix.ui.base.SwipeActivity;
 import space.weme.remix.util.LogUtils;
 import space.weme.remix.util.OkHttpUtils;
 import space.weme.remix.util.StrUtils;
+import space.weme.remix.widgt.WDialog;
+import space.weme.remix.widgt.WSwitch;
 
 public class AtyPublicActivity extends SwipeActivity {
 
@@ -48,8 +46,7 @@ public class AtyPublicActivity extends SwipeActivity {
     private EditText editAdvertise;
     private EditText editDetail;
     private EditText editLabe;
-    private ToggleButton toggleButton;
-    private boolean checked=false;
+    private WSwitch wSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,42 +75,21 @@ public class AtyPublicActivity extends SwipeActivity {
             public void onClick(View v) {
                 if(path!=null&&!path.isEmpty()
                         &&getEditText()!=null){
-                    new AlertDialog.Builder(AtyPublicActivity.this)
-                            .setTitle("提示")
-                            .setMessage("确定发布活动吗？")
-                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    new WDialog.Builder(AtyPublicActivity.this).setMessage("确定发布活动吗？")
+                            .setPositive("发布", new View.OnClickListener() {
                                 @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
+                                public void onClick(View v) {
                                     publicActivity(getEditText());
                                 }
-                            })
-                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            })
-                            .show();
-                }
-                else{
-                    new AlertDialog.Builder(AtyPublicActivity.this)
-                            .setTitle("提示")
-                            .setMessage("请填写必填信息")
-                            .setPositiveButton("确认",null).show();
+                            }).show();
+                }else{
+                    new WDialog.Builder(AtyPublicActivity.this).setMessage("请填写必填信息").show();
                 }
 
             }
         });
 
-        toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                toggleButton.setChecked(isChecked);
-                checked=isChecked;
-                LogUtils.d(TAG, "isChecked " + isChecked);
-            }
-        });
+
 
 
     }
@@ -129,7 +105,8 @@ public class AtyPublicActivity extends SwipeActivity {
         editTime= (EditText) findViewById(R.id.edit_time);
         editLabe= (EditText) findViewById(R.id.edit_labe);
         editNumber= (EditText) findViewById(R.id.edit_number);
-        toggleButton= (ToggleButton) findViewById(R.id.tog_btn);
+        wSwitch= (WSwitch) findViewById(R.id.tog_btn);
+        wSwitch.setOn(false);
     }
 
     @Override
@@ -166,7 +143,7 @@ public class AtyPublicActivity extends SwipeActivity {
         map.put("time",editTime.getText().toString());
         map.put("advertise",editAdvertise.getText().toString());
 
-        map.put("whetherimage",checked?"true":"false");
+        map.put("whetherimage",wSwitch.isOn()?"true":"false");
         map.put("detail",editDetail.getText().toString());
         map.put("labe",editLabe.getText().toString());
         return map;
@@ -177,22 +154,20 @@ public class AtyPublicActivity extends SwipeActivity {
             @Override
             public void onResponse(String s) {
                 JSONObject j = OkHttpUtils.parseJSON(AtyPublicActivity.this, s);
-                String state = j.optString("state");
-                if (state != null && state.equals("successful")) {
-                    new AlertDialog.Builder(AtyPublicActivity.this)
-                            .setTitle("提示")
-                            .setMessage("已发布活动")
-                            .setPositiveButton("确认", null).show();
-                } else {
-                    new AlertDialog.Builder(AtyPublicActivity.this)
+                if(j == null)  {
+                    new WDialog.Builder(AtyPublicActivity.this)
                             .setTitle("提示")
                             .setMessage("活动发布失败")
-                            .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                            .setPositive("确认", new View.OnClickListener() {
                                 @Override
-                                public void onClick(DialogInterface dialog, int which) {
+                                public void onClick(View v) {
                                     onBackPressed();
                                 }
                             }).show();
+                } else {
+                    new WDialog.Builder(AtyPublicActivity.this)
+                            .setTitle("提示")
+                            .setMessage("已发布活动").show();
                 }
             }
         });

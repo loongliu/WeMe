@@ -44,6 +44,9 @@ public class AtyMessage extends SwipeActivity {
         messageList = new ArrayList<>();
         mAdapter = new MessageAdapter(this);
         mRecycler.setAdapter(mAdapter);
+    }
+    protected void onResume(){
+        super.onResume();
         getMessage();
     }
 
@@ -59,6 +62,7 @@ public class AtyMessage extends SwipeActivity {
                     return;
                 }
                 JSONArray result = j.optJSONArray("result");
+                messageList.clear();
                 for(int i = 0; i<result.length(); i++){
                     messageList.add(Message.fromJSON(result.optJSONObject(i)));
                 }

@@ -83,15 +83,15 @@
                     android:layout_height="32dp"
                     android:gravity="center_vertical"
                     android:text="性别" />
-                <Switch
+                <space.weme.remix.widgt.WSwitch
                     android:id="@+id/aty_editinfo_switch_gender"
-                    android:thumb="@drawable/thumb"
-                    android:track="@drawable/track"
-                    android:textOn="男"
-                    android:textOff="女"
+                    app:textOn="男"
+                    app:textOff="女"
+                    app:colorOn="@color/colorPrimary"
+                    app:colorOff="@color/white"
                     android:layout_gravity="end|center_vertical"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="32dp" />
             </FrameLayout>
             <View
                 android:background="@color/grey_gap"

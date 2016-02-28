@@ -1,7 +1,5 @@
 package space.weme.remix.ui.aty;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,6 +29,7 @@ import space.weme.remix.util.LogUtils;
 import space.weme.remix.util.OkHttpUtils;
 import space.weme.remix.util.OkHttpUtils.SimpleOkCallBack;
 import space.weme.remix.util.StrUtils;
+import space.weme.remix.widgt.WDialog;
 
 import static space.weme.remix.R.id.txt_public_author;
 
@@ -137,12 +136,12 @@ public class AtyActivityDetail extends SwipeActivity {
                     public void onClick(View v) {
                         if (detail.state.equals("no")) {
                             if (detail.whetherimage.equals("false"))
-                                Dialog("提示", "确定参加活动吗？", 1);
+                                showDialog("确定参加活动吗？", 1);
                             else {
-                                Dialog("提示", "请上传您的生活照", 5);
+                                showDialog("请上传您的生活照", 5);
                             }
                         } else {
-                            Dialog("提示", "是否取消参加该活动吗？", 2);
+                            showDialog("是否取消参加该活动吗？", 2);
                         }
                     }
                 });
@@ -150,9 +149,9 @@ public class AtyActivityDetail extends SwipeActivity {
                     @Override
                     public void onClick(View v) {
                         if (detail.likeflag.equals("0")) {
-                            Dialog("提示", "确定关注吗？", 3);
+                            showDialog("确定关注吗？", 3);
                         } else {
-                            Dialog("提示", "是否取消关注？", 4);
+                            showDialog("是否取消关注？", 4);
                         }
 
                     }
@@ -165,46 +164,35 @@ public class AtyActivityDetail extends SwipeActivity {
 
     }
 
-    protected void Dialog(String title,String msg, final int flag){
-        AlertDialog.Builder builder=new AlertDialog.Builder(AtyActivityDetail.this);
-        builder.setMessage(msg);
-        builder.setTitle(title);
-        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                switch (flag) {
-                    case 1:
-                        likeSignAty(StrUtils.SIGN_ACTIVITY);
-                        break;
-                    case 2:
-                        likeSignAty(StrUtils.DEL_SIGN_ACTIVITY);
-                        break;
-                    case 3:
-                        likeSignAty(StrUtils.LIKE_ACTIVITY);
-                        break;
-                    case 4:
-                        likeSignAty(StrUtils.UNLIKE_ACTIVITY);
-                        break;
-                    case 5:
-                        chooseImage();
-                        likeSignAty(StrUtils.SIGN_ACTIVITY);
-                        break;
-                    default:
-                        LogUtils.e(TAG, "error" + flag);
-                        break;
-                }
-            }
-        });
+    protected void showDialog(String msg, final int flag){
+        new WDialog.Builder(AtyActivityDetail.this).setMessage(msg)
+                .setPositive(R.string.sure, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        switch (flag) {
+                            case 1:
+                                likeSignAty(StrUtils.SIGN_ACTIVITY);
+                                break;
+                            case 2:
+                                likeSignAty(StrUtils.DEL_SIGN_ACTIVITY);
+                                break;
+                            case 3:
+                                likeSignAty(StrUtils.LIKE_ACTIVITY);
+                                break;
+                            case 4:
+                                likeSignAty(StrUtils.UNLIKE_ACTIVITY);
+                                break;
+                            case 5:
+                                chooseImage();
+                                likeSignAty(StrUtils.SIGN_ACTIVITY);
+                                break;
+                            default:
+                                LogUtils.e(TAG, "error" + flag);
+                                break;
+                        }
+                    }
+                }).show();
 
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-
-            }
-        });
-        builder.create().show();
     }
 
     void likeSignAty(String url){

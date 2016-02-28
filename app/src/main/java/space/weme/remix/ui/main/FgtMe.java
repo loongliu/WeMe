@@ -92,11 +92,7 @@ public class FgtMe extends BaseFragment {
         return fragment;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
 
-    }
 
     @Nullable
     @Override
@@ -126,6 +122,7 @@ public class FgtMe extends BaseFragment {
         return rootView;
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
@@ -151,6 +148,7 @@ public class FgtMe extends BaseFragment {
                     return;
                 }
                 if (count <= 0) {
+                    mTvCount.setVisibility(View.GONE);
                     return;
                 }
                 mTvCount.setVisibility(View.VISIBLE);

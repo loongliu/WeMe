@@ -1,10 +1,15 @@
 package space.weme.remix.util;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Environment;
 import android.support.v4.util.ArrayMap;
 import android.view.View;
 
 import org.json.JSONObject;
+
+import java.io.File;
 
 import space.weme.remix.R;
 import space.weme.remix.widgt.WDialog;
@@ -37,28 +42,34 @@ public class UpdateUtils {
                     return;
                 }
                 String url = j.optString("apkurl");
+                JSONObject version = j.optJSONObject("version_newest");
+                if(version == null){
+                    return;
+                }
+                String v1 = version.optString("v1");
+                String v2 = version.optString("v2");
+                String v3 = version.optString("v3");
+                final String filePath = Environment.getExternalStorageDirectory()
+                        + File.separator + "weme_"+v1+"_"+v2+"_"+v3+".apk";
                 showDialog(context,
-                        context.getString(R.string.new_version_found),
                         context.getString(R.string.whether_update_or_not),
-                        url );
+                        url , filePath);
             }
         });
     }
 
-    private static void showDialog(final Context aty, String title,String message, final String url){
-        new WDialog.Builder(aty).setTitle(title).setMessage(message).setPositive(R.string.update, new View.OnClickListener() {
+    private static void showDialog(final Context aty, String message, final String url,final String filePath){
+        new WDialog.Builder(aty).setMessage(message).setPositive(R.string.update, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                final String filePath = Environment.getExternalStorageDirectory()
-//                        + File.separator + "weme.apk";
-//                OkHttpUtils.downloadFile( url,  filePath, new OkHttpUtils.SimpleOkCallBack(){
-//                    @Override
-//                    public void onResponse(String s) {
-//                        Intent intent = new Intent(Intent.ACTION_VIEW);
-//                        intent.setDataAndType(Uri.fromFile(new File(filePath)), "application/vnd.android.package-archive");
-//                        aty.startActivity(intent);
-//                    }
-//                });
+                OkHttpUtils.downloadFile( url,  filePath,false, new OkHttpUtils.SimpleOkCallBack(){
+                    @Override
+                    public void onResponse(String s) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setDataAndType(Uri.fromFile(new File(filePath)), "application/vnd.android.package-archive");
+                        aty.startActivity(intent);
+                    }
+                });
             }
         }).show();
 

@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -76,12 +77,12 @@ public final class OkHttpUtils {
         getInstance().firePost(request, callback);
     }
 
-    public static void downloadFile(String url, String filePath, OkCallBack callBack){
+    public static void downloadFile(String url, String filePath,boolean override, OkCallBack callBack){
         Request request = new Request.Builder().url(url).build();
-        getInstance().fireDownload(request,filePath, callBack);
+        getInstance().fireDownload(request,filePath,override, callBack);
 
     }
-    private void fireDownload(Request request,final String filePath,final OkCallBack callback){
+    private void fireDownload(Request request,final String filePath,final boolean override,final OkCallBack callback){
         Call call = getInstance().mClient.newCall(request);
         call.enqueue(new Callback() {
             @Override
@@ -96,26 +97,34 @@ public final class OkHttpUtils {
 
             @Override
             public void onResponse(final Call call, final Response response) throws IOException {
-                InputStream in = response.body().byteStream();
                 try {
-                    OutputStream out = new FileOutputStream(filePath);
-                    byte[] buf = new byte[1024];
-                    int len;
-                    while((len=in.read(buf))>0){
-                        out.write(buf,0,len);
+                    long length = response.body().contentLength();
+                    File file = new File(filePath);
+                    if (file.exists() && file.length() == length && !override) {
+                        return;
                     }
-                    out.close();
-                    in.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    InputStream in = response.body().byteStream();
+                    try {
+                        OutputStream out = new FileOutputStream(filePath);
+                        byte[] buf = new byte[1024];
+                        int len;
+                        while ((len = in.read(buf)) > 0) {
+                            out.write(buf, 0, len);
+                        }
+                        out.close();
+                        in.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }finally {
+                    response.body().close();
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onResponse("");
+                        }
+                    });
                 }
-                response.body().close();
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        callback.onResponse("");
-                    }
-                });
             }
         });
     }

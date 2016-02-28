@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -48,8 +48,8 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center_horizontal"
-                fresco:actualImageScaleType="focusCrop"
-                fresco:placeholderImage="@mipmap/add_image" />
+                app:actualImageScaleType="focusCrop"
+                app:placeholderImage="@mipmap/add_image" />
 
             <EditText
                 android:id="@+id/edit_title"
@@ -240,18 +240,22 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:paddingLeft="8dp"
+                    android:paddingStart="8dp"
                     android:text="是否需要生活照" />
 
-                <ToggleButton
+                <space.weme.remix.widgt.WSwitch
                     android:id="@+id/tog_btn"
-                    android:layout_width="60dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_centerVertical="true"
-                    android:textOn="@null"
-                    android:textOff="@null"
-                    android:background="@drawable/toggle_selector" />
+                    app:colorOn="@color/colorPrimary"
+                    app:colorOff="@color/white"
+                    app:textOn="是"
+                    app:textOff="否" />
             </RelativeLayout>
 
         </LinearLayout>

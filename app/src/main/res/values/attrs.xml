@@ -4,4 +4,10 @@
         <attr name="image" format="reference" />
         <attr name="text" format="string" />
     </declare-styleable>
+    <declare-styleable name="WSwitch">
+        <attr name="colorOn" format="color" />
+        <attr name="colorOff" format="color" />
+        <attr name="textOn" format="string" />
+        <attr name="textOff" format="string" />
+    </declare-styleable>
 </resources>

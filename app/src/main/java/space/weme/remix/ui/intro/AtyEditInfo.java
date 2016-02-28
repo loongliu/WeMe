@@ -16,10 +16,8 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -41,6 +39,7 @@ import space.weme.remix.util.BitmapUtils;
 import space.weme.remix.util.LogUtils;
 import space.weme.remix.util.OkHttpUtils;
 import space.weme.remix.util.StrUtils;
+import space.weme.remix.widgt.WSwitch;
 
 /**
  * Created by Liujilong on 16/2/3.
@@ -66,7 +65,6 @@ public class AtyEditInfo extends BaseActivity {
 
     SimpleDraweeView mDrawAvatar;
     EditText etName;
-    Switch swGender;
     TextView tvBirth;
     EditText etPhone;
     TextView tvSchool;
@@ -76,6 +74,7 @@ public class AtyEditInfo extends BaseActivity {
     EditText etQQ;
     EditText etHome;
     TextView etCommit;
+    WSwitch wSwitch;
 
     ProgressDialog mProgressDialog;
 
@@ -102,7 +101,7 @@ public class AtyEditInfo extends BaseActivity {
     private void bindViews(){
         mDrawAvatar = (SimpleDraweeView) findViewById(R.id.aty_editinfo_avatar);
         etName = (EditText) findViewById(R.id.aty_editinfo_edittext_name);
-        swGender = (Switch) findViewById(R.id.aty_editinfo_switch_gender);
+        wSwitch = (WSwitch) findViewById(R.id.aty_editinfo_switch_gender);
         tvBirth = (TextView) findViewById(R.id.aty_editinfo_birth);
         etPhone = (EditText) findViewById(R.id.aty_editinfo_phone);
         tvSchool = (TextView) findViewById(R.id.aty_editinfo_school);
@@ -181,7 +180,7 @@ public class AtyEditInfo extends BaseActivity {
         mDrawAvatar.setImageURI(Uri.parse(StrUtils.thumForID(mUser.ID + "")));
         etName.setText(mUser.name);
         boolean male = getResources().getString(R.string.male).equals(mUser.gender);
-        swGender.setChecked(male);
+        wSwitch.setOn(male);
         tvBirth.setText(mUser.birthday);
         etPhone.setText(mUser.phone);
         tvSchool.setText(mUser.school);
@@ -233,7 +232,7 @@ public class AtyEditInfo extends BaseActivity {
         if(etMajor.getText().length()!=0){
             param.put("department", etMajor.getText().toString());
         }
-        param.put("gender", swGender.isChecked() ? getResources().getString(R.string.male) : getResources().getString(R.string.female));
+        param.put("gender", wSwitch.isOn() ? getResources().getString(R.string.male) : getResources().getString(R.string.female));
         if(etHome.getText().length()!=0){
             param.put("hometown",etHome.getText().toString());
         }

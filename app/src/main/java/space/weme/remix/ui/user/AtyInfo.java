@@ -1,8 +1,6 @@
 package space.weme.remix.ui.user;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -51,6 +49,7 @@ import space.weme.remix.util.DimensionUtils;
 import space.weme.remix.util.LogUtils;
 import space.weme.remix.util.OkHttpUtils;
 import space.weme.remix.util.StrUtils;
+import space.weme.remix.widgt.WDialog;
 
 /**
  * Created by Liujilong on 2016/1/29.
@@ -440,11 +439,10 @@ public class AtyInfo extends BaseActivity {
     }
 
     private void unfollow(){
-        // todo dialog theme
-        new AlertDialog.Builder(AtyInfo.this)
-                .setMessage(getString(R.string.sure_to_unfollow))
-                .setPositiveButton(R.string.unfollow, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
+        new WDialog.Builder(AtyInfo.this).setMessage(R.string.sure_to_unfollow)
+                .setPositive(R.string.unfollow, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
                         ArrayMap<String,String> param = new ArrayMap<>();
                         param.put("token",StrUtils.token());
                         param.put("id", mUser.ID+"");
@@ -466,14 +464,8 @@ public class AtyInfo extends BaseActivity {
                             }
                         });
                     }
-                })
-                .setNegativeButton(R.string.not_unfollow, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
+                }).show();
+
     }
 
     private void follow(){

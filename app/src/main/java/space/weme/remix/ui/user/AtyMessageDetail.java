@@ -50,7 +50,20 @@ public class AtyMessageDetail extends SwipeActivity {
         messageList = new ArrayList<>();
         adapter = new MessageDetailAdapter(this, id);
         mRecycler.setAdapter(adapter);
+        setHasRead();
         getMessageDetail(1);
+    }
+
+    private void setHasRead(){
+        ArrayMap<String,String> param = new ArrayMap<>();
+        param.put("id",id);
+        param.put("token", StrUtils.token());
+        OkHttpUtils.post(StrUtils.READ_MESSAGE,param,TAG,new OkHttpUtils.SimpleOkCallBack(){
+            @Override
+            public void onResponse(String s) {
+                LogUtils.d(TAG,s);
+            }
+        });
     }
 
     private void getMessageDetail(int page){
