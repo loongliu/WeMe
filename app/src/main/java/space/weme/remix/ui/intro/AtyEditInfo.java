@@ -5,9 +5,12 @@ import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -20,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.generic.RoundingParams;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.core.ImagePipeline;
 
@@ -27,6 +31,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -57,6 +62,7 @@ public class AtyEditInfo extends BaseActivity {
     private static final int REQUEST_IMAGE = 0xef;
     private static final int REQUEST_CITY = 0xff;
     private final int REQUEST_CROP = 400;
+    private Uri uriTempFile=Uri.parse("file://" + "/" + Environment.getExternalStorageDirectory().getPath() + "/" + "small.jpg");
 
     private String mAvatarPath;
     private Bitmap avatarBitmap;
@@ -267,7 +273,7 @@ public class AtyEditInfo extends BaseActivity {
         p.put("token",StrUtils.token());
         p.put("type","0");
         p.put("number","0");
-        OkHttpUtils.uploadBitmap(StrUtils.UPLOAD_AVATAR_URL, p, avatarBitmap, StrUtils.MEDIA_TYPE_IMG, TAG, new OkHttpUtils.SimpleOkCallBack() {
+        OkHttpUtils.uploadBitmap(StrUtils.UPLOAD_AVATAR_URL, p, uriTempFile, StrUtils.MEDIA_TYPE_IMG, TAG, new OkHttpUtils.SimpleOkCallBack() {
             @Override
             public void onFailure(IOException e) {
                 uploadImageReturned();
@@ -284,6 +290,7 @@ public class AtyEditInfo extends BaseActivity {
     }
     private void uploadImageReturned(){
         if(mEdit){
+            LogUtils.e(TAG,"UPload success");
             finish();
         }else {
             Intent i = new Intent(AtyEditInfo.this, AtyLogin.class);
@@ -311,10 +318,16 @@ public class AtyEditInfo extends BaseActivity {
             String name = data.getStringExtra(AtySearchCity.INTENT_UNIVERSITY);
             tvSchool.setText(name);
         }else if (requestCode == REQUEST_CROP){
-            Bundle extras = data.getExtras();
-            avatarBitmap = extras.getParcelable("data");
-            mDrawAvatar.setImageBitmap(BitmapUtils.roundBitmap(avatarBitmap));
+            //Bundle extras = data.getExtras();
+            //avatarBitmap = extras.getParcelable("data");
+            if (uriTempFile!=null){
+                //avatarBitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uriTempFile));
 
+                RoundingParams roundingParams = RoundingParams.fromCornersRadius(5f);
+                roundingParams.setRoundAsCircle(true);
+                mDrawAvatar.getHierarchy().setRoundingParams(roundingParams);
+                mDrawAvatar.setImageURI(uriTempFile);
+            }
         }
     }
 
@@ -334,8 +347,13 @@ public class AtyEditInfo extends BaseActivity {
             cropIntent.putExtra("aspectY", 1);
 
             // retrieve data on return
-            cropIntent.putExtra("return-data", true);
+            //cropIntent.putExtra("return-data", true);
             // start the activity - we handle returning in onActivityResult
+            uriTempFile = Uri.parse("file://" + "/" + Environment.getExternalStorageDirectory().getPath() + "/" + "small.jpg");
+            cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriTempFile);
+            cropIntent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+
+
             startActivityForResult(cropIntent, REQUEST_CROP);
         }
         // respond to users whose devices do not support the crop action
