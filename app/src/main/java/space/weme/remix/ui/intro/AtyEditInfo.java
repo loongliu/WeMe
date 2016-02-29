@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.generic.RoundingParams;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.core.ImagePipeline;
 
@@ -272,7 +273,7 @@ public class AtyEditInfo extends BaseActivity {
         p.put("token",StrUtils.token());
         p.put("type","0");
         p.put("number","0");
-        OkHttpUtils.uploadBitmap(StrUtils.UPLOAD_AVATAR_URL, p, avatarBitmap, StrUtils.MEDIA_TYPE_IMG, TAG, new OkHttpUtils.SimpleOkCallBack() {
+        OkHttpUtils.uploadBitmap(StrUtils.UPLOAD_AVATAR_URL, p, uriTempFile, StrUtils.MEDIA_TYPE_IMG, TAG, new OkHttpUtils.SimpleOkCallBack() {
             @Override
             public void onFailure(IOException e) {
                 uploadImageReturned();
@@ -318,11 +319,13 @@ public class AtyEditInfo extends BaseActivity {
         }else if (requestCode == REQUEST_CROP){
             //Bundle extras = data.getExtras();
             //avatarBitmap = extras.getParcelable("data");
-            try {
-                avatarBitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uriTempFile));
-                mDrawAvatar.setImageBitmap(BitmapUtils.roundBitmap(avatarBitmap));
-            } catch (FileNotFoundException e) {
-                LogUtils.e(TAG,e.toString()+" 图片裁剪错误");
+            if (uriTempFile!=null){
+                //avatarBitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uriTempFile));
+
+                RoundingParams roundingParams = RoundingParams.fromCornersRadius(5f);
+                roundingParams.setRoundAsCircle(true);
+                mDrawAvatar.getHierarchy().setRoundingParams(roundingParams);
+                mDrawAvatar.setImageURI(uriTempFile);
             }
         }
     }
@@ -348,6 +351,7 @@ public class AtyEditInfo extends BaseActivity {
             uriTempFile = Uri.parse("file://" + "/" + Environment.getExternalStorageDirectory().getPath() + "/" + "small.jpg");
             cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriTempFile);
             cropIntent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+
 
             startActivityForResult(cropIntent, REQUEST_CROP);
         }
