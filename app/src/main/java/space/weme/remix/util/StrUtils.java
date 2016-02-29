@@ -133,6 +133,10 @@ public final class StrUtils {
         return GET_AVATAR + id + "_thumbnail.jpg";
     }
 
+    public static String cardForID(String id) {
+        return GET_AVATAR + id + "-1_card.jpg";
+    }
+
     public static String avatarForID(String id){
         return GET_AVATAR + id;
     }

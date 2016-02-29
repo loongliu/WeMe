@@ -5,9 +5,12 @@ import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -27,6 +30,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -57,6 +61,7 @@ public class AtyEditInfo extends BaseActivity {
     private static final int REQUEST_IMAGE = 0xef;
     private static final int REQUEST_CITY = 0xff;
     private final int REQUEST_CROP = 400;
+    private Uri uriTempFile=Uri.parse("file://" + "/" + Environment.getExternalStorageDirectory().getPath() + "/" + "small.jpg");
 
     private String mAvatarPath;
     private Bitmap avatarBitmap;
@@ -311,10 +316,14 @@ public class AtyEditInfo extends BaseActivity {
             String name = data.getStringExtra(AtySearchCity.INTENT_UNIVERSITY);
             tvSchool.setText(name);
         }else if (requestCode == REQUEST_CROP){
-            Bundle extras = data.getExtras();
-            avatarBitmap = extras.getParcelable("data");
-            mDrawAvatar.setImageBitmap(BitmapUtils.roundBitmap(avatarBitmap));
-
+            //Bundle extras = data.getExtras();
+            //avatarBitmap = extras.getParcelable("data");
+            try {
+                avatarBitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uriTempFile));
+                mDrawAvatar.setImageBitmap(BitmapUtils.roundBitmap(avatarBitmap));
+            } catch (FileNotFoundException e) {
+                LogUtils.e(TAG,e.toString()+" 图片裁剪错误");
+            }
         }
     }
 
@@ -334,8 +343,12 @@ public class AtyEditInfo extends BaseActivity {
             cropIntent.putExtra("aspectY", 1);
 
             // retrieve data on return
-            cropIntent.putExtra("return-data", true);
+            //cropIntent.putExtra("return-data", true);
             // start the activity - we handle returning in onActivityResult
+            uriTempFile = Uri.parse("file://" + "/" + Environment.getExternalStorageDirectory().getPath() + "/" + "small.jpg");
+            cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriTempFile);
+            cropIntent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+
             startActivityForResult(cropIntent, REQUEST_CROP);
         }
         // respond to users whose devices do not support the crop action

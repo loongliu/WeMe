@@ -165,7 +165,7 @@ public class Card extends CardView {
             }
         };
 
-        Uri uri = Uri.parse(StrUtils.avatarForID(user.ID + ""));
+        Uri uri = Uri.parse(StrUtils.cardForID(user.ID + ""));
         DraweeController controller = Fresco.newDraweeControllerBuilder()
                 .setControllerListener(controllerListener)
                 .setUri(uri)
