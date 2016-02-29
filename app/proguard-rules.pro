@@ -17,6 +17,8 @@
 #}
 
 
+-printmapping mapping.txt
+
 -optimizationpasses 5
 
 #When not preverifing in a case-insensitive filing system, such as Windows. Because this tool unpacks your processed jars, you should then use:
