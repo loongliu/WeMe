@@ -174,7 +174,8 @@ public final class OkHttpUtils {
         try {
             bitmap = MediaStore.Images.Media.getBitmap(APP.context().getContentResolver(), uri);
         } catch (IOException e) {
-            e.printStackTrace();
+            LogUtils.e(TAG,"loadImage Error");
+            return;
         }
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] byteArray = stream.toByteArray();
