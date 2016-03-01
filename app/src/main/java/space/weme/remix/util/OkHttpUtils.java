@@ -169,16 +169,7 @@ public final class OkHttpUtils {
 
     public static void uploadBitmap(String url,Map<String,String> param, Uri uri,MediaType type, String tag, OkCallBack callBack){
         JSONObject jsonObject = new JSONObject(param);
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        Bitmap bitmap= null;
-        try {
-            bitmap = MediaStore.Images.Media.getBitmap(APP.context().getContentResolver(), uri);
-        } catch (IOException e) {
-            LogUtils.e(TAG,"loadImage Error");
-            return;
-        }
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        byte[] byteArray = stream.toByteArray();
+        //bitmap = MediaStore.Images.Media.getBitmap(APP.context().getContentResolver(), uri);
         RequestBody requestBody=new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addPart(
@@ -186,7 +177,7 @@ public final class OkHttpUtils {
                         RequestBody.create(MediaType.parse("application/json"), jsonObject.toString()))
                 .addPart(
                         Headers.of("Content-Disposition", "form-data; name=\"avatar\";filename=\"file.jpg\""),
-                        RequestBody.create(type, byteArray)
+                        RequestBody.create(type,new File(uri.getPath()))
                 ).build();
         Request.Builder builder = new Request.Builder().url(url).post(requestBody);
         if(tag!=null) builder.tag(tag);

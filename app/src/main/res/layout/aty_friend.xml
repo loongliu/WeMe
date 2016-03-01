@@ -59,9 +59,14 @@
         android:layout_width="match_parent"
         android:layout_height="8dp"/>
 
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/aty_friend_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <android.support.v7.widget.RecyclerView
         android:id="@+id/aty_friend_recycler"
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="0dp"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

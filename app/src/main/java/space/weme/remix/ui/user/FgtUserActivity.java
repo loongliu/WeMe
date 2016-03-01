@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.util.ArrayMap;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -39,6 +40,12 @@ public class FgtUserActivity extends BaseFragment {
     private int pagerPage;
     private List<Activity> activityList;
     ActivityAdapter adapter;
+    SwipeRefreshLayout mRefresh;
+
+    int pageFlag=1;
+    boolean isLoading=false;
+    boolean isRefreshing=false;
+    boolean canLoadMore=true;
 
     String[] urls = new String[]{StrUtils.GET_PUBLISH_ACTIVITY,
                                 StrUtils.GET_LIKE_ACTIVITY,
@@ -47,7 +54,7 @@ public class FgtUserActivity extends BaseFragment {
     public static FgtUserActivity newInstance(int page){
         FgtUserActivity f = new FgtUserActivity();
         Bundle bundle = new Bundle();
-        bundle.putInt("page",page);
+        bundle.putInt("page", page);
         f.setArguments(bundle);
         return f;
     }
@@ -59,14 +66,53 @@ public class FgtUserActivity extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.fgt_user_activity, container, false);
         pagerPage = getArguments().getInt("page");
+        mRefresh= (SwipeRefreshLayout) v.findViewById(R.id.fgt_user_activity_refresh);
         RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.fgt_user_activity_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
         activityList = new ArrayList<>();
         adapter = new ActivityAdapter(getActivity());
         recyclerView.setAdapter(adapter);
-        fetchActivities(1);
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int visibleItemCount = recyclerView.getChildCount();
+                int totalItemCount = layoutManager.getItemCount();
+                int firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
+                if (!isLoading && (totalItemCount - firstVisibleItem)
+                        <= (visibleItemCount + 2) && canLoadMore) {
+                    LogUtils.d(TAG, pageFlag + "");
+                    fetchActivities(pageFlag);
+                }
+            }
+        });
+
+        mRefresh.setColorSchemeResources(R.color.colorPrimary);
+        mRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (isRefreshing){
+                    LogUtils.d(TAG,"is refreshing!");
+                }
+                else{
+                    refresh();
+                }
+            }
+        });
+        refresh();
         return v;
+    }
+
+    void refresh(){
+        pageFlag=1;
+        canLoadMore=true;
+        isRefreshing=true;
+        isLoading=false;
+        activityList.clear();
+        fetchActivities(pageFlag);
     }
 
     private void fetchActivities(int page){
@@ -76,17 +122,27 @@ public class FgtUserActivity extends BaseFragment {
         OkHttpUtils.post(urls[pagerPage], param, TAG, new OkHttpUtils.SimpleOkCallBack(){
             @Override
             public void onResponse(String s) {
-                LogUtils.i(TAG,s);
+              //  LogUtils.i(TAG,s);
                 JSONObject j = OkHttpUtils.parseJSON(getActivity(),s);
                 if(j == null){
                     return;
                 }
                 JSONArray array = j.optJSONArray("result");
+                if (array.length()==0){
+                    canLoadMore=false;
+                    return;
+                }
+                else {
+                    pageFlag++;
+                }
                 for(int i = 0; i<array.length(); i++){
                     activityList.add(Activity.fromJSON(array.optJSONObject(i)));
                 }
                 adapter.setActivities(activityList);
                 adapter.notifyDataSetChanged();
+                isLoading=false;
+                isRefreshing=false;
+                mRefresh.setRefreshing(false);
             }
         });
     }

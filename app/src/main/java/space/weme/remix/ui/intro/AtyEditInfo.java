@@ -62,10 +62,9 @@ public class AtyEditInfo extends BaseActivity {
     private static final int REQUEST_IMAGE = 0xef;
     private static final int REQUEST_CITY = 0xff;
     private final int REQUEST_CROP = 400;
-    private Uri uriTempFile=Uri.parse("file://" + "/" + Environment.getExternalStorageDirectory().getPath() + "/" + "small.jpg");
+    private Uri uriTempFile;
 
     private String mAvatarPath;
-    private Bitmap avatarBitmap;
 
     private String education;
 
@@ -290,7 +289,6 @@ public class AtyEditInfo extends BaseActivity {
     }
     private void uploadImageReturned(){
         if(mEdit){
-            LogUtils.e(TAG,"UPload success");
             finish();
         }else {
             Intent i = new Intent(AtyEditInfo.this, AtyLogin.class);
@@ -313,7 +311,6 @@ public class AtyEditInfo extends BaseActivity {
             List<String> paths=data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
             mAvatarPath = paths.get(0);
             performCrop(mAvatarPath);
-            //mDrawAvatar.setImageURI(Uri.parse("file://"+mAvatarPath));
         }else if(requestCode == REQUEST_CITY){
             String name = data.getStringExtra(AtySearchCity.INTENT_UNIVERSITY);
             tvSchool.setText(name);
@@ -322,10 +319,12 @@ public class AtyEditInfo extends BaseActivity {
             //avatarBitmap = extras.getParcelable("data");
             if (uriTempFile!=null){
                 //avatarBitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uriTempFile));
-
+                ImagePipeline imagePipeline = Fresco.getImagePipeline();
+                imagePipeline.evictFromCache(uriTempFile);
                 RoundingParams roundingParams = RoundingParams.fromCornersRadius(5f);
                 roundingParams.setRoundAsCircle(true);
                 mDrawAvatar.getHierarchy().setRoundingParams(roundingParams);
+                LogUtils.d(TAG, uriTempFile.toString());
                 mDrawAvatar.setImageURI(uriTempFile);
             }
         }

@@ -91,7 +91,6 @@ public class FgtActivity extends BaseFragment {
                 int firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
                 if (!isLoading && (totalItemCount - visibleItemCount)
                         <= (firstVisibleItem + 2) && canLoadMore) {
-                    Log.i(TAG, "scroll to end  load page " + (page + 1));
                     loadPage(page + 1);
                 }
             }
@@ -152,7 +151,7 @@ public class FgtActivity extends BaseFragment {
 
             @Override
             public void onResponse(String s) {
-                //LogUtils.i(TAG, s);
+                LogUtils.i(TAG, s);
                 JSONObject j = OkHttpUtils.parseJSON(getActivity(),s);
                 if(j==null){
                     return;

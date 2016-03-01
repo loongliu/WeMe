@@ -3,6 +3,7 @@ package space.weme.remix.ui.user;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.util.ArrayMap;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -10,6 +11,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -36,7 +38,13 @@ public class AtyFriend extends SwipeActivity {
     EditText etSearch;
     FrameLayout tvSeeMe;
     // todo load more and refresh
+    int pageFlag=1;
+    boolean isLoading=false;
+    boolean isRefreshing=false;
+    boolean canLoadMore=true;
+
     RecyclerView mRecycler;
+    SwipeRefreshLayout mRefresh;
 
     private List<FriendData> friendDataList;
     private FriendAdapter adapter;
@@ -57,21 +65,25 @@ public class AtyFriend extends SwipeActivity {
         mRecycler.setLayoutManager(new LinearLayoutManager(this));
         mRecycler.setHasFixedSize(true);
 
+        mRefresh= (SwipeRefreshLayout) findViewById(R.id.aty_friend_refresh);
+
         friendDataList = new ArrayList<>();
         searchList = new ArrayList<>();
         adapter = new FriendAdapter(this);
         mRecycler.setAdapter(adapter);
 
-
-
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {   }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {    }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
             @Override
             public void afterTextChanged(Editable s) {
-                if(s.length()==0){
+                if (s.length() == 0) {
                     adapter.setList(friendDataList);
                     adapter.notifyDataSetChanged();
                     return;
@@ -84,15 +96,52 @@ public class AtyFriend extends SwipeActivity {
         tvSeeMe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(AtyFriend.this,AtySeeMe.class);
+                Intent i = new Intent(AtyFriend.this, AtySeeMe.class);
                 startActivity(i);
             }
         });
 
-        getFollowersAtPage(1);
+        mRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int visibleItemCount = recyclerView.getChildCount();
+                int totalItemCount = layoutManager.getItemCount();
+                int firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
+                if (!isLoading && (totalItemCount - firstVisibleItem)
+                        <= (visibleItemCount + 2) && canLoadMore) {
+                    isLoading=true;
+                    LogUtils.d(TAG, pageFlag + "");
+                    getFollowersAtPage(pageFlag);
+                }
+            }
+        });
+
+        mRefresh.setColorSchemeResources(R.color.colorPrimary);
+        mRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (isRefreshing){
+                    LogUtils.d(TAG,"is refreshing");
+                }
+                else {
+                    refresh();
+                }
+            }
+        });
+        refresh();
     }
 
-    private void getFollowersAtPage(int page){
+    void refresh(){
+        isRefreshing=true;
+        pageFlag = 1;
+        canLoadMore = true;
+        friendDataList.clear();
+        getFollowersAtPage(pageFlag);
+    }
+
+    private void getFollowersAtPage(final int page){
         ArrayMap<String, String> param = new ArrayMap<>();
         param.put("token", StrUtils.token());
         param.put("page",String.format("%d", page));
@@ -100,17 +149,28 @@ public class AtyFriend extends SwipeActivity {
         OkHttpUtils.post(StrUtils.GET_FOLLOWERS_URL, param, TAG, new OkHttpUtils.SimpleOkCallBack() {
             @Override
             public void onResponse(String s) {
-                LogUtils.i(TAG, s);
+
+                //LogUtils.i(TAG, s);
                 JSONObject j = OkHttpUtils.parseJSON(AtyFriend.this, s);
                 if (j == null) {
                     return;
                 }
                 JSONArray result = j.optJSONArray("result");
+                if (result.length()==0){
+                    canLoadMore=false;
+                    return;
+                }
+               else{
+                    pageFlag++;
+                }
                 for (int i = 0; i < result.length(); i++) {
                     friendDataList.add(FriendData.fromJSON(result.optJSONObject(i)));
                 }
                 adapter.setList(friendDataList);
                 adapter.notifyDataSetChanged();
+                isLoading=false;
+                isRefreshing=false;
+                mRefresh.setRefreshing(false);
             }
         });
     }
@@ -122,7 +182,7 @@ public class AtyFriend extends SwipeActivity {
         OkHttpUtils.post(StrUtils.SEARCH_USER_URL,param,TAG, new OkHttpUtils.SimpleOkCallBack(){
             @Override
             public void onResponse(String s) {
-                LogUtils.i(TAG,s);
+               // LogUtils.i(TAG,s);
                 JSONObject j = OkHttpUtils.parseJSON(AtyFriend.this,s);
                 if(j == null){
                     return;

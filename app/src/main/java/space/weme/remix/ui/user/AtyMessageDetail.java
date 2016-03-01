@@ -3,8 +3,10 @@ package space.weme.remix.ui.user;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.util.ArrayMap;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,9 +32,14 @@ public class AtyMessageDetail extends SwipeActivity {
     public static final String INTENT_ID = "intent_id";
     public static int REQUEST_CODE = 0xfe;
 
+    int pageFlag=1;
+    boolean isLoading=false;
+    boolean isRefreshing=false;
+    boolean canLoadMore=true;
+    private SwipeRefreshLayout mRefresh;
+
     private String id;
     private MessageDetailAdapter adapter;
-
     private List<Message> messageList;
 
     @Override
@@ -44,13 +51,53 @@ public class AtyMessageDetail extends SwipeActivity {
         mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
 
         id = getIntent().getStringExtra(INTENT_ID);
+        mRefresh= (SwipeRefreshLayout) findViewById(R.id.aty_message_detail_refresh);
         RecyclerView mRecycler = (RecyclerView) findViewById(R.id.aty_message_detail_recycler);
         mRecycler.setHasFixedSize(true);
         mRecycler.setLayoutManager(new LinearLayoutManager(this));
         messageList = new ArrayList<>();
         adapter = new MessageDetailAdapter(this, id);
         mRecycler.setAdapter(adapter);
-        getMessageDetail(1);
+
+        mRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int visibleItemCount = recyclerView.getChildCount();
+                int totalItemCount = layoutManager.getItemCount();
+                int firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
+                if (!isLoading && (totalItemCount - firstVisibleItem)
+                        <= (visibleItemCount + 2) && canLoadMore) {
+                    isLoading=true;
+                    LogUtils.d(TAG, pageFlag + "");
+                    getMessageDetail(pageFlag);
+                }
+            }
+        });
+        mRefresh.setColorSchemeResources(R.color.colorPrimary);
+        mRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if(isRefreshing){
+                    LogUtils.d(TAG," is refreshing!");
+                }
+                else{
+
+                    refresh();
+                }
+            }
+        });
+       refresh();
+    }
+
+    void refresh(){
+        pageFlag=1;
+        isRefreshing=true;
+        canLoadMore=true;
+        isLoading=false;
+        messageList.clear();
+        getMessageDetail(pageFlag);
     }
 
     private void setHasRead(String messageId){
@@ -83,7 +130,14 @@ public class AtyMessageDetail extends SwipeActivity {
                 if(result == null){
                     return;
                 }
-                messageList.clear();
+                if (result.length()==0){
+                    canLoadMore=false;
+                    return;
+                }
+                else {
+                    pageFlag++;
+                }
+                //messageList.clear();
                 for(int i = 0; i<result.length(); i++){
                     Message m = Message.fromJSON(result.optJSONObject(i));
                     messageList.add(m);
@@ -91,6 +145,9 @@ public class AtyMessageDetail extends SwipeActivity {
                 }
                 adapter.setMessageList(messageList);
                 adapter.notifyDataSetChanged();
+                isLoading=false;
+                isRefreshing=false;
+                mRefresh.setRefreshing(false);
             }
         });
     }

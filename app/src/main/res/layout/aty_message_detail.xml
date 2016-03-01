@@ -15,10 +15,15 @@
             android:layout_height="match_parent" />
     </android.support.v7.widget.Toolbar>
 
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/aty_message_detail_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <android.support.v7.widget.RecyclerView
         android:background="@color/grey_gap"
         android:id="@+id/aty_message_detail_recycler"
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="0dp"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

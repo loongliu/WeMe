@@ -2,6 +2,7 @@ package space.weme.remix.ui.user;
 
 import android.os.Bundle;
 import android.support.v4.util.ArrayMap;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -27,9 +28,14 @@ import space.weme.remix.util.StrUtils;
 public class AtySeeMe extends SwipeActivity {
     private static final String TAG = "AtySeeMe";
     RecyclerView mRecycler;
+    SwipeRefreshLayout mRefresh;
     // todo load more and refresh
-    FriendAdapter adapter;
+    int pageFlag=1;
+    boolean isLoading=false;
+    boolean isRefreshing=false;
+    boolean canLoadMore=true;
 
+    FriendAdapter adapter;
     List<FriendData> friendDataList;
 
     @Override
@@ -46,9 +52,44 @@ public class AtySeeMe extends SwipeActivity {
         mRecycler.setLayoutManager(new LinearLayoutManager(this));
         mRecycler.setHasFixedSize(true);
         mRecycler.setAdapter(adapter);
-
         friendDataList = new ArrayList<>();
-        getFollowers(1);
+
+        mRefresh= (SwipeRefreshLayout) findViewById(R.id.aty_see_me_refresh);
+
+        mRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int visibleItemCount = recyclerView.getChildCount();
+                int totalItemCount = layoutManager.getItemCount();
+                int firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
+                if (!isLoading && (totalItemCount - firstVisibleItem)
+                        <= (visibleItemCount + 2) && canLoadMore) {
+                    isLoading=true;
+                    LogUtils.d(TAG, pageFlag + "");
+                    getFollowers(pageFlag);
+                }
+            }
+        });
+
+        mRefresh.setColorSchemeResources(R.color.colorPrimary);
+        mRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refresh();
+            }
+        });
+        refresh();
+    }
+
+    void refresh(){
+        friendDataList.clear();
+        pageFlag=1;
+        isLoading=false;
+        isRefreshing=true;
+        canLoadMore=true;
+        getFollowers(pageFlag);
     }
 
     private void getFollowers(int page){
@@ -65,11 +106,21 @@ public class AtySeeMe extends SwipeActivity {
                     return;
                 }
                 JSONArray result = j.optJSONArray("result");
+                if (result.length()==0){
+                    canLoadMore=false;
+                    return;
+                }
+                else {
+                    pageFlag++;
+                }
                 for (int i = 0; i < result.length(); i++) {
                     friendDataList.add(FriendData.fromJSON(result.optJSONObject(i)));
                 }
                 adapter.setList(friendDataList);
                 adapter.notifyDataSetChanged();
+                isLoading=false;
+                isRefreshing=false;
+                mRefresh.setRefreshing(false);
             }
         });
     }
