@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -27,8 +28,11 @@ import space.weme.remix.util.StrUtils;
 public class AtySeeMe extends SwipeActivity {
     private static final String TAG = "AtySeeMe";
     RecyclerView mRecycler;
-    // todo load more and refresh
     FriendAdapter adapter;
+
+    boolean isLoading = false;
+    boolean canLoadMore = true;
+    int curPage = 1;
 
     List<FriendData> friendDataList;
 
@@ -46,12 +50,29 @@ public class AtySeeMe extends SwipeActivity {
         mRecycler.setLayoutManager(new LinearLayoutManager(this));
         mRecycler.setHasFixedSize(true);
         mRecycler.setAdapter(adapter);
-
+        mRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int visibleItemCount = recyclerView.getChildCount();
+                int totalItemCount = layoutManager.getItemCount();
+                int firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
+                if (!isLoading && (totalItemCount - visibleItemCount)
+                        <= (firstVisibleItem + 1) && canLoadMore) {
+                    // End has been reached
+                    Log.i(TAG, "scroll to end  load page " + (curPage + 1));
+                    getFollowers(curPage + 1);
+                }
+            }
+        });
         friendDataList = new ArrayList<>();
+        adapter.setList(friendDataList);
         getFollowers(1);
     }
 
-    private void getFollowers(int page){
+    private void getFollowers(final int page){
+        isLoading = true;
         ArrayMap<String, String> param = new ArrayMap<>();
         param.put("token", StrUtils.token());
         param.put("page",String.format("%d", page));
@@ -60,16 +81,23 @@ public class AtySeeMe extends SwipeActivity {
             @Override
             public void onResponse(String s) {
                 LogUtils.i(TAG, s);
+                isLoading = false;
+                curPage = page;
                 JSONObject j = OkHttpUtils.parseJSON(AtySeeMe.this, s);
                 if (j == null) {
                     return;
                 }
                 JSONArray result = j.optJSONArray("result");
+                int previousCount = friendDataList.size();
+                int count = result.length();
+                if(count == 0){
+                    canLoadMore = false;
+                    return;
+                }
                 for (int i = 0; i < result.length(); i++) {
                     friendDataList.add(FriendData.fromJSON(result.optJSONObject(i)));
                 }
-                adapter.setList(friendDataList);
-                adapter.notifyDataSetChanged();
+                adapter.notifyItemRangeInserted(previousCount, count);
             }
         });
     }

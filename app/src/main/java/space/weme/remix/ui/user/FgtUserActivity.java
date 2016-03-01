@@ -6,8 +6,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.util.ArrayMap;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +42,11 @@ public class FgtUserActivity extends BaseFragment {
     private List<Activity> activityList;
     ActivityAdapter adapter;
 
+    boolean isRefreshing = false;
+    boolean isLoading = false;
+    boolean canLoadMore = true;
+    int curPage = 1;
+
     String[] urls = new String[]{StrUtils.GET_PUBLISH_ACTIVITY,
                                 StrUtils.GET_LIKE_ACTIVITY,
                                 StrUtils.GET_REGISTER_ACTIVITY};
@@ -52,7 +59,7 @@ public class FgtUserActivity extends BaseFragment {
         return f;
     }
 
-    // todo load more and refresh
+
 
     @Nullable
     @Override
@@ -62,14 +69,47 @@ public class FgtUserActivity extends BaseFragment {
         RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.fgt_user_activity_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
+
+        SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (isRefreshing) {
+                    Log.d(TAG, "ignore manually update!");
+                } else {
+                    fetchActivities(1);
+                }
+            }
+        });
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int visibleItemCount = recyclerView.getChildCount();
+                int totalItemCount = layoutManager.getItemCount();
+                int firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
+                if (!isLoading && (totalItemCount - visibleItemCount)
+                        <= (firstVisibleItem + 1) && canLoadMore) {
+                    // End has been reached
+                    Log.i(TAG, "scroll to end  load page " + (curPage + 1));
+                    fetchActivities(curPage + 1);
+                }
+            }
+        });
+
         activityList = new ArrayList<>();
+        adapter.setActivities(activityList);
         adapter = new ActivityAdapter(getActivity());
         recyclerView.setAdapter(adapter);
         fetchActivities(1);
         return v;
     }
 
-    private void fetchActivities(int page){
+    private void fetchActivities(final int page){
+        isRefreshing = true;
+        isLoading = true;
         ArrayMap<String, String> param = new ArrayMap<>();
         param.put("token",StrUtils.token());
         param.put("page", page + "");
@@ -77,16 +117,29 @@ public class FgtUserActivity extends BaseFragment {
             @Override
             public void onResponse(String s) {
                 LogUtils.i(TAG,s);
+                isRefreshing = false;
+                isLoading = false;
                 JSONObject j = OkHttpUtils.parseJSON(getActivity(),s);
                 if(j == null){
                     return;
                 }
                 JSONArray array = j.optJSONArray("result");
+                if(page == 1){
+                    activityList.clear();
+                }
+                int previousCount = activityList.size();
+                int length = array.length();
+                if(length == 0) {
+                    canLoadMore = false;
+                }
                 for(int i = 0; i<array.length(); i++){
                     activityList.add(Activity.fromJSON(array.optJSONObject(i)));
                 }
-                adapter.setActivities(activityList);
-                adapter.notifyDataSetChanged();
+                if(page == 1) {
+                    adapter.notifyDataSetChanged();
+                }else{
+                    adapter.notifyItemRangeInserted(previousCount,length);
+                }
             }
         });
     }

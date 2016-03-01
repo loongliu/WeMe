@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -35,6 +36,10 @@ public class AtyMessageDetail extends SwipeActivity {
 
     private List<Message> messageList;
 
+    boolean isLoading = false;
+    boolean canLoadMore = true;
+    int curPage = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +54,26 @@ public class AtyMessageDetail extends SwipeActivity {
         mRecycler.setLayoutManager(new LinearLayoutManager(this));
         messageList = new ArrayList<>();
         adapter = new MessageDetailAdapter(this, id);
+        adapter.setMessageList(messageList);
         mRecycler.setAdapter(adapter);
+        mRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int visibleItemCount = recyclerView.getChildCount();
+                int totalItemCount = layoutManager.getItemCount();
+                int firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
+                if (!isLoading && (totalItemCount - visibleItemCount)
+                        <= (firstVisibleItem + 1) && canLoadMore) {
+                    // End has been reached
+                    Log.i(TAG, "scroll to end  load page " + (curPage + 1));
+                    getMessageDetail(curPage + 1);
+                }
+            }
+        });
+
+
         getMessageDetail(1);
     }
 
@@ -65,16 +89,17 @@ public class AtyMessageDetail extends SwipeActivity {
         });
     }
 
-    private void getMessageDetail(int page){
+    private void getMessageDetail(final int page){
         ArrayMap<String,String> param = new ArrayMap<>();
         param.put("token", StrUtils.token());
         param.put("page",String.format("%d", page));
         param.put("SendId",id);
-        // todo load more
+        isLoading = true;
         OkHttpUtils.post(StrUtils.GET_MESSAGE_DETAIL,param,TAG, new OkHttpUtils.SimpleOkCallBack(){
             @Override
             public void onResponse(String s) {
                 LogUtils.i(TAG,s);
+                isLoading = false;
                 JSONObject j = OkHttpUtils.parseJSON(AtyMessageDetail.this, s);
                 if(j == null){
                     return;
@@ -83,14 +108,19 @@ public class AtyMessageDetail extends SwipeActivity {
                 if(result == null){
                     return;
                 }
-                messageList.clear();
+                curPage = page;
+                int previousCount = messageList.size();
+                int count = result.length();
+                if(count == 0){
+                    canLoadMore = false;
+                    return;
+                }
                 for(int i = 0; i<result.length(); i++){
                     Message m = Message.fromJSON(result.optJSONObject(i));
                     messageList.add(m);
                     setHasRead(m.messageid+"");
                 }
-                adapter.setMessageList(messageList);
-                adapter.notifyDataSetChanged();
+                adapter.notifyItemRangeInserted(previousCount, count);
             }
         });
     }

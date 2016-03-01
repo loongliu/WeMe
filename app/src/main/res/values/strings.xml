@@ -108,6 +108,10 @@
     <string name="ok">确认</string>
     <string name="yes">是</string>
     <string name="no">否</string>
+    <string name="please_choose_education">请选择学历</string>
+    <string name="benke">本科</string>
+    <string name="master">硕士</string>
+    <string name="doctor">博士</string>
 
 
     <string-array name="aty_info_tabs">

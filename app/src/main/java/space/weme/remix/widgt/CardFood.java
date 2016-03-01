@@ -200,7 +200,7 @@ public class CardFood extends CardView {
         showPicture(food);
         mFrontLikeNumber.setText(String.format("%d", food.likeNumber));
 
-        //todo color
+
         mFrontLikeImage.setImageResource(food.likeFlag ? R.mipmap.like_on : R.mipmap.like_off);
         String name = food.author + aty.getResources().getString(R.string.recommend);
         mFrontUserName.setText(name);
@@ -282,7 +282,6 @@ public class CardFood extends CardView {
                         return;
                     }
                     mFrontLikeNumber.setText(String.format("%d",food.likeNumber+1));
-                    // todo
                     mFrontLikeImage.setImageResource(R.mipmap.like_on);
                 }
             });

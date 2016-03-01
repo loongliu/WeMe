@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,7 +30,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -40,7 +38,6 @@ import space.weme.remix.R;
 import space.weme.remix.model.User;
 import space.weme.remix.ui.base.BaseActivity;
 import space.weme.remix.ui.community.DatePickerFragment;
-import space.weme.remix.util.BitmapUtils;
 import space.weme.remix.util.LogUtils;
 import space.weme.remix.util.OkHttpUtils;
 import space.weme.remix.util.StrUtils;
@@ -151,8 +148,11 @@ public class AtyEditInfo extends BaseActivity {
             }
         });
 
-        // todo string , spinner
-        final String[] items = new String[]{"请选择学历","本科", "硕士", "博士"};
+        final String[] items = new String[]{
+                getString(R.string.please_choose_education),
+                getString(R.string.benke),
+                getString(R.string.master),
+                getString(R.string.doctor)};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
         spEducation.setAdapter(adapter);
         spEducation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

@@ -9,7 +9,7 @@
     android:layout_marginTop="4dp"
     android:layout_marginBottom="4dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="72dp">
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/aty_message_cell_avatar"
         app:placeholderImage="@mipmap/default_avatar"
@@ -21,14 +21,14 @@
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:id="@+id/aty_message_cell_name"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:textColor="@color/colorPrimary"
         android:layout_alignTop="@+id/aty_message_cell_avatar"
         android:layout_toRightOf="@+id/aty_message_cell_avatar"
         android:layout_toEndOf="@+id/aty_message_cell_avatar"
         android:layout_width="wrap_content"
         android:gravity="center_vertical"
-        android:layout_height="20dp" />
+        android:layout_height="wrap_content" />
 
     <ImageView
         android:id="@+id/aty_message_cell_gender"
@@ -42,9 +42,9 @@
         android:layout_width="16dp"
         android:layout_height="16dp" />
     <TextView
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="2dp"
         android:id="@+id/aty_message_cell_school"
-        android:textSize="14sp"
+        android:textSize="12sp"
         android:layout_below="@+id/aty_message_cell_name"
         android:layout_alignLeft="@id/aty_message_cell_name"
         android:layout_alignStart="@id/aty_message_cell_name"
@@ -52,7 +52,7 @@
         android:layout_height="20dp" />
     <ImageView
         android:id="@+id/aty_message_cell_image"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="2dp"
         android:layout_below="@+id/aty_message_cell_school"
         android:layout_alignLeft="@id/aty_message_cell_name"
         android:layout_alignStart="@id/aty_message_cell_name"
@@ -63,8 +63,9 @@
         android:gravity="center"
         android:id="@+id/aty_message_cell_info"
         android:layout_marginLeft="4dp"
-        android:textSize="14sp"
+        android:textSize="12sp"
         android:layout_marginStart="4dp"
+
         android:layout_alignTop="@+id/aty_message_cell_image"
         android:layout_toRightOf="@+id/aty_message_cell_image"
         android:layout_toEndOf="@+id/aty_message_cell_image"
