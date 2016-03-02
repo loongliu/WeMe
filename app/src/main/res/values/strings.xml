@@ -112,6 +112,7 @@
     <string name="benke">本科</string>
     <string name="master">硕士</string>
     <string name="doctor">博士</string>
+    <string name="send_message">发私信</string>
 
 
     <string-array name="aty_info_tabs">

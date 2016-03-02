@@ -229,7 +229,7 @@ public class AtyInfo extends BaseActivity {
                 followFlag = j.optInt("followflag");
                 mTvConstellation.setText(user.constellation);
                 boolean male = getResources().getString(R.string.male).equals(mUser.gender);
-                mIvGender.setImageResource(male? R.mipmap.boy : R.mipmap.girl);
+                mIvGender.setImageResource(male ? R.mipmap.boy : R.mipmap.girl);
                 TextView tvName = (TextView) mPagerViews[0].findViewById(R.id.aty_info_name);
                 tvName.setText(user.name);
                 TextView tvBirth = (TextView) mPagerViews[0].findViewById(R.id.aty_info_birth);
@@ -252,22 +252,18 @@ public class AtyInfo extends BaseActivity {
                 tvWeChat.setText(user.wechat);
 
                 final Button btnFollow = (Button) mPagerViews[0].findViewById(R.id.aty_info_follow_btn);
+                LinearLayout llBtn = (LinearLayout) mPagerViews[0].findViewById(R.id.aty_info_view1_btn);
                 if (mId.equals(StrUtils.id())) {
-                    btnFollow.setVisibility(View.GONE);
+                    llBtn.setVisibility(View.GONE);
                 } else {
-                    btnFollow.setVisibility(View.VISIBLE);
-                    boolean isHe = user.gender.equals("\u7537");
+                    llBtn.setVisibility(View.VISIBLE);
                     switch (followFlag) {
                         case 1:
-                            btnFollow.setText(isHe ? R.string.has_follow_he : R.string.has_follow_she);
-                            break;
-                        case 2:
-                            btnFollow.setText(isHe ? R.string.he_has_follow_you : R.string.she_has_follow_you);
-                            break;
                         case 3:
-                            btnFollow.setText(R.string.has_follow_each_other);
+                            btnFollow.setText(R.string.unfollow);
                             break;
                         case 0:
+                        case 2:
                             btnFollow.setText(R.string.add_follow);
                     }
                     btnFollow.setOnClickListener(new View.OnClickListener() {
@@ -278,6 +274,12 @@ public class AtyInfo extends BaseActivity {
                             } else {
                                 follow();
                             }
+                        }
+                    });
+                    mPagerViews[0].findViewById(R.id.aty_info_message_btn).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            sendMessage();
                         }
                     });
                 }

@@ -214,14 +214,46 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </FrameLayout>
-
-        <Button
-            android:textColor="@color/white"
-            android:layout_margin="16dp"
-            android:background="@drawable/bg_aty_info_follow"
-            android:id="@+id/aty_info_follow_btn"
+        <View
+            android:background="@color/grey_gap"
             android:layout_width="match_parent"
-            android:layout_height="40dp" />
+            android:layout_height="10dp" />
+
+        <LinearLayout
+            android:visibility="gone"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:id="@+id/aty_info_view1_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:textColor="@color/white"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginEnd="8dp"
+                android:textSize="16sp"
+                android:background="@drawable/bg_aty_info_follow"
+                android:id="@+id/aty_info_follow_btn"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="40dp" />
+
+            <Button
+                android:text="@string/send_message"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/bg_aty_info_follow"
+                android:id="@+id/aty_info_message_btn"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="40dp" />
+        </LinearLayout>
 
     </LinearLayout>
 

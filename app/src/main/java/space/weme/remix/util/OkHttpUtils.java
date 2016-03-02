@@ -2,10 +2,8 @@ package space.weme.remix.util;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
-import android.provider.MediaStore;
 import android.support.v4.util.ArrayMap;
 import android.widget.Toast;
 
@@ -31,7 +29,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import space.weme.remix.APP;
 import space.weme.remix.R;
 
 /**
@@ -167,31 +164,6 @@ public final class OkHttpUtils {
         getInstance().firePost(request, callBack);
     }
 
-    public static void uploadBitmap(String url,Map<String,String> param, Uri uri,MediaType type, String tag, OkCallBack callBack){
-        JSONObject jsonObject = new JSONObject(param);
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        Bitmap bitmap= null;
-        try {
-            bitmap = MediaStore.Images.Media.getBitmap(APP.context().getContentResolver(), uri);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        byte[] byteArray = stream.toByteArray();
-        RequestBody requestBody=new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addPart(
-                        Headers.of("Content-Disposition", "form-data; name=\"json\""),
-                        RequestBody.create(MediaType.parse("application/json"), jsonObject.toString()))
-                .addPart(
-                        Headers.of("Content-Disposition", "form-data; name=\"avatar\";filename=\"file.jpg\""),
-                        RequestBody.create(type, byteArray)
-                ).build();
-        Request.Builder builder = new Request.Builder().url(url).post(requestBody);
-        if(tag!=null) builder.tag(tag);
-        Request request = builder.build();
-        getInstance().firePost(request, callBack);
-    }
 
 
     private void firePost(Request request, final OkCallBack callback){
