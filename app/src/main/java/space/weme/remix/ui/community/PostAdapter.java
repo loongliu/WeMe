@@ -19,6 +19,8 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -108,9 +110,17 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 SimpleDraweeView image = new SimpleDraweeView(mContext);
                 viewHolder.imagesGridLayout.addView(image);
                 image.setImageURI(Uri.parse(thumbUrl));
-                image.setTag(mPost.imageUrl.get(i));
                 image.setId(imageID);
                 image.setOnClickListener(mListener);
+                try {
+                    JSONObject j = new JSONObject();
+                    JSONArray array = new JSONArray(mPost.imageUrl);
+                    j.put(AtyImage.KEY_INDEX, i);
+                    j.put(AtyImage.KEY_ARRAY, array);
+                    image.setTag(j);
+                }catch(JSONException e){
+                    // ignore
+                }
             }
             viewHolder.tvLikeNumber.setText(mPost.likenumber);
             viewHolder.tvCommit.setText(mPost.commentnumber);
@@ -180,10 +190,18 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 for(int i = 0; i<reply.thumbnail.size(); i++){
                     SimpleDraweeView drawView = new SimpleDraweeView(mContext);
                     drawView.setImageURI(Uri.parse(reply.thumbnail.get(i)));
-                    drawView.setTag(reply.image.get(i));
                     drawView.setId(imageID);
                     drawView.setOnClickListener(mListener);
                     item.imagesGridLayout.addView(drawView);
+                    try {
+                        JSONObject j = new JSONObject();
+                        JSONArray array = new JSONArray(reply.image);
+                        j.put(AtyImage.KEY_ARRAY, array);
+                        j.put(AtyImage.KEY_INDEX, i);
+                        drawView.setTag(j);
+                    }catch(JSONException e){
+                        // ignore
+                    }
                 }
             }
         }else {
@@ -305,9 +323,9 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 i.putExtra(AtyInfo.ID_INTENT,userID);
                 mContext.startActivity(i);
             }else if(v.getId()==imageID){
-                String url = (String) v.getTag();
+                JSONObject json = (JSONObject) v.getTag();
                 Intent i = new Intent(mContext, AtyImage.class);
-                i.putExtra(AtyImage.URL_INTENT, url);
+                i.putExtra(AtyImage.INTENT_JSON, json.toString());
                 mContext.startActivity(i);
                 ((Activity)mContext).overridePendingTransition(0, 0);
             }else if(v.getId() == R.id.aty_post_title_like_layout){

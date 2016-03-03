@@ -36,6 +36,7 @@ import space.weme.remix.R;
 import space.weme.remix.model.Food;
 import space.weme.remix.ui.find.AtyFoodMap;
 import space.weme.remix.ui.find.AtyDiscoveryFood;
+import space.weme.remix.ui.user.AtyInfo;
 import space.weme.remix.util.DimensionUtils;
 import space.weme.remix.util.OkHttpUtils;
 import space.weme.remix.util.StrUtils;
@@ -75,6 +76,7 @@ public class CardFood extends CardView {
     LikeListener mLikeListener;
     DetailListener mDetailListener;
     MapListener mMapListener;
+    UserListener mUserListener;
 
     Food currentFood;
 
@@ -175,6 +177,9 @@ public class CardFood extends CardView {
         mMapListener = new MapListener();
         mDetailLocationLayout.setOnClickListener(mMapListener);
 
+        mUserListener = new UserListener();
+        mFrontAvatar.setOnClickListener(mUserListener);
+
     }
 
     public void resize(){
@@ -225,6 +230,7 @@ public class CardFood extends CardView {
         mDetailName.setText(author);
 
         mMapListener.setFood(food);
+        mUserListener.setUserId(food.authorId);
     }
 
     @SuppressWarnings("unchecked")
@@ -334,6 +340,21 @@ public class CardFood extends CardView {
             i.putExtra(AtyFoodMap.INTENT_LAT,currentFood.latitude);
             i.putExtra(AtyFoodMap.INTENT_LON, currentFood.longitude);
             aty.startActivity(i);
+        }
+    }
+
+    private class UserListener implements View.OnClickListener{
+        String userId;
+        void setUserId(String id){
+            userId  = id;
+        }
+        @Override
+        public void onClick(View v) {
+            if(userId != null) {
+                Intent i = new Intent(aty, AtyInfo.class);
+                i.putExtra(AtyInfo.ID_INTENT, userId);
+                aty.startActivity(i);
+            }
         }
     }
 

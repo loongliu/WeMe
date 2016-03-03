@@ -126,4 +126,8 @@
         <item >我关注的活动</item>
         <item >我报名的活动</item>
     </string-array>
+
+    <item type="id" name="tag_first"/>
+    <item type="id" name="tag_second"/>
+
 </resources>

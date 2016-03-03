@@ -13,6 +13,10 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.List;
 
 import space.weme.remix.R;
@@ -35,6 +39,9 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private final int TYPE_ITEM = 0x2;
     private final int TYPE_PROGRESS = 0x3;
 
+    private final int KEY_1 = 0x4;
+    private final int KEY_2 = 0x5;
+
     private View.OnClickListener mListener;
 
     private static final int imageID = StrUtils.generateViewId();
@@ -52,9 +59,8 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     i.putExtra(AtyInfo.ID_INTENT,userId);
                     mContext.startActivity(i);
                 }else if(v.getId()==imageID){
-                    String url = (String) v.getTag();
                     Intent i = new Intent(mContext, AtyImage.class);
-                    i.putExtra(AtyImage.URL_INTENT, url);
+                    i.putExtra(AtyImage.INTENT_JSON,(String)v.getTag());
                     mContext.startActivity(i);
                     ((Activity)mContext).overridePendingTransition(0, 0);
                 }else if(v.getId()==itemID){
@@ -112,9 +118,17 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 SimpleDraweeView image = new SimpleDraweeView(mContext);
                 item.grid.addView(image);
                 image.setImageURI(Uri.parse(url));
-                image.setTag(post.imageUrl.get(i));
                 image.setId(imageID);
                 image.setOnClickListener(mListener);
+                try {
+                    JSONObject j = new JSONObject();
+                    JSONArray array = new JSONArray(post.imageUrl);
+                    j.put(AtyImage.KEY_ARRAY, array);
+                    j.put(AtyImage.KEY_INDEX, i);
+                    image.setTag(j.toString());
+                }catch(JSONException e){
+                    // ignore
+                }
             }
             item.itemView.setTag(post);
             item.itemView.setOnClickListener(mListener);
