@@ -221,6 +221,7 @@ public class AtyInfo extends BaseActivity {
                 //LogUtils.i(TAG, s);
                 JSONObject j = OkHttpUtils.parseJSON(AtyInfo.this, s);
                 if (j == null) {
+                    finish();
                     return;
                 }
                 User user = User.fromJSON(j);
@@ -652,7 +653,7 @@ public class AtyInfo extends BaseActivity {
                 content.findViewById(R.id.aty_info_option_change_background).setOnClickListener(listener);
                 dialog.setContentView(content);
             }else if(v.getId()==R.id.aty_info_more){
-                if(Integer.parseInt(StrUtils.id())==mUser.ID){
+                if(Integer.parseInt(StrUtils.id())==Integer.parseInt(mId)){
                     content = LayoutInflater.from(AtyInfo.this).inflate(R.layout.aty_info_option3,mWholeLayout,false);
                     listener = new View.OnClickListener() {
                         @Override

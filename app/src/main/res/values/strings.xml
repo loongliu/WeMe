@@ -113,6 +113,12 @@
     <string name="master">硕士</string>
     <string name="doctor">博士</string>
     <string name="send_message">发私信</string>
+    <string name="edit_food_card">编辑美食卡片</string>
+    <string name="finish">完成</string>
+    <string name="food_title_hint">美食名称（必填）</string>
+    <string name="food_comment_hint">美食评论（可选，100字以内)</string>
+    <string name="price_per_person">人均消费</string>
+    <string name="price_range">价格范围</string>
 
 
     <string-array name="aty_info_tabs">
@@ -127,7 +133,15 @@
         <item >我报名的活动</item>
     </string-array>
 
-    <item type="id" name="tag_first"/>
-    <item type="id" name="tag_second"/>
+    <string-array name="food_card_price">
+        <item >免费</item>
+        <item >1&#8211;10</item>
+        <item >10&#8211;50</item>
+        <item >50&#8211;100</item>
+        <item >100&#8211;200</item>
+        <item >200&#8211;500</item>
+        <item >500&#8211;1000</item>
+        <item >1000+</item>
+    </string-array>
 
 </resources>

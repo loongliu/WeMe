@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.Toolbar;
@@ -59,7 +58,6 @@ public class AtyEditInfo extends BaseActivity {
     private static final int REQUEST_IMAGE = 0xef;
     private static final int REQUEST_CITY = 0xff;
     private final int REQUEST_CROP = 400;
-    private String filePath = Environment.getExternalStorageDirectory().getPath() + "/" + "small.jpg";
 
 
 
@@ -274,7 +272,7 @@ public class AtyEditInfo extends BaseActivity {
         p.put("token",StrUtils.token());
         p.put("type","0");
         p.put("number","0");
-        OkHttpUtils.uploadFile(StrUtils.UPLOAD_AVATAR_URL, p, filePath, StrUtils.MEDIA_TYPE_IMG, TAG, new OkHttpUtils.SimpleOkCallBack() {
+        OkHttpUtils.uploadFile(StrUtils.UPLOAD_AVATAR_URL, p, StrUtils.cropFilePath, StrUtils.MEDIA_TYPE_IMG, TAG, new OkHttpUtils.SimpleOkCallBack() {
             @Override
             public void onFailure(IOException e) {
                 uploadImageReturned();
@@ -318,13 +316,11 @@ public class AtyEditInfo extends BaseActivity {
             String name = data.getStringExtra(AtySearchCity.INTENT_UNIVERSITY);
             tvSchool.setText(name);
         }else if (requestCode == REQUEST_CROP){
-            //Bundle extras = data.getExtras();
-            //avatarBitmap = extras.getParcelable("data");
-
-                RoundingParams roundingParams = RoundingParams.fromCornersRadius(5f);
-                roundingParams.setRoundAsCircle(true);
-                mDrawAvatar.getHierarchy().setRoundingParams(roundingParams);
-                mDrawAvatar.setImageURI(Uri.parse("file://" + filePath));
+            Fresco.getImagePipeline().evictFromCache(Uri.parse("file://" + StrUtils.cropFilePath));
+            RoundingParams roundingParams = RoundingParams.fromCornersRadius(5f);
+            roundingParams.setRoundAsCircle(true);
+            mDrawAvatar.getHierarchy().setRoundingParams(roundingParams);
+            mDrawAvatar.setImageURI(Uri.parse("file://" + StrUtils.cropFilePath));
         }
     }
 
@@ -346,7 +342,7 @@ public class AtyEditInfo extends BaseActivity {
             // retrieve data on return
             //cropIntent.putExtra("return-data", true);
             // start the activity - we handle returning in onActivityResult
-            cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.parse("file://" + filePath));
+            cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.parse("file://" + StrUtils.cropFilePath));
             cropIntent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
 
 

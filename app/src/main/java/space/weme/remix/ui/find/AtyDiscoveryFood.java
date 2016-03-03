@@ -5,6 +5,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -299,7 +300,7 @@ public class AtyDiscoveryFood extends BaseActivity {
             public void onClick(View v) {
                 if(v.getId()==R.id.aty_discovery_option_add){
                     LogUtils.i(TAG, "add food card");
-                    // todo
+                    startActivity(new Intent(AtyDiscoveryFood.this, AtyAddFood.class));
                 }
                 dialog.dismiss();
             }

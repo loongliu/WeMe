@@ -109,7 +109,6 @@ public class FgtMe extends BaseFragment {
 
         setClickListener(rootView);
 
-        fetchNameInfo();
         
         rootView.findViewById(R.id.fgt_me_qrcode).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,6 +125,7 @@ public class FgtMe extends BaseFragment {
     public void onResume() {
         super.onResume();
         fetchUnreadMessage();
+        fetchNameInfo();
         mDraweeAvatar.setImageURI(Uri.parse(StrUtils.thumForID(StrUtils.id() + "")));
     }
 

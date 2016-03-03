@@ -54,6 +54,8 @@
         <activity android:name=".ui.user.AtyNearBy" />
         <activity android:name=".ui.find.AtyFoodMap" />
         <activity android:name=".ui.user.AtySetting" />
+        <activity android:name=".ui.find.AtyAddFood"
+            android:screenOrientation="portrait"/>
 
         <activity android:name=".ui.aty.AtyActivityDetail" android:theme="@style/AppTheme.Translucent" />
         <activity android:name=".ui.aty.AtyPublicActivity" android:theme="@style/AppTheme.Translucent"/>

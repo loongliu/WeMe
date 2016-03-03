@@ -2,6 +2,7 @@ package space.weme.remix.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Environment;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -240,4 +241,7 @@ public final class StrUtils {
             }
         }
     }
+
+
+    public static final String cropFilePath = Environment.getExternalStorageDirectory().getPath() + "/" + "small.jpg";
 }

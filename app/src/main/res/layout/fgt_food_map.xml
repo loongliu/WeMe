@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:background="@color/grey_gap"
+        android:layout_width="match_parent"
+        android:layout_height="48dp">
+        <EditText
+            android:id="@+id/food_map_search"
+            android:nextFocusUp="@id/aty_friend_search"
+            android:nextFocusLeft="@id/aty_friend_search"
+            android:padding="8dp"
+            android:hint="搜索附近地点"
+            android:textSize="14sp"
+            android:layout_margin="8dp"
+            android:background="@drawable/bg_aty_friend_search"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/search_cancel"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            android:gravity="center_vertical"
+            android:text="取消"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+    <com.amap.api.maps2d.MapView
+        android:id="@+id/map_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"/>
+</LinearLayout>

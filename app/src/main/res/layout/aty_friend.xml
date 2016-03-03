@@ -13,6 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize" />
     <FrameLayout
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:background="@color/grey_gap"
         android:layout_width="match_parent"
         android:layout_height="48dp">
