@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -24,6 +25,7 @@ import space.weme.remix.R;
 import space.weme.remix.ui.find.AtyDiscovery;
 import space.weme.remix.ui.find.AtyDiscoveryFood;
 import space.weme.remix.util.DimensionUtils;
+import space.weme.remix.util.StrUtils;
 
 /**
  * Created by Liujilong on 2016/2/21.
@@ -112,6 +114,13 @@ public class FindFoodPath extends FrameLayout implements View.OnClickListener{
 
         startThisAnimation();
 
+    }
+
+    public void configFriendPicture(){
+        SharedPreferences sp =getContext(). getSharedPreferences(StrUtils.SP_USER,Context.MODE_PRIVATE);
+        String gender =  sp.getString(StrUtils.SP_USER_GENDER,"");
+        boolean isMale = gender.equals(getResources().getString(R.string.male));
+        ivFriend.setImageResource(isMale?R.mipmap.find_girl:R.mipmap.find_boy);
     }
 
     public void startThisAnimation(){

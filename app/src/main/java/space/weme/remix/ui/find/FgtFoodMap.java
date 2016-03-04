@@ -2,6 +2,7 @@ package space.weme.remix.ui.find;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,7 +14,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.amap.api.maps2d.AMap;
+import com.amap.api.maps2d.CameraUpdate;
+import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.MapView;
+import com.amap.api.maps2d.model.BitmapDescriptor;
+import com.amap.api.maps2d.model.BitmapDescriptorFactory;
+import com.amap.api.maps2d.model.LatLng;
+import com.amap.api.maps2d.model.MarkerOptions;
+import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.core.PoiItem;
 import com.amap.api.services.poisearch.PoiResult;
 import com.amap.api.services.poisearch.PoiSearch;
@@ -45,6 +53,11 @@ public class FgtFoodMap extends BaseFragment {
     MapView mapView;
     private AMap aMap;
     RecyclerView recyclerView;
+    Adapter adapter;
+
+    AtyAddFood aty;
+
+    BitmapDescriptor descriptor = BitmapDescriptorFactory.fromResource(R.mipmap.map_marker);
 
 
 
@@ -52,10 +65,12 @@ public class FgtFoodMap extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fgt_food_map,container,false);
+        aty = (AtyAddFood) getActivity();
+
         etext = (EditText) v.findViewById(R.id.food_map_search);
         tvCancel = (TextView) v.findViewById(R.id.search_cancel);
         mapView = (MapView) v.findViewById(R.id.map_view);
-        recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
+
         mapView.onCreate(savedInstanceState);
         if (aMap == null) {
             aMap = mapView.getMap();
@@ -68,14 +83,18 @@ public class FgtFoodMap extends BaseFragment {
         });
         etext.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {    }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {     }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
-                searchText(s.toString());
+                if(s.length()!=0) {
+                    searchText(s.toString());
+                }
             }
         });
         tvCancel.setOnClickListener(new View.OnClickListener() {
@@ -83,11 +102,21 @@ public class FgtFoodMap extends BaseFragment {
             public void onClick(View v) {
                 etext.clearFocus();
                 etext.setText("");
+                adapter.setList(null);
             }
         });
         ViewGroup.LayoutParams params = mapView.getLayoutParams();
         params.height = DimensionUtils.getDisplay().widthPixels/2;
         mapView.setLayoutParams(params);
+
+
+
+        recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
+        adapter = new Adapter();
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(adapter);
+
         return v;
     }
 
@@ -104,12 +133,12 @@ public class FgtFoodMap extends BaseFragment {
         @Override
         public void onPoiSearched(PoiResult poiResult, int i) {
             ArrayList<PoiItem> poiItems = poiResult.getPois();
+            adapter.setList(poiItems);
+            adapter.notifyDataSetChanged();
         }
 
         @Override
-        public void onPoiItemSearched(PoiItem poiItem, int i) {
-
-        }
+        public void onPoiItemSearched(PoiItem poiItem, int i) {    }
     };
 
     @Override
@@ -124,10 +153,7 @@ public class FgtFoodMap extends BaseFragment {
         mapView.onResume();
     }
 
-    /**
-     * 方法必须重写
-     * map的生命周期方法
-     */
+
     @Override
     public void onPause() {
         Log.i("sys", "mf onPause");
@@ -135,10 +161,6 @@ public class FgtFoodMap extends BaseFragment {
         mapView.onPause();
     }
 
-    /**
-     * 方法必须重写
-     * map的生命周期方法
-     */
     @Override
     public void onSaveInstanceState(Bundle outState) {
         Log.i("sys", "mf onSaveInstanceState");
@@ -146,10 +168,6 @@ public class FgtFoodMap extends BaseFragment {
         mapView.onSaveInstanceState(outState);
     }
 
-    /**
-     * 方法必须重写
-     * map的生命周期方法
-     */
     @Override
     public void onDestroy() {
         Log.i("sys", "mf onDestroy");
@@ -159,6 +177,11 @@ public class FgtFoodMap extends BaseFragment {
 
     class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         List<PoiItem> list;
+
+        public void setList(List<PoiItem> item){
+            list = item;
+        }
+
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View v = LayoutInflater.from(getActivity()).inflate(R.layout.fgt_food_map_cell,parent,false);
@@ -167,13 +190,43 @@ public class FgtFoodMap extends BaseFragment {
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            // todo
+            VH vh = (VH) holder;
+            vh.tvName.setText(list.get(position).getTitle());
+            vh.tvPosition.setText(list.get(position).getSnippet());
         }
 
         class VH extends RecyclerView.ViewHolder{
-
+            TextView tvName;
+            TextView tvChoose;
+            TextView tvPosition;
             public VH(View itemView) {
                 super(itemView);
+                tvName = (TextView) itemView.findViewById(R.id.location_name);
+                tvChoose = (TextView) itemView.findViewById(R.id.location_choose);
+                tvPosition = (TextView) itemView.findViewById(R.id.location_position);
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int position = getAdapterPosition();
+                        LatLonPoint point = list.get(position).getLatLonPoint();
+                        LatLng latLng = new LatLng(point.getLatitude(),point.getLongitude());
+                        // zoom level is in 4-20
+                        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latLng, 16);
+                        aMap.moveCamera(update);
+                        MarkerOptions options = new MarkerOptions();
+                        options.position(latLng);
+                        options.icon(descriptor);
+                        aMap.addMarker(options);
+                    }
+                });
+                tvChoose.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int position = getAdapterPosition();
+                        aty.fgtAddFood.poiItem = list.get(position);
+                        aty.switchToFragment(aty.fgtAddFood);
+                    }
+                });
             }
         }
         public int getItemCount() {

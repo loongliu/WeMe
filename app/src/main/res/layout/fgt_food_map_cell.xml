@@ -1,6 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-</LinearLayout>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:gravity="center_vertical"
+        android:id="@+id/location_name"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp" />
+    <TextView
+        android:layout_marginLeft="14dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="28dp"
+        android:id="@+id/location_position"
+        android:textSize="14sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:background="@drawable/bg_aty_info_follow"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:padding="8dp"
+        android:layout_margin="8dp"
+        android:gravity="center_vertical"
+        android:text="选择"
+        android:id="@+id/location_choose"
+        android:layout_gravity="end"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
+    <View
+        android:background="@color/grey_gap"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+</FrameLayout>

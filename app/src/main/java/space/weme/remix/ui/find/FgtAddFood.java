@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.amap.api.services.core.PoiItem;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
@@ -35,8 +36,9 @@ public class FgtAddFood extends BaseFragment {
     TextView tvLocation;
     TextView tvPrice;
 
-    private String price;
+    String price;
     boolean pictureChosen = false;
+    PoiItem poiItem;
 
 
     public static FgtAddFood newInstance() {
@@ -96,6 +98,10 @@ public class FgtAddFood extends BaseFragment {
         }
         if(pictureChosen){
             pictureDrawee.setImageURI(Uri.parse("file://" + StrUtils.cropFilePath));
+        }
+        if(poiItem != null){
+            String location = poiItem.getTitle() + poiItem.getSnippet();
+            tvLocation.setText(location);
         }
 
     }

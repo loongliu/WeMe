@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
@@ -288,6 +289,9 @@ public class AtyEditInfo extends BaseActivity {
         });
     }
     private void uploadImageReturned(){
+        SharedPreferences sp = getSharedPreferences(StrUtils.SP_USER,MODE_PRIVATE);
+        String gender = wSwitch.isOn() ? getResources().getString(R.string.male) : getResources().getString(R.string.female);
+        sp.edit().putString(StrUtils.SP_USER_GENDER,gender).apply();
         if(mEdit){
             finish();
         }else {

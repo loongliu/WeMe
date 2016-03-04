@@ -6,13 +6,17 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
+import android.support.v4.util.ArrayMap;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.List;
@@ -21,6 +25,7 @@ import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 import space.weme.remix.R;
 import space.weme.remix.ui.base.BaseActivity;
 import space.weme.remix.util.LogUtils;
+import space.weme.remix.util.OkHttpUtils;
 import space.weme.remix.util.StrUtils;
 
 /**
@@ -51,6 +56,13 @@ public class AtyAddFood extends BaseActivity{
 
         tvTitle.setText(R.string.edit_food_card);
         tvRight.setText(R.string.finish);
+
+        tvRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadFood();
+            }
+        });
 
         fgtAddFood = FgtAddFood.newInstance();
         fgtPrice = FgtPrice.newInstance();
@@ -124,6 +136,65 @@ public class AtyAddFood extends BaseActivity{
             Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
             toast.show();
         }
+    }
+
+    private void uploadFood(){
+        if(fgtAddFood.etTitle.getText().length() == 0){
+            Toast.makeText(this,R.string.please_input_food_title,Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(fgtAddFood.poiItem == null){
+            Toast.makeText(this,R.string.please_choose_location, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(fgtAddFood.price == null){
+            Toast.makeText(this,R.string.please_choose_price, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(!fgtAddFood.pictureChosen){
+            Toast.makeText(this,R.string.please_choose_picutre, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        ArrayMap<String,String> map = new ArrayMap<>();
+        map.put("token", StrUtils.token());
+        map.put("title", fgtAddFood.etTitle.getText().toString());
+        map.put("comment", fgtAddFood.etComment.getText().toString());
+        map.put("location",fgtAddFood.poiItem.getTitle()+" "+fgtAddFood.poiItem.getSnippet());
+        map.put("latitude",Double.toString(fgtAddFood.poiItem.getLatLonPoint().getLatitude()));
+        map.put("longitude",Double.toString(fgtAddFood.poiItem.getLatLonPoint().getLongitude()));
+        map.put("price", fgtAddFood.price);
+        OkHttpUtils.post(StrUtils.PUBLISH_CARD,map,TAG,new OkHttpUtils.SimpleOkCallBack(){
+            @Override
+            public void onResponse(String s) {
+                JSONObject j = OkHttpUtils.parseJSON(AtyAddFood.this,s);
+                if(j == null){
+                    return;
+                }
+                String id = j.optString("id");
+                ArrayMap<String,String> params = new ArrayMap<>();
+                params.put("token", StrUtils.token());
+                params.put("type","-11");
+                params.put("foodcardid",id);
+                OkHttpUtils.uploadFile(StrUtils.UPLOAD_AVATAR_URL,params,StrUtils.cropFilePath,StrUtils.MEDIA_TYPE_IMG,TAG,new OkHttpUtils.SimpleOkCallBack(){
+                    @Override
+                    public void onResponse(String s) {
+                        JSONObject j = OkHttpUtils.parseJSON(AtyAddFood.this,s);
+                        if(j == null){
+                            Toast.makeText(AtyAddFood.this,R.string.upload_food_fail,Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        Toast.makeText(AtyAddFood.this,R.string.upload_food_finish,Toast.LENGTH_SHORT).show();
+                        Handler handler = new Handler(getMainLooper());
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                               finish();
+                            }
+                        },500);
+                    }
+                });
+            }
+        });
     }
 
     @Override

@@ -38,6 +38,11 @@ public class FgtFind extends BaseFragment {
         path.stopAnimation();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        path.configFriendPicture();
+    }
 
     @Override
     protected String tag() {

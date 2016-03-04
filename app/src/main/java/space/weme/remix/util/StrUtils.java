@@ -122,6 +122,8 @@ public final class StrUtils {
 
     public static final String CHECK_UPDATE_URL = BASE_URL + "checkapkversion";
 
+    public static final String PUBLISH_CARD = BASE_URL + "publishcard";
+
 
 
     public static final String GET_AVATAR = BASE_URL_NGINX + "avatar/";
@@ -150,6 +152,7 @@ public final class StrUtils {
     public static final String SP_USER = "StrUtils_sp_user";
     public static final String SP_USER_TOKEN = SP_USER + "_token";
     public static final String SP_USER_ID = SP_USER + "_id";
+    public static final String SP_USER_GENDER = SP_USER + "_gender";
     public static final String SP_USER_CAN_FOUND = SP_USER +"_can_found";
 
 
