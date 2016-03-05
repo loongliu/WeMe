@@ -31,6 +31,7 @@
 
         <activity android:name=".ui.intro.AtyLogin" />
         <activity android:name=".ui.intro.AtyRegister" />
+        <activity android:name=".ui.intro.AtyForget" />
         <activity android:name=".ui.intro.AtyContract" />
         <activity android:name=".ui.intro.AtyEditInfo"  />
         <activity android:name=".ui.intro.AtySearchCity" />

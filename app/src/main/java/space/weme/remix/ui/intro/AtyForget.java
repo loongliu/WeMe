@@ -26,57 +26,45 @@ import space.weme.remix.util.StrUtils;
 import space.weme.remix.widgt.CountDownButton;
 
 /**
- * Created by Liujilong on 16/2/3.
+ * Created by Liujilong on 2016/3/5.
  * liujilong.me@gmail.com
  */
-public class AtyRegister extends BaseActivity {
-    private static final String TAG = "AtyRegister";
+public class AtyForget extends BaseActivity {
+    private static final String TAG = "AtyForget";
 
     Pattern phone = Pattern.compile(StrUtils.PHONE_PATTERN);
 
-    EditText etName;
+    EditText etPhone;
+    EditText etCode;
     EditText etPass;
     EditText etPass2;
-    EditText etCode;
     Button btnCode;
-    TextView tvContract;
-    TextView tvRegister;
+    TextView tvReset;
     TextView tvError;
 
     CountDownButton mCountDown;
     ProgressDialog progressDialog;
 
-
     TextWatcher mTextWatcher;
-    View.OnClickListener mListener;
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.aty_register);
+        setContentView(R.layout.aty_forget);
 
-        etName = (EditText) findViewById(R.id.phone);
+        etPhone = (EditText) findViewById(R.id.phone);
         etPass = (EditText) findViewById(R.id.login_password);
         etPass2 = (EditText) findViewById(R.id.login_copy_password);
-        tvContract = (TextView) findViewById(R.id.aty_register_contract);
-        tvRegister = (TextView) findViewById(R.id.register);
-        tvError = (TextView) findViewById(R.id.aty_register_error);
+        tvReset = (TextView) findViewById(R.id.reset_button);
+        tvError = (TextView) findViewById(R.id.aty_reset_error);
         etCode = (EditText) findViewById(R.id.verification_code);
         btnCode = (Button) findViewById(R.id.gain_verification_code);
 
         mCountDown = new CountDownButton(btnCode,btnCode.getText().toString(),60,1);
-
         btnCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendCode();
                 mCountDown.start();
-            }
-        });
-
-        tvContract.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(AtyRegister.this, AtyContract.class);
-                startActivity(i);
             }
         });
 
@@ -90,41 +78,37 @@ public class AtyRegister extends BaseActivity {
                 checkText();
             }
         };
-
-        mListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                register();
-            }
-        };
-
-        etName.addTextChangedListener(mTextWatcher);
+        etPhone.addTextChangedListener(mTextWatcher);
         etPass.addTextChangedListener(mTextWatcher);
         etPass2.addTextChangedListener(mTextWatcher);
         etCode.addTextChangedListener(mTextWatcher);
-        tvRegister.setOnClickListener(mListener);
-
+        tvReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reset();
+            }
+        });
     }
 
     private void sendCode(){
         ArrayMap<String,String> param = new ArrayMap<>();
-        param.put("phone",etName.getText().toString());
-        param.put("type","1");
-        OkHttpUtils.post(StrUtils.SEND_CODE,param,TAG,new OkHttpUtils.SimpleOkCallBack(){
+        param.put("phone",etPhone.getText().toString());
+        param.put("type", "2");
+        OkHttpUtils.post(StrUtils.SEND_CODE, param, TAG, new OkHttpUtils.SimpleOkCallBack() {
             @Override
             public void onResponse(String s) {
-                LogUtils.d(TAG,s);
-                JSONObject j = OkHttpUtils.parseJSON(AtyRegister.this,s);
-                if(j != null){
-                    Toast.makeText(AtyRegister.this,R.string.send_code_complete,Toast.LENGTH_SHORT).show();
+                LogUtils.d(TAG, s);
+                JSONObject j = OkHttpUtils.parseJSON(AtyForget.this, s);
+                if (j != null) {
+                    Toast.makeText(AtyForget.this, R.string.send_code_complete, Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
     private void checkText(){
-        if(!phone.matcher(etName.getText()).matches()){
-            tvRegister.setEnabled(false);
+        if(!phone.matcher(etPhone.getText()).matches()){
+            tvReset.setEnabled(false);
             tvError.setText(R.string.please_input_phone);
             btnCode.setEnabled(false);
             return;
@@ -132,38 +116,36 @@ public class AtyRegister extends BaseActivity {
             btnCode.setEnabled(true);
         }
         if(etCode.getText().length()==0){
-            tvRegister.setEnabled(false);
+            tvReset.setEnabled(false);
             tvError.setText(R.string.code_length);
             return;
         }
         if(etPass.getText().length()<6){
-            tvRegister.setEnabled(false);
+            tvReset.setEnabled(false);
             tvError.setText(R.string.password_long_6);
             return;
         }
         if(!etPass.getText().toString().equals(etPass2.getText().toString())){
-            tvRegister.setEnabled(false);
+            tvReset.setEnabled(false);
             tvError.setText(R.string.password_not_equal);
             return;
         }
-        tvRegister.setEnabled(true);
+        tvReset.setEnabled(true);
         tvError.setText("");
     }
-
-
-    private void register(){
-        String name = etName.getText().toString();
+    private void reset(){
+        String name = etPhone.getText().toString();
         String passMD5 = StrUtils.md5(etPass.getText().toString());
         ArrayMap<String,String> param = new ArrayMap<>();
         param.put("phone",name);
         param.put("password", passMD5);
         param.put("code",etCode.getText().toString());
-        progressDialog = ProgressDialog.show(AtyRegister.this,null,"正在注册");
-        OkHttpUtils.post(StrUtils.REGISTER_PHONE,param,TAG,new OkHttpUtils.SimpleOkCallBack(){
+        progressDialog = ProgressDialog.show(AtyForget.this,null,"正在重置密码");
+        OkHttpUtils.post(StrUtils.RESET_PASSWORD,param,TAG,new OkHttpUtils.SimpleOkCallBack(){
             @Override
             public void onResponse(String s) {
                 LogUtils.i(TAG,s);
-                final JSONObject j = OkHttpUtils.parseJSON(AtyRegister.this, s);
+                final JSONObject j = OkHttpUtils.parseJSON(AtyForget.this, s);
                 if(j == null){
                     progressDialog.dismiss();
                     return;
@@ -173,14 +155,15 @@ public class AtyRegister extends BaseActivity {
                 SharedPreferences sp = getSharedPreferences(StrUtils.SP_USER, MODE_PRIVATE);
                 sp.edit().putString(StrUtils.SP_USER_ID, id)
                         .putString(StrUtils.SP_USER_TOKEN, token).apply();
-                progressDialog.setMessage("注册成功，请编辑个人信息");
+                progressDialog.setMessage("重置密码成功，正在登陆中");
                 Handler handler = new Handler(getMainLooper());
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        Intent i = new Intent(AtyRegister.this, AtyEditInfo.class);
+                        Intent i = new Intent(AtyForget.this, AtyLogin.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        i.putExtra(AtyLogin.INTENT_CLEAR, true);
                         startActivity(i);
-                        finish();
                     }
                 }, 1000);
             }

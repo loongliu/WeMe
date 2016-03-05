@@ -125,6 +125,17 @@
     <string name="please_choose_picutre">请选择美食图片</string>
     <string name="upload_food_fail">上传美食失败</string>
     <string name="upload_food_finish">上传美食完成,等待审核</string>
+    <string name="register_phone_number">手机号</string>
+    <string name="verification_code">验证码</string>
+    <string name="gain_verification">获取验证码</string>
+    <string name="set_password">输入密码</string>
+    <string name="copy_password">重新输入密码</string>
+    <string name="register">注册</string>
+    <string name="please_input_phone">请输入11位数字手机号码</string>
+    <string name="code_length">请输入正确的验证码</string>
+    <string name="send_code_complete">发送验证码完成</string>
+    <string name="forget_password">忘记密码？</string>
+    <string name="reset_password">重置密码</string>
 
 
     <string-array name="aty_info_tabs">

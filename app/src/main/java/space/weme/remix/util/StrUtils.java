@@ -25,6 +25,9 @@ public final class StrUtils {
 
     private StrUtils(){}
 
+    public static final String PHONE_PATTERN =
+            "^1[34578]\\d{9}$";
+
 
 
     /** ####################### URLs ############################### **/
@@ -35,6 +38,8 @@ public final class StrUtils {
     public static final String LOGIN_URL = BASE_URL + "login";
 
     public static final String REGISTER_URL = BASE_URL + "register";
+
+    public static final String REGISTER_PHONE = BASE_URL + "registerphone";
 
     public static final String EDIT_PROFILE_URL = BASE_URL + "editprofileinfo";
 
@@ -55,6 +60,8 @@ public final class StrUtils {
     public static final String GET_POST_LIST = BASE_URL + "getpostlist";
 
     public static final String GET_VISIT_INFO = BASE_URL + "visitinfo";
+
+    public static final String VISIT_USER = BASE_URL + "visit";
 
     public static final String GET_PROFILE_BY_ID = BASE_URL + "getprofilebyid";
 
@@ -123,6 +130,10 @@ public final class StrUtils {
     public static final String CHECK_UPDATE_URL = BASE_URL + "checkapkversion";
 
     public static final String PUBLISH_CARD = BASE_URL + "publishcard";
+
+    public static final String SEND_CODE = BASE_URL + "sendsmscode";
+
+    public static final String RESET_PASSWORD = BASE_URL + "resetpassword";
 
 
 

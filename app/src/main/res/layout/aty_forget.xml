@@ -12,7 +12,7 @@
         android:layout_height="56dp"
         android:background="@color/colorPrimary"
         android:gravity="center"
-        android:text="@string/register_weme_user"
+        android:text="@string/reset_password"
         android:textColor="@color/white"
         android:textSize="16sp" />
 
@@ -96,29 +96,21 @@
                 android:padding="8dp"
                 android:singleLine="true" />
             <TextView
-                android:id="@+id/aty_register_contract"
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                android:layout_marginBottom="16dp"
-                android:layout_marginTop="16dp"
-                android:gravity="center"
-                android:text='注册表示您同意"WEME用户协议",请先阅读>>'
-                android:textColor="@color/colorPrimary" />
-            <TextView
-                android:id="@+id/aty_register_error"
+                android:id="@+id/aty_reset_error"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
                 android:textColor="@color/red" />
+
             <TextView
                 android:enabled="false"
-                android:id="@+id/register"
+                android:id="@+id/reset_button"
                 style="@style/InputEditText"
                 android:layout_width="match_parent"
                 android:background="@drawable/button_selector"
                 android:gravity="center_horizontal"
-                android:text="@string/register"
+                android:text="@string/reset_password"
                 android:textColor="#ffffff"
                 android:textSize="14sp" />
 

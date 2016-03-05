@@ -147,7 +147,7 @@ public class AtyInfo extends BaseActivity {
 
         findViewById(R.id.aty_info_more).setOnClickListener(mWindowListener);
 
-
+        visitUser();
 
         mUserImageListener = new UserImageListener();
 
@@ -165,6 +165,18 @@ public class AtyInfo extends BaseActivity {
     protected void onResume() {
         super.onResume();
         mDrawAvatar.setImageURI(Uri.parse(StrUtils.thumForID(mId)));
+    }
+
+    private void visitUser(){
+        ArrayMap<String,String> param = new ArrayMap<>();
+        param.put("token", StrUtils.token());
+        param.put("userid",mId);
+        OkHttpUtils.post(StrUtils.VISIT_USER,param,TAG,new OkHttpUtils.SimpleOkCallBack(){
+            @Override
+            public void onResponse(String s) {
+                LogUtils.i(TAG,s);
+            }
+        });
     }
 
     private void fireInfo(){
