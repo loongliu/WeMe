@@ -22,6 +22,11 @@
         <item name="android:windowExitAnimation">@anim/outdowntoup</item>
     </style>
 
+    <style name="RightTopAnimation">
+        <item name="android:windowEnterAnimation">@anim/righttopin</item>
+        <item name="android:windowExitAnimation">@anim/righttopout</item>
+    </style>
+
     <style name="Dialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowBackground">@color/white</item>
         <item name="android:windowIsFloating">true</item>
@@ -36,6 +41,12 @@
     <style name="DialogSlideAnim" parent="DialogTransparent">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowAnimationStyle">@style/PopupWindowAnimation</item>
+    </style>
+    <style name="DialogMain" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@style/RightTopAnimation</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowNoTitle">true</item>
     </style>
 
     <style name="InputEditText" parent="android:style/Widget.EditText">

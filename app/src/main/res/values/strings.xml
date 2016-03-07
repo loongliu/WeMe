@@ -136,6 +136,9 @@
     <string name="send_code_complete">发送验证码完成</string>
     <string name="forget_password">忘记密码？</string>
     <string name="reset_password">重置密码</string>
+    <string name="search_activity">搜索活动</string>
+    <string name="publish_activity">发布活动</string>
+    <string name="qr_code">二维码</string>
 
 
     <string-array name="aty_info_tabs">

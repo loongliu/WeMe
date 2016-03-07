@@ -1,14 +1,18 @@
 package space.weme.remix.ui.main;
 
+import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import space.weme.remix.R;
@@ -16,6 +20,7 @@ import space.weme.remix.ui.aty.AtyPublicActivity;
 import space.weme.remix.ui.aty.AtySearchActivity;
 import space.weme.remix.ui.base.BaseActivity;
 import space.weme.remix.ui.intro.AtyLogin;
+import space.weme.remix.util.DimensionUtils;
 import space.weme.remix.util.UpdateUtils;
 import space.weme.remix.widgt.TabItem;
 
@@ -23,7 +28,7 @@ import space.weme.remix.widgt.TabItem;
  * Created by Liujilong on 16/1/24.
  * liujilong.me@gmail.com
  */
-public class AtyMain extends BaseActivity implements Toolbar.OnMenuItemClickListener {
+public class AtyMain extends BaseActivity{
 
     private static final String TAG = "AtyMain";
     public static final String INTENT_LOGOUT = "intent_lougout";
@@ -41,13 +46,30 @@ public class AtyMain extends BaseActivity implements Toolbar.OnMenuItemClickList
     private TabItem[] tabItems;
     private ViewPager mPager;
     private TextView mTvTitle;
-    private Toolbar toolbar;
+    private ImageView ivMore;
+    private ViewGroup wholeLayout;
 
-
-    @Override
+     Dialog dialog;
+    private View.OnClickListener dialogListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.action_publish:
+                Intent publicActivity=new Intent(AtyMain.this, AtyPublicActivity.class);
+                startActivity(publicActivity);
+                    break;
+                case R.id.action_search:
+                Intent search=new Intent(AtyMain.this, AtySearchActivity.class);
+                startActivity(search);
+                    break;
+                case R.id.action_qrcode:
+                    break;
+            }
+            dialog.dismiss();
+        }
+    };
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.aty_main);
         if (getIntent().getBooleanExtra(INTENT_LOGOUT, false))
         {
             Intent i = new Intent(AtyMain.this,AtyLogin.class);
@@ -58,6 +80,8 @@ public class AtyMain extends BaseActivity implements Toolbar.OnMenuItemClickList
         if(getIntent().getBooleanExtra(INTENT_UPDATE,false)){
             UpdateUtils.checkUpdate(AtyMain.this);
         }
+        setContentView(R.layout.aty_main);
+
         bindViews();
     }
 
@@ -69,13 +93,16 @@ public class AtyMain extends BaseActivity implements Toolbar.OnMenuItemClickList
         tabItems[3] = (TabItem) findViewById(R.id.main_item_me);
         tabItems[0].setEnable(true);
 
-        toolbar= (Toolbar) findViewById(R.id.toolbar_main);
-        toolbar.inflateMenu(R.menu.menu_main);
-        toolbar.setOnMenuItemClickListener(this);
+
+//        toolbar.inflateMenu(R.menu.menu_main);
+//        toolbar.setOnMenuItemClickListener(this);
 
         mPager = (ViewPager) findViewById(R.id.main_pager);
         mTvTitle = (TextView) findViewById(R.id.main_title);
         mTvTitle.setText(R.string.activity);
+        ivMore = (ImageView) findViewById(R.id.more_action);
+        wholeLayout = (ViewGroup) findViewById(R.id.whole_layout);
+
 
         Adapter mAdapter = new Adapter(getFragmentManager());
         mPager.setAdapter(mAdapter);
@@ -89,9 +116,9 @@ public class AtyMain extends BaseActivity implements Toolbar.OnMenuItemClickList
                     tabItems[i].setEnable(i==position);
                 }
                 if (position==0)
-                    toolbar.inflateMenu(R.menu.menu_main);
+                    ivMore.setVisibility(View.VISIBLE);
                 else {
-                    toolbar.getMenu().clear();
+                    ivMore.setVisibility(View.GONE);
                 }
             }
             @Override
@@ -108,25 +135,26 @@ public class AtyMain extends BaseActivity implements Toolbar.OnMenuItemClickList
             tabItems[i].setTag(i);
             tabItems[i].setOnClickListener(mTabItemClickListener);
         }
-    }
 
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_search:
-                Intent search=new Intent(AtyMain.this, AtySearchActivity.class);
-                startActivity(search);
-                return true;
-            case R.id.action_public:
-                Intent publicActivity=new Intent(AtyMain.this, AtyPublicActivity.class);
-                startActivity(publicActivity);
-                return true;
-            case R.id.action_2code:
-                return true;
-            default:
-                break;
-        }
-        return false;
+        ivMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog = new Dialog(AtyMain.this, R.style.DialogMain);
+                View content = LayoutInflater.from(AtyMain.this).inflate(R.layout.main_menu, wholeLayout, false);
+                content.findViewById(R.id.action_search).setOnClickListener(dialogListener);
+                content.findViewById(R.id.action_publish).setOnClickListener(dialogListener);
+                content.findViewById(R.id.action_qrcode).setOnClickListener(dialogListener);
+                dialog.setContentView(content);
+                WindowManager.LayoutParams wmlp = dialog.getWindow().getAttributes();
+                wmlp.gravity = Gravity.TOP | Gravity.END;
+                wmlp.x = DimensionUtils.dp2px(20);   //x position
+                wmlp.y = DimensionUtils.dp2px(56)+DimensionUtils. getStatusBarHeight();   //y position
+                wmlp.width = DimensionUtils.dp2px(160);
+                wmlp.height = DimensionUtils.dp2px(123);
+                dialog.show();
+            }
+        });
+
     }
 
     public class Adapter extends FragmentPagerAdapter {

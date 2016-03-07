@@ -16,4 +16,12 @@ public final class DimensionUtils {
     public static DisplayMetrics getDisplay(){
         return APP.context().getResources().getDisplayMetrics();
     }
+    public static int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = APP.context().getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = APP.context().getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
 }

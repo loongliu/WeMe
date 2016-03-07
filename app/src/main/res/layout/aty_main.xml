@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/whole_layout"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -12,10 +13,17 @@
         <TextView
             android:id="@+id/main_title"
             android:textSize="18sp"
-            android:textColor="@color/white"
             android:layout_gravity="center"
+            android:textColor="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+        <ImageView
+            android:layout_gravity="end"
+            android:src="@mipmap/more"
+            android:id="@+id/more_action"
+            android:padding="16dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp" />
     </android.support.v7.widget.Toolbar>
     <android.support.v4.view.ViewPager
         android:id="@+id/main_pager"

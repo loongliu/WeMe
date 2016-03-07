@@ -100,8 +100,8 @@ public class FgtUserActivity extends BaseFragment {
         });
 
         activityList = new ArrayList<>();
-        adapter.setActivities(activityList);
         adapter = new ActivityAdapter(getActivity());
+        adapter.setActivities(activityList);
         recyclerView.setAdapter(adapter);
         fetchActivities(1);
         return v;

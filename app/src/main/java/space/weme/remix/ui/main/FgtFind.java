@@ -35,7 +35,9 @@ public class FgtFind extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        path.stopAnimation();
+        if(path != null) {
+            path.stopAnimation();
+        }
     }
 
     @Override
