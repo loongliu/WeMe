@@ -16,30 +16,51 @@
         android:src="@mipmap/spade" />
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/card_people_avatar"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:actualImageScaleType="centerCrop"
-            app:placeholderImage="@mipmap/default_avatar" />
+            android:layout_height="wrap_content">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/card_people_avatar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:actualImageScaleType="centerCrop"
+                app:placeholderImage="@mipmap/default_avatar" />
+            <ImageView
+                android:layout_gravity="end|bottom"
+                android:src="@mipmap/like_on"
+                android:id="@+id/card_people_like"
+                android:padding="8dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp" />
+            <TextView
+                android:id="@+id/card_people_like_add"
+                android:text="喜欢+1"
+                android:layout_marginBottom="20dp"
+                android:textColor="#ff6b8e"
+                android:layout_gravity="end|bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </FrameLayout>
 
         <TextView
             android:id="@+id/card_people_name"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_weight="1"
             android:layout_gravity="center"
+            android:layout_weight="1"
             android:textSize="20sp"
             android:textStyle="bold" />
 
         <FrameLayout
-            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="0dp">
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
             <ImageView
                 android:id="@+id/card_people_gender"
                 android:layout_width="16dp"
@@ -54,20 +75,21 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"/>
+                android:layout_marginRight="16dp" />
 
         </FrameLayout>
 
         <FrameLayout
-            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="0dp">
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
             <TextView
                 android:id="@+id/card_people_school"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_marginStart="16dp"/>
+                android:layout_marginStart="16dp" />
 
             <TextView
                 android:id="@+id/card_people_education"
@@ -80,9 +102,10 @@
         </FrameLayout>
 
         <FrameLayout
-            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="0dp">
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
             <ImageView
                 android:id="@+id/card_people_location"
                 android:layout_width="16dp"
@@ -100,11 +123,6 @@
                 android:layout_marginRight="16dp" />
 
         </FrameLayout>
-
-
-
-
-
 
 
     </LinearLayout>

@@ -21,4 +21,6 @@
     <color name="shadow_white">#000000</color>
     <color name="black">#000000</color>
     <color name="chat_bg_grey">#aaaaaa</color>
+
+    <color name="test">#ffffffff</color>
 </resources>

@@ -1,16 +1,22 @@
 package space.weme.remix.widgt;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Animatable;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,10 +28,16 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.image.CloseableStaticBitmap;
 import com.facebook.imagepipeline.image.ImageInfo;
 
+import org.json.JSONObject;
+
+import java.util.Random;
+
 import space.weme.remix.R;
 import space.weme.remix.model.User;
 import space.weme.remix.ui.find.AtyDiscovery;
 import space.weme.remix.ui.user.AtyInfo;
+import space.weme.remix.util.LogUtils;
+import space.weme.remix.util.OkHttpUtils;
 import space.weme.remix.util.StrUtils;
 
 /**
@@ -33,6 +45,7 @@ import space.weme.remix.util.StrUtils;
  * liujilong.me@gmail.com
  */
 public class Card extends CardView {
+    private static final String TAG = "Card";
     private View mFront;
     private View mBack;
     private SimpleDraweeView avatar;
@@ -42,13 +55,22 @@ public class Card extends CardView {
     private TextView tvDegree;
     private TextView tvLocation;
     private ImageView ivGender;
+    private ImageView ivLike;
+    private TextView tvLikeAdd;
     private AtyDiscovery aty;
 
+    private ValueAnimator animator;
+    private AnimatorSet likeTextAnimator;
+
     private AvatarListener avatarListener;
+
+    private User user;
 
 
 
     private boolean isFront;
+
+    private boolean isLiked;
 
     public Card(Context context) {
         super(context);
@@ -91,10 +113,25 @@ public class Card extends CardView {
         if(!checkBackAndFront()){
             return;
         }
+        if(isFront){
+            stopLikeAnimation();
+        }else{
+            startLikeAnimation();
+        }
+        isLiked = false;
         mFront.setVisibility(isFront?GONE:VISIBLE);
         mBack.setVisibility(isFront?VISIBLE:GONE);
         isFront = !isFront;
     }
+
+    private void stopLikeAnimation(){
+        animator.cancel();
+    }
+
+    private void startLikeAnimation(){
+        animator.start();
+    }
+
     private boolean checkBackAndFront(){
         if(mBack==null||mFront==null){
             if(getChildCount()>1) {
@@ -116,17 +153,96 @@ public class Card extends CardView {
         avatar = (SimpleDraweeView) mFront.findViewById(R.id.card_people_avatar);
         tvName = (TextView) mFront.findViewById(R.id.card_people_name);
         ivGender = (ImageView) mFront.findViewById(R.id.card_people_gender);
+        ivLike = (ImageView) mFront.findViewById(R.id.card_people_like);
         tvBirth = (TextView) mFront.findViewById(R.id.card_people_birth);
         tvSchool = (TextView) mFront.findViewById(R.id.card_people_school);
         tvDegree = (TextView) mFront.findViewById(R.id.card_people_education);
         tvLocation = (TextView) mFront.findViewById(R.id.card_people_location_text);
+        tvLikeAdd = (TextView) mFront.findViewById(R.id.card_people_like_add);
         avatarListener = new AvatarListener();
+
+
+        animator = ValueAnimator.ofFloat(0.6f,1.4f);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                ivLike.setScaleX((Float) animation.getAnimatedValue());
+                ivLike.setScaleY((Float) animation.getAnimatedValue());
+            }
+        });
+        animator.setDuration(800);
+        animator.setRepeatMode(ValueAnimator.REVERSE);
+        animator.setRepeatCount(ValueAnimator.INFINITE);
+        animator.setInterpolator(new LinearInterpolator());
+
+        ivLike.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isLiked) {
+                    LogUtils.d("Card", "send like post");
+                    ArrayMap<String, String> map = new ArrayMap<>();
+                    map.put("token", StrUtils.token());
+                    map.put("userid", user.ID + "");
+                    OkHttpUtils.post(StrUtils.LIKE_USER_CARD, map, TAG, new OkHttpUtils.SimpleOkCallBack() {
+                        @Override
+                        public void onResponse(String s) {
+                            LogUtils.i("Card", s);
+                            JSONObject j = OkHttpUtils.parseJSON(getContext(), s);
+                            if (j == null) {
+                                return;
+                            }
+                            String flag = j.optString("flag");
+                            if ("1".equals(flag)) {
+                                showLikeEachOther();
+                            }
+                        }
+                    });
+                }
+                isLiked = true;
+                likeTextAnimator.start();
+            }
+        });
+
+        Random random = new Random(System.currentTimeMillis());
+        ObjectAnimator a1 = ObjectAnimator.ofFloat(tvLikeAdd,"Rotation",0,random.nextFloat()*360);
+        ObjectAnimator a2 = ObjectAnimator.ofFloat(tvLikeAdd,"ScaleX",1f,0.5f);
+        ObjectAnimator a3 = ObjectAnimator.ofFloat(tvLikeAdd,"ScaleY",1f,0.5f);
+        ObjectAnimator a4 = ObjectAnimator.ofFloat(tvLikeAdd, "Alpha", 1f, 0f);
+        likeTextAnimator = new AnimatorSet();
+        likeTextAnimator.playTogether(a1,a2,a3,a4);
+        likeTextAnimator.setDuration(500);
+        likeTextAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                tvLikeAdd.setVisibility(VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                tvLikeAdd.setVisibility(GONE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+    }
+
+    private void showLikeEachOther(){
+
     }
 
     public void showUser(User user){
         if(!checkBackAndFront()){
             return;
         }
+        this.user = user;
         showAvatar(user);
         avatarListener.setId(user.ID+"");
         avatar.setOnClickListener(avatarListener);
