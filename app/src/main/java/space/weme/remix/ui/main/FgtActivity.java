@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.drawee.generic.RoundingParams;
@@ -228,6 +229,18 @@ public class FgtActivity extends BaseFragment {
                 item.mTvCount.setText(count);
                 item.mTvTime.setText(activity.time);
                 item.mTvLocation.setText(activity.location);
+                item.mTimeState.setText(activity.timeState);
+                if(activity.timeState.equals("已结束")){
+                    item.mTimeState.setTextColor(0xffc8c8dc);
+                }else{
+                    item.mTimeState.setTextColor(getActivity().getResources().getColor(R.color.colorPrimary));
+                }
+                int cc = Integer.parseInt(activity.top);
+                if(cc!=0){
+                    item.mTopImage.setVisibility(View.VISIBLE);
+                }else{
+                    item.mTopImage.setVisibility(View.GONE);
+                }
             }
         }
 
@@ -256,6 +269,9 @@ public class FgtActivity extends BaseFragment {
             TextView mTvCount;
             TextView mTvTime;
             TextView mTvLocation;
+            TextView mTimeState;
+            ImageView mTopImage;
+
 
             public ItemViewHolder(View itemView) {
                 super(itemView);
@@ -276,6 +292,9 @@ public class FgtActivity extends BaseFragment {
                 mTvCount = (TextView) itemView.findViewById(R.id.fgt_activity_item_count);
                 mTvTime = (TextView) itemView.findViewById(R.id.fgt_activity_item_time);
                 mTvLocation = (TextView) itemView.findViewById(R.id.fgt_activity_item_location);
+                mTimeState = (TextView) itemView.findViewById(R.id.fgt_activity_item_time_state);
+                mTopImage = (ImageView) itemView.findViewById(R.id.fgt_activity_item_top_image);
+                mTopImage.setRotation(45);
             }
         }
     }

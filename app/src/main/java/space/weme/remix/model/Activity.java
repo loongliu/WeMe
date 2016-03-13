@@ -26,12 +26,16 @@ public class Activity {
     public String school;
     public String poster;
     public String status;
+    public String timeState;
+    public String sponsor;
+    public String top;
 
     public String gender;
 
     public static Activity fromJSON(JSONObject j){
         Activity a = new Activity();
         a.advertise = j.optString("advertise");
+        a.timeState = j.optString("timestate");
         a.author = j.optString("author");
         a.authorID = j.optInt("authorid");
         a.activityID = j.optInt("id");
@@ -45,6 +49,8 @@ public class Activity {
         a.time = j.optString("time");
         a.title = j.optString("title");
         a.status = j.optString("status");
+        a.status = j.optString("sponsor");
+        a.top = j.optString("top");
         return a;
     }
 

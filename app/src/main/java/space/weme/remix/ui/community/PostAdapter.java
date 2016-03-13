@@ -105,8 +105,15 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             viewHolder.tvTitle.setText(mPost.title);
             viewHolder.tvContent.setText(mPost.body);
             viewHolder.imagesGridLayout.removeAllViews();
+            if(mPost.thumbnailUrl.size()<=1){
+                viewHolder.imagesGridLayout.setNumInRow(1);
+            }else if(mPost.thumbnailUrl.size()<=4){
+                viewHolder.imagesGridLayout.setNumInRow(2);
+            }else{
+                viewHolder.imagesGridLayout.setNumInRow(3);
+            }
             for(int i = 0; i<mPost.thumbnailUrl.size(); i++) {
-                String thumbUrl = mPost.thumbnailUrl.get(i);
+                String thumbUrl = mPost.imageUrl.get(i);
                 SimpleDraweeView image = new SimpleDraweeView(mContext);
                 viewHolder.imagesGridLayout.addView(image);
                 image.setImageURI(Uri.parse(thumbUrl));
@@ -183,13 +190,21 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 item.llReplyList.addView(tv);
             }
             item.imagesGridLayout.removeAllViews();
+
+            if(reply.image.size()<=1){
+                item.imagesGridLayout.setNumInRow(1);
+            }else if(reply.image.size()<=4){
+                item.imagesGridLayout.setNumInRow(2);
+            }else{
+                item.imagesGridLayout.setNumInRow(3);
+            }
             if(reply.image==null || reply.image.size()==0){
                 item.imagesGridLayout.setVisibility(View.GONE);
             }else {
                 item.imagesGridLayout.setVisibility(View.VISIBLE);
                 for(int i = 0; i<reply.thumbnail.size(); i++){
                     SimpleDraweeView drawView = new SimpleDraweeView(mContext);
-                    drawView.setImageURI(Uri.parse(reply.thumbnail.get(i)));
+                    drawView.setImageURI(Uri.parse(reply.image.get(i)));
                     drawView.setId(imageID);
                     drawView.setOnClickListener(mListener);
                     item.imagesGridLayout.addView(drawView);
@@ -261,7 +276,6 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             tvTitle = (TextView) itemView.findViewById(R.id.aty_post_title_title);
             tvContent = (TextView) itemView.findViewById(R.id.aty_post_title_content);
             imagesGridLayout = (GridLayout) itemView.findViewById(R.id.aty_post_title_image);
-            imagesGridLayout.setNumInRow(3);
             tvLikeNumber = (TextView) itemView.findViewById(R.id.aty_post_title_like_number);
             ivLike = (ImageView) itemView.findViewById(R.id.aty_post_title_like_image);
             tvCommit = (TextView) itemView.findViewById(R.id.aty_post_title_reply_number);
@@ -294,7 +308,6 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             tvContent = (TextView) itemView.findViewById(R.id.aty_post_reply_content);
             llReplyList = (LinearLayout) itemView.findViewById(R.id.aty_post_reply_reply_list);
             imagesGridLayout = (GridLayout) itemView.findViewById(R.id.aty_post_reply_images);
-            imagesGridLayout.setNumInRow(3);
             tvLike = (TextView) itemView.findViewById(R.id.aty_post_reply_like_number);
             llLike = (LinearLayout) itemView.findViewById(R.id.aty_post_reply_like_layout);
             ivLike = (ImageView) itemView.findViewById(R.id.aty_post_reply_like_image);

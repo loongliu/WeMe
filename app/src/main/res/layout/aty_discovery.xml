@@ -24,6 +24,7 @@
 
 
     <space.weme.remix.widgt.Card
+        android:visibility="visible"
         android:id="@+id/aty_discovery_card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,14 +38,15 @@
         android:layout_margin="8dp"
         android:scaleType="centerCrop"
         android:src="@mipmap/spade" />
+
+        <TextView
+            android:id="@+id/aty_discovery_text"
+            android:text="点击此处抽取卡片"
+            android:padding="16dp"
+            android:gravity="center_horizontal|top"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </space.weme.remix.widgt.Card>
 
-    <TextView
-        android:id="@+id/aty_discovery_text"
-        android:text="点击此处抽取卡片"
-        android:padding="16dp"
-        android:layout_gravity="center_horizontal|bottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
 </FrameLayout>

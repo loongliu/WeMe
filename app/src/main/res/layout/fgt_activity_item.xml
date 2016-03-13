@@ -16,6 +16,25 @@
             android:layout_width="36dp"
             android:layout_height="36dp"/>
         <TextView
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            android:textColor="#c8c8dc"
+            android:textSize="12sp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:id="@+id/fgt_activity_item_time_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/fgt_activity_item_top_image"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/activity_top"
+            android:layout_margin="16dp"
+            android:layout_width="48dp"
+            android:layout_height="24dp" />
+        <TextView
             android:background="@drawable/bg_activity_item_text"
             android:textSize="12sp"
             android:textColor="@color/white"

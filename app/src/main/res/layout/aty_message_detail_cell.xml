@@ -32,7 +32,7 @@
         android:layout_alignLeft="@id/aty_message_detail_cell_name"
         android:layout_alignStart="@id/aty_message_detail_cell_name"
         android:layout_width="wrap_content"
-        android:layout_height="20dp" />
+        android:layout_height="wrap_content" />
     <space.weme.remix.widgt.GridLayout
         android:layout_below="@+id/aty_message_detail_cell_text"
         android:layout_alignLeft="@+id/aty_message_detail_cell_name"
