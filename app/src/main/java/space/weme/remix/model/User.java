@@ -27,6 +27,7 @@ public class User {
     public String constellation;
 
     public String avatar;
+    public boolean match;
 
     public static User fromJSON(JSONObject j){
         User user = new User();
@@ -50,6 +51,7 @@ public class User {
         user.constellation = j.optString("constellation");
 
         user.avatar = j.optString("avatar");
+        user.match = j.optString("match","0").equals("1");
         return user;
     }
 

@@ -7,7 +7,9 @@ import android.animation.ValueAnimator;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.util.ArrayMap;
@@ -16,11 +18,14 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -74,6 +79,7 @@ public class AtyDiscovery extends BaseActivity {
 
     ExecutorService exec;
     private Handler mHandler;
+
 
 
     @Override
@@ -139,6 +145,60 @@ public class AtyDiscovery extends BaseActivity {
     }
 
 
+    public void showLikeEachOther(final User user){
+        View v = LayoutInflater.from(this).inflate(R.layout.aty_discovery_like_each_other, flBackground,false);
+        final Dialog d = new Dialog(AtyDiscovery.this,R.style.DialogLike);
+        d.setContentView(v);
+        flBackground.setDrawingCacheEnabled(true);
+        setBackground(flBackground.getDrawingCache(), v);
+        TextView tvCong = (TextView) v.findViewById(R.id.dialog_cong);
+        Typeface tf = Typeface.createFromAsset(getAssets(),"scriptina_pro.otf");
+        tvCong.setTypeface(tf, Typeface.BOLD);
+
+        TextView tvText = (TextView) v.findViewById(R.id.like_text);
+        String text = "你和" + user.name + "互相喜欢对方";
+        tvText.setText(text);
+
+        SimpleDraweeView yourAvatar = (SimpleDraweeView) v.findViewById(R.id.my_avatar);
+        SimpleDraweeView userAvatar = (SimpleDraweeView) v.findViewById(R.id.user_avatar);
+        ViewGroup.MarginLayoutParams params1 = (ViewGroup.MarginLayoutParams) yourAvatar.getLayoutParams();
+        ViewGroup.MarginLayoutParams params2 = (ViewGroup.MarginLayoutParams) userAvatar.getLayoutParams();
+        int size = DimensionUtils.getDisplay().widthPixels/13;
+        params1.width = size*5;
+        params1.height = size*5;
+        params1.setMargins(size * 2, 0, 0, 0);
+        yourAvatar.setLayoutParams(params1);
+        params2.width = size*5;
+        params2.height = size*5;
+        params2.setMargins(size * 6, 0, 0, 0);
+        userAvatar.setLayoutParams(params2);
+        yourAvatar.setImageURI(Uri.parse(StrUtils.thumForID(StrUtils.id())));
+        userAvatar.setImageURI(Uri.parse(user.avatar));
+
+        v.findViewById(R.id.continue_find).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                d.dismiss();
+            }
+        });
+
+        v.findViewById(R.id.send_message).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                d.dismiss();
+                Intent i = new Intent(AtyDiscovery.this,AtyMessageReply.class);
+                i.putExtra(AtyMessageReply.INTENT_ID,user.ID+"");
+                startActivity(i);
+            }
+        });
+
+
+        WindowManager.LayoutParams wmlp = d.getWindow().getAttributes();
+        wmlp.width = DimensionUtils.getDisplay().widthPixels;
+        wmlp.height = DimensionUtils.getDisplay().heightPixels;
+        d.show();
+    }
+
 
 
     private void ivMoreClicked(){
@@ -196,8 +256,11 @@ public class AtyDiscovery extends BaseActivity {
         });
     }
 
+    public void setBackground(Bitmap b){
+        setBackground(b,flBackground);
+    }
     @SuppressWarnings("deprecation")
-    public void setBackground(final Bitmap b){
+    private void setBackground(final Bitmap b, final View v){
         LogUtils.i("Time","Label 1 : " + System.currentTimeMillis());
         if(b == null){
             return;
@@ -210,12 +273,14 @@ public class AtyDiscovery extends BaseActivity {
                 LogUtils.i("Time","Label 3 : " + System.currentTimeMillis());
                 final int radius = 5;
                 final Bitmap blur = BitmapUtils.blur(sized,radius);
+                // important, clear cache of flBackground used in showLikeEachOther
+                flBackground.setDrawingCacheEnabled(false);
                 LogUtils.i("Time", "Label 4 : " + System.currentTimeMillis());
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
                         LogUtils.i("Time","Label 5 : " + System.currentTimeMillis());
-                        flBackground.setBackgroundDrawable(new BitmapDrawable(getResources(),blur));
+                        v.setBackgroundDrawable(new BitmapDrawable(getResources(),blur));
                     }
                 });
             }

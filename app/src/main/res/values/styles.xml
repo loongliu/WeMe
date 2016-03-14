@@ -33,9 +33,11 @@
         <item name="android:windowNoTitle">true</item>
     </style>
     <style name="DialogTransparent" parent="@android:style/Theme.Dialog">
-        <item name="android:windowBackground">@null</item>
-        <item name="android:windowIsFloating">true</item>
-        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="DialogLike" parent="Dialog">
+        <item name="android:windowBackground">@color/half_alpha_black</item>
     </style>
 
     <style name="DialogSlideAnim" parent="DialogTransparent">

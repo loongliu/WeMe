@@ -135,7 +135,9 @@ public final class StrUtils {
 
     public static final String RESET_PASSWORD = BASE_URL + "resetpassword";
 
-    public static final String LIKE_USER_CARD = BASE_URL + "unlikeusercard";
+    public static final String LIKE_USER_CARD = BASE_URL + "likeusercard";
+
+    public static final String GET_LIKE_COUNT = BASE_URL + "getlikeusernumber";
 
 
 

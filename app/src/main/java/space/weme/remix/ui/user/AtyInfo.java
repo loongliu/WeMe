@@ -63,6 +63,8 @@ public class AtyInfo extends BaseActivity {
     private String mId;
     private User mUser;
 
+    private TextView mLikeCount;
+
     private TextView mTvVisit;
     private TextView mTvConstellation;
     private ImageView mIvGender;
@@ -143,6 +145,21 @@ public class AtyInfo extends BaseActivity {
         mWindowListener = new WindowListener();
         if(StrUtils.id().equals(mId)) {
             mDrawBackground.setOnClickListener(mWindowListener);
+            findViewById(R.id.aty_info_like_layout).setVisibility(View.VISIBLE);
+            mLikeCount = (TextView) findViewById(R.id.aty_info_like_count);
+            ArrayMap<String,String> map = new ArrayMap<>();
+            map.put("token",StrUtils.token());
+            OkHttpUtils.post(StrUtils.GET_LIKE_COUNT,map,TAG,new OkHttpUtils.SimpleOkCallBack(){
+                @Override
+                public void onResponse(String s) {
+                    JSONObject j = OkHttpUtils.parseJSON(AtyInfo.this,s);
+                    if(j == null){
+                        return;
+                    }
+                    int count = j.optInt("likenumber");
+                    mLikeCount.setText(count+"");
+                }
+            });
         }
 
         findViewById(R.id.aty_info_more).setOnClickListener(mWindowListener);

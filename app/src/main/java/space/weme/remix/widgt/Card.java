@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,6 +37,7 @@ import space.weme.remix.R;
 import space.weme.remix.model.User;
 import space.weme.remix.ui.find.AtyDiscovery;
 import space.weme.remix.ui.user.AtyInfo;
+import space.weme.remix.util.DimensionUtils;
 import space.weme.remix.util.LogUtils;
 import space.weme.remix.util.OkHttpUtils;
 import space.weme.remix.util.StrUtils;
@@ -57,6 +59,7 @@ public class Card extends CardView {
     private ImageView ivGender;
     private ImageView ivLike;
     private TextView tvLikeAdd;
+    private FrameLayout frameLayout;
     private AtyDiscovery aty;
 
     private ValueAnimator animator;
@@ -159,6 +162,7 @@ public class Card extends CardView {
         tvDegree = (TextView) mFront.findViewById(R.id.card_people_education);
         tvLocation = (TextView) mFront.findViewById(R.id.card_people_location_text);
         tvLikeAdd = (TextView) mFront.findViewById(R.id.card_people_like_add);
+        frameLayout = (FrameLayout) mFront.findViewById(R.id.card_people_image_click);
         avatarListener = new AvatarListener();
 
 
@@ -175,11 +179,10 @@ public class Card extends CardView {
         animator.setRepeatCount(ValueAnimator.INFINITE);
         animator.setInterpolator(new LinearInterpolator());
 
-        ivLike.setOnClickListener(new OnClickListener() {
+        frameLayout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!isLiked) {
-                    LogUtils.d("Card", "send like post");
                     ArrayMap<String, String> map = new ArrayMap<>();
                     map.put("token", StrUtils.token());
                     map.put("userid", user.ID + "");
@@ -193,7 +196,7 @@ public class Card extends CardView {
                             }
                             String flag = j.optString("flag");
                             if ("1".equals(flag)) {
-                                showLikeEachOther();
+                                aty.showLikeEachOther(user);
                             }
                         }
                     });
@@ -203,14 +206,16 @@ public class Card extends CardView {
             }
         });
 
+
         Random random = new Random(System.currentTimeMillis());
         ObjectAnimator a1 = ObjectAnimator.ofFloat(tvLikeAdd,"Rotation",0,random.nextFloat()*360);
         ObjectAnimator a2 = ObjectAnimator.ofFloat(tvLikeAdd,"ScaleX",1f,0.5f);
         ObjectAnimator a3 = ObjectAnimator.ofFloat(tvLikeAdd,"ScaleY",1f,0.5f);
         ObjectAnimator a4 = ObjectAnimator.ofFloat(tvLikeAdd, "Alpha", 1f, 0f);
+        ObjectAnimator a5 = ObjectAnimator.ofFloat(tvLikeAdd,"TranslationY",0, DimensionUtils.dp2px(30));
         likeTextAnimator = new AnimatorSet();
-        likeTextAnimator.playTogether(a1,a2,a3,a4);
-        likeTextAnimator.setDuration(500);
+        likeTextAnimator.playTogether(a1,a2,a3,a4,a5);
+        likeTextAnimator.setDuration(1000);
         likeTextAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -223,22 +228,15 @@ public class Card extends CardView {
             }
 
             @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
+            public void onAnimationCancel(Animator animation) {            }
 
             @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
+            public void onAnimationRepeat(Animator animation) {            }
         });
     }
 
-    private void showLikeEachOther(){
 
-    }
-
-    public void showUser(User user){
+    public void showUser(final User user){
         if(!checkBackAndFront()){
             return;
         }
@@ -255,6 +253,15 @@ public class Card extends CardView {
             tvLocation.setText(R.string.hometown_unknown);
         }else {
             tvLocation.setText(user.hometown);
+        }
+        if(user.match){
+            isLiked = true;
+            postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    aty.showLikeEachOther(user);
+                }
+            },600);
         }
     }
 
@@ -273,15 +280,13 @@ public class Card extends CardView {
             }
 
             @Override
-            public void onIntermediateImageSet(String id, @Nullable ImageInfo imageInfo) {
-            }
+            public void onIntermediateImageSet(String id, @Nullable ImageInfo imageInfo) {     }
 
             @Override
-            public void onFailure(String id, Throwable throwable) {
-            }
+            public void onFailure(String id, Throwable throwable) {       }
         };
 
-        Uri uri = Uri.parse(StrUtils.cardForID(user.ID + ""));
+        Uri uri = Uri.parse(user.avatar);
         DraweeController controller = Fresco.newDraweeControllerBuilder()
                 .setControllerListener(controllerListener)
                 .setUri(uri)

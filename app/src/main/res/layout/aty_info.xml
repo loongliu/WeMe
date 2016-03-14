@@ -51,6 +51,7 @@
             android:textSize="12sp" />
 
         <LinearLayout
+            android:id="@+id/aty_info_xin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/aty_info_visit"
@@ -75,6 +76,38 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/aty_info_like_layout"
+            android:layout_below="@id/aty_info_xin"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textSize="12sp"
+                android:textColor="@color/white"
+                android:text="已被"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_marginLeft="2dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_marginEnd="2dp"
+                android:textColor="@color/red"
+                android:id="@+id/aty_info_like_count"
+                android:textStyle="italic"
+                android:textSize="18sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:textSize="12sp"
+                android:textColor="@color/white"
+                android:text="人喜欢"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
         </LinearLayout>
     </RelativeLayout>
 

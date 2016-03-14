@@ -30,14 +30,23 @@
                 android:layout_height="wrap_content"
                 app:actualImageScaleType="centerCrop"
                 app:placeholderImage="@mipmap/default_avatar" />
-            <ImageView
+            <FrameLayout
+                android:id="@+id/card_people_image_click"
                 android:layout_gravity="end|bottom"
-                android:src="@mipmap/like_on"
-                android:id="@+id/card_people_like"
-                android:padding="8dp"
                 android:layout_width="40dp"
-                android:layout_height="40dp" />
+                android:layout_height="40dp">
+                <ImageView
+                    android:layout_gravity="center"
+                    android:src="@mipmap/like_on"
+                    android:id="@+id/card_people_like"
+                    android:padding="8dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
+            </FrameLayout>
             <TextView
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:visibility="gone"
                 android:id="@+id/card_people_like_add"
                 android:text="喜欢+1"
                 android:layout_marginBottom="20dp"

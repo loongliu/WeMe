@@ -139,6 +139,8 @@
     <string name="search_activity">搜索活动</string>
     <string name="publish_activity">发布活动</string>
     <string name="qr_code">二维码</string>
+    <string name="send_message_m">发送消息</string>
+    <string name="continue_find">继续寻觅</string>
 
 
     <string-array name="aty_info_tabs">
