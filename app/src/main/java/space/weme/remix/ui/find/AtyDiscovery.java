@@ -290,6 +290,7 @@ public class AtyDiscovery extends BaseActivity {
 
 
     private void startAnimation(){
+        LogUtils.d(TAG,"clicked");
         currentIndex++;
         if(currentIndex>=userList.size()&& !isLoading){
             fetchUser();

@@ -281,10 +281,12 @@ public class AtyEditInfo extends BaseActivity {
 
             @Override
             public void onResponse(String s) {
-                ImagePipeline imagePipeline = Fresco.getImagePipeline();
-                imagePipeline.evictFromCache(Uri.parse(StrUtils.thumForID(mUser.ID + "")));
-                imagePipeline.evictFromCache(Uri.parse(StrUtils.avatarForID(mUser.ID + "")));
-                imagePipeline.evictFromCache(Uri.parse(StrUtils.cardForID(mUser.ID+"")));
+                if(mUser!=null) {
+                    ImagePipeline imagePipeline = Fresco.getImagePipeline();
+                    imagePipeline.evictFromCache(Uri.parse(StrUtils.thumForID(mUser.ID + "")));
+                    imagePipeline.evictFromCache(Uri.parse(StrUtils.avatarForID(mUser.ID + "")));
+                    imagePipeline.evictFromCache(Uri.parse(StrUtils.cardForID(mUser.ID + "")));
+                }
                 uploadImageReturned();
             }
         });
