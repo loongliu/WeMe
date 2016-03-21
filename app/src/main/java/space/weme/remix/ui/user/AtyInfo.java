@@ -482,7 +482,7 @@ public class AtyInfo extends BaseActivity {
                     public void onClick(View v) {
                         ArrayMap<String,String> param = new ArrayMap<>();
                         param.put("token",StrUtils.token());
-                        param.put("id", mUser.ID+"");
+                        param.put("id", mId+"");
                         OkHttpUtils.post(StrUtils.UNFOLLOW_USER, param, TAG, new OkHttpUtils.SimpleOkCallBack(){
                             @Override
                             public void onFailure(IOException e) {
@@ -508,7 +508,7 @@ public class AtyInfo extends BaseActivity {
     private void follow(){
         ArrayMap<String,String> param = new ArrayMap<>();
         param.put("token", StrUtils.token());
-        param.put("id", mUser.ID+"");
+        param.put("id", mId+"");
         OkHttpUtils.post(StrUtils.FOLLOW_USER, param, TAG, new OkHttpUtils.SimpleOkCallBack() {
             @Override
             public void onFailure(IOException e) {
@@ -734,7 +734,7 @@ public class AtyInfo extends BaseActivity {
 
     private void sendMessage(){
         Intent i = new Intent(AtyInfo.this, AtyMessageReply.class);
-        i.putExtra(AtyMessageReply.INTENT_ID,mUser.ID+"");
+        i.putExtra(AtyMessageReply.INTENT_ID,mId+"");
         startActivity(i);
     }
 
@@ -744,7 +744,9 @@ public class AtyInfo extends BaseActivity {
         LogUtils.i(TAG, "edit my info");
         Intent i = new Intent(AtyInfo.this, AtyEditInfo.class);
         i.putExtra(AtyEditInfo.INTENT_EDIT,true);
-        i.putExtra(AtyEditInfo.INTENT_INFO,mUser.toJSONString());
+        if(mUser!=null) {
+            i.putExtra(AtyEditInfo.INTENT_INFO, mUser.toJSONString());
+        }
         startActivity(i);
     }
 

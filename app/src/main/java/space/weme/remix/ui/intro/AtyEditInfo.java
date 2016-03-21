@@ -92,12 +92,31 @@ public class AtyEditInfo extends BaseActivity {
         mEdit = getIntent().getBooleanExtra(INTENT_EDIT,false);
         if(mEdit){
             String info = getIntent().getStringExtra(INTENT_INFO);
-            try {
-                mUser = User.fromJSON(new JSONObject(info));
-            } catch (JSONException e) {
-                e.printStackTrace();
+            if(info!=null) {
+                try {
+                    mUser = User.fromJSON(new JSONObject(info));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                showUserInfo();
+            }else {
+                ArrayMap<String, String> param = new ArrayMap<>();
+                param.put("token", StrUtils.token());
+                param.put("id", StrUtils.id());
+                OkHttpUtils.post(StrUtils.GET_PROFILE_BY_ID, param, TAG, new OkHttpUtils.SimpleOkCallBack() {
+                    @Override
+                    public void onResponse(String s) {
+                        //LogUtils.i(TAG, s);
+                        JSONObject j = OkHttpUtils.parseJSON(AtyEditInfo.this, s);
+                        if (j == null) {
+                            finish();
+                            return;
+                        }
+                        mUser = User.fromJSON(j);
+                        showUserInfo();
+                    }
+                });
             }
-            showUserInfo();
         }
     }
 

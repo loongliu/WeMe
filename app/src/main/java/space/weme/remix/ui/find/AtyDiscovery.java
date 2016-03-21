@@ -210,6 +210,7 @@ public class AtyDiscovery extends BaseActivity {
         View.OnClickListener popupListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(currentIndex>=userList.size()) return;
                 String id = userList.get(currentIndex).ID + "";
                 if(v.getId()==R.id.aty_discovery_option_message){
                     Intent i = new Intent(AtyDiscovery.this,AtyMessageReply.class);

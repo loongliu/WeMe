@@ -182,6 +182,7 @@ public class Card extends CardView {
         frameLayout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(user == null) {return;}
                 if (!isLiked) {
                     ArrayMap<String, String> map = new ArrayMap<>();
                     map.put("token", StrUtils.token());

@@ -145,6 +145,9 @@ public final class OkHttpUtils {
     }
 
     public static void uploadBitmap(String url,Map<String,String> param, Bitmap bitmap,MediaType type, String tag, OkCallBack callBack){
+        if(bitmap == null){
+            return;
+        }
         JSONObject jsonObject = new JSONObject(param);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);

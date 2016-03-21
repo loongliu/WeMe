@@ -61,6 +61,9 @@ public class FgtMe extends BaseFragment {
     TextView mTvName;
     TextView mTvCount;
 
+    View qrCodeView;
+    boolean isQrCodeShowing = false;
+
     View.OnClickListener mListener;
     User me;
 
@@ -179,6 +182,7 @@ public class FgtMe extends BaseFragment {
                 }
                 me = User.fromJSON(j);
                 mTvName.setText(me.name);
+                showQRCodeUserInfo();
             }
         });
 
@@ -233,9 +237,9 @@ public class FgtMe extends BaseFragment {
     private void showQRCode(){
         LogUtils.i(TAG, "showQRCode");
         final Dialog dialog = new Dialog(getActivity(),R.style.DialogTransparent);
-        View v = LayoutInflater.from(getActivity()).inflate(R.layout.qrcode_user,llLayout,false);
+        qrCodeView = LayoutInflater.from(getActivity()).inflate(R.layout.qrcode_user,llLayout,false);
         final int size = DimensionUtils.getDisplay().widthPixels*4/5-DimensionUtils.dp2px(32);
-        final ImageView qr_code = (ImageView) v.findViewById(R.id.qr_code);
+        final ImageView qr_code = (ImageView) qrCodeView.findViewById(R.id.qr_code);
         ViewGroup.LayoutParams param = qr_code.getLayoutParams();
         param.width = size;
         param.height = size;
@@ -246,28 +250,39 @@ public class FgtMe extends BaseFragment {
             drawQRCodeWithCallBack(qr_code);
         }
 
-        SimpleDraweeView avatar = (SimpleDraweeView) v.findViewById(R.id.avatar);
+        SimpleDraweeView avatar = (SimpleDraweeView) qrCodeView.findViewById(R.id.avatar);
         avatar.setImageURI(Uri.parse(StrUtils.thumForID(StrUtils.id())));
-        TextView name = (TextView) v.findViewById(R.id.name);
-        name.setText(me.name);
-        TextView school = (TextView) v.findViewById(R.id.school);
-        school.setText(me.school);
-        ImageView iv = (ImageView) v.findViewById(R.id.gender);
 
-        v.setOnClickListener(new View.OnClickListener() {
+        showQRCodeUserInfo();
+
+
+        qrCodeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                isQrCodeShowing = false;
             }
         });
 
-        boolean male = getResources().getString(R.string.male).equals(me.gender);
-        iv.setImageResource(male? R.mipmap.boy : R.mipmap.girl);
 
-        dialog.setContentView(v);
+
+        dialog.setContentView(qrCodeView);
         WindowManager.LayoutParams wmlp = dialog.getWindow().getAttributes();
         wmlp.gravity = Gravity.CENTER;
         dialog.show();
+        isQrCodeShowing = true;
+    }
+
+    private void showQRCodeUserInfo(){
+        if(qrCodeView != null && isQrCodeShowing) {
+            TextView name = (TextView) qrCodeView.findViewById(R.id.name);
+            name.setText(me.name);
+            TextView school = (TextView) qrCodeView.findViewById(R.id.school);
+            school.setText(me.school);
+            ImageView iv = (ImageView) qrCodeView.findViewById(R.id.gender);
+            boolean male = getResources().getString(R.string.male).equals(me.gender);
+            iv.setImageResource(male ? R.mipmap.boy : R.mipmap.girl);
+        }
     }
 
 

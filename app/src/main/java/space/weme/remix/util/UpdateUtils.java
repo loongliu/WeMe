@@ -21,7 +21,7 @@ import space.weme.remix.widgt.WDialog;
 public class UpdateUtils {
     private static String v1 = "1";
     private static String v2 = "4";
-    private static String v3 = "1";
+    private static String v3 = "2";
 
     public static void checkUpdate(final Context context){
         ArrayMap<String,String> map = new ArrayMap<>();
