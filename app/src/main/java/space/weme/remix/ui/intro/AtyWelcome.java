@@ -2,10 +2,12 @@ package space.weme.remix.ui.intro;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.widget.ImageView;
+
+import com.facebook.common.util.UriUtil;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import space.weme.remix.R;
 import space.weme.remix.ui.base.BaseActivity;
@@ -27,21 +29,14 @@ public class AtyWelcome extends BaseActivity {
         setContentView(R.layout.aty_welcome);
 
         Handler handler = new Handler();
-        final ImageView iv = (ImageView) findViewById(R.id.background);
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                int w = DimensionUtils.getDisplay().widthPixels;
-                int h = DimensionUtils.getDisplay().heightPixels;
-                final Bitmap bitmap = BitmapUtils.fromResoursAndSize(R.mipmap.splash_background,w,h);
-                iv.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        iv.setImageBitmap(bitmap);
-                    }
-                });
-            }
-        });
+        final SimpleDraweeView iv = (SimpleDraweeView) findViewById(R.id.background);
+        Uri uri = new Uri.Builder()
+                .scheme(UriUtil.LOCAL_RESOURCE_SCHEME) // "res"
+                .path(String.valueOf(R.mipmap.splash_background))
+                .build();
+        int width = DimensionUtils.getDisplay().widthPixels;
+        int height = DimensionUtils.getDisplay().heightPixels;
+        BitmapUtils.showResizedPicture(iv,uri,width,height);
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {SharedPreferences sp = getSharedPreferences(StrUtils.SP_USER, MODE_PRIVATE);

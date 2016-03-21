@@ -45,6 +45,7 @@ import space.weme.remix.ui.AtyImage;
 import space.weme.remix.ui.base.BaseActivity;
 import space.weme.remix.ui.community.AtyPost;
 import space.weme.remix.ui.intro.AtyEditInfo;
+import space.weme.remix.util.BitmapUtils;
 import space.weme.remix.util.DimensionUtils;
 import space.weme.remix.util.LogUtils;
 import space.weme.remix.util.OkHttpUtils;
@@ -774,7 +775,9 @@ public class AtyInfo extends BaseActivity {
         if(requestCode == REQUEST_IMAGE){
             List<String> paths=data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
             String mAvatarPath = paths.get(0);
-            mDrawBackground.setImageURI(Uri.parse("file://" + mAvatarPath));
+            int width = mDrawBackground.getWidth();
+            int height = mDrawBackground.getHeight();
+            BitmapUtils.showResizedPicture(mDrawBackground,Uri.parse("file://" + mAvatarPath), width, height);
             ArrayMap<String,String> map = new ArrayMap<>();
             map.put("token", StrUtils.token());
             map.put("type","-1");

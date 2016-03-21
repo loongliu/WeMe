@@ -187,6 +187,7 @@ public class Card extends CardView {
                     ArrayMap<String, String> map = new ArrayMap<>();
                     map.put("token", StrUtils.token());
                     map.put("userid", user.ID + "");
+                    final User cached = user;
                     OkHttpUtils.post(StrUtils.LIKE_USER_CARD, map, TAG, new OkHttpUtils.SimpleOkCallBack() {
                         @Override
                         public void onResponse(String s) {
@@ -196,7 +197,7 @@ public class Card extends CardView {
                                 return;
                             }
                             String flag = j.optString("flag");
-                            if ("1".equals(flag)) {
+                            if ("1".equals(flag)&&cached==user) {
                                 aty.showLikeEachOther(user);
                             }
                         }
@@ -255,15 +256,15 @@ public class Card extends CardView {
         }else {
             tvLocation.setText(user.hometown);
         }
-        if(user.match){
-            isLiked = true;
-            postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    aty.showLikeEachOther(user);
-                }
-            },600);
-        }
+//        if(user.match){
+//            isLiked = true;
+//            postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    aty.showLikeEachOther(user);
+//                }
+//            },600);
+//        }
     }
 
     private void showAvatar(User user){

@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 import space.weme.remix.R;
 import space.weme.remix.ui.base.AtyImage;
+import space.weme.remix.util.BitmapUtils;
 import space.weme.remix.util.LogUtils;
 import space.weme.remix.util.OkHttpUtils;
 import space.weme.remix.util.StrUtils;
@@ -148,7 +149,8 @@ public class AtyMessageReply extends AtyImage {
             mImageGrids.removeAllViews();
             for(String path : mChosenPicturePathList){
                 SimpleDraweeView image = new SimpleDraweeView(AtyMessageReply.this);
-                image.setImageURI(Uri.parse("file://"+path));
+                int size = mImageGrids.getCellSize();
+                BitmapUtils.showResizedPicture(image,Uri.parse("file://"+path), size, size);
                 mImageGrids.addView(image);
                 image.setOnClickListener(mListener);
             }

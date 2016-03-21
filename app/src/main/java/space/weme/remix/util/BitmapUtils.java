@@ -10,9 +10,15 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.support.annotation.ColorInt;
 
-import space.weme.remix.APP;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
 /**
  * Created by Liujilong on 16/1/24.
@@ -106,15 +112,7 @@ public final class BitmapUtils {
         return BitmapFactory.decodeFile(path,options);
     }
 
-    public static Bitmap fromResoursAndSize(int resId, int w, int h ){
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeResource(APP.context().getResources(), resId, options);
-        int resize = calculateInSampleSize(options, w, h);
-        options.inJustDecodeBounds = false;
-        options.inSampleSize = resize;
-        return BitmapFactory.decodeResource(APP.context().getResources(), resId, options);
-    }
+
 
     private static int calculateInSampleSize(
             BitmapFactory.Options options) {
@@ -125,7 +123,7 @@ public final class BitmapUtils {
 
         long memory = height*width*4;
         // resize the bitmap smaller than 512kb (1<<26)
-        while(memory/inSampleSize > (1L<<24)){
+        while(memory/inSampleSize > (1L<<22)){
             inSampleSize*=2;
         }
         LogUtils.d("BitmapUtils", "inSampleSize: " + inSampleSize);
@@ -142,6 +140,17 @@ public final class BitmapUtils {
             inSampleSize*=2;
         }
         return inSampleSize;
+    }
+
+    public static void showResizedPicture(SimpleDraweeView view, Uri uri, int width, int height){
+        ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
+                .setResizeOptions(new ResizeOptions(width, height))
+                .build();
+        DraweeController controller = Fresco.newDraweeControllerBuilder()
+                .setOldController(view.getController())
+                .setImageRequest(request)
+                .build();
+        view.setController(controller);
     }
 
     /** bitmap blur for SDK version below 17

@@ -17,6 +17,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 import space.weme.remix.R;
 import space.weme.remix.ui.base.BaseFragment;
+import space.weme.remix.util.BitmapUtils;
 import space.weme.remix.util.StrUtils;
 
 /**
@@ -97,7 +98,9 @@ public class FgtAddFood extends BaseFragment {
             tvPrice.setText(price);
         }
         if(pictureChosen){
-            pictureDrawee.setImageURI(Uri.parse("file://" + StrUtils.cropFilePath));
+            int width = pictureDrawee.getWidth();
+            int height = pictureDrawee.getHeight();
+            BitmapUtils.showResizedPicture(pictureDrawee, Uri.parse("file://" + StrUtils.cropFilePath), width, height);
         }
         if(poiItem != null){
             String location = poiItem.getTitle() + poiItem.getSnippet();

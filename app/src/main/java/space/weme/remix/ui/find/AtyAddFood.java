@@ -24,6 +24,7 @@ import java.util.List;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 import space.weme.remix.R;
 import space.weme.remix.ui.base.BaseActivity;
+import space.weme.remix.util.BitmapUtils;
 import space.weme.remix.util.LogUtils;
 import space.weme.remix.util.OkHttpUtils;
 import space.weme.remix.util.StrUtils;
@@ -99,7 +100,9 @@ public class AtyAddFood extends BaseActivity{
             //mDrawAvatar.setImageURI(Uri.parse("file://"+mAvatarPath));
         }else if (requestCode == REQUEST_CROP){
             Fresco.getImagePipeline().evictFromCache(Uri.parse("file://" + StrUtils.cropFilePath));
-            fgtAddFood.pictureDrawee.setImageURI(Uri.parse("file://" + StrUtils.cropFilePath));
+            int width = fgtAddFood.pictureDrawee.getWidth();
+            int height = fgtAddFood.pictureDrawee.getHeight();
+            BitmapUtils.showResizedPicture(fgtAddFood.pictureDrawee,Uri.parse("file://" + StrUtils.cropFilePath), width, height);
             fgtAddFood.pictureChosen = true;
         }
     }

@@ -111,6 +111,10 @@ public class GridLayout extends ViewGroup {
         return CELL_SIZE_DIVIDE_GAP_SIZE*width / ((CELL_SIZE_DIVIDE_GAP_SIZE+1)*numInRow-1);
     }
 
+    public int getCellSize(){
+        return getCellSize(getWidth());
+    }
+
     private int calculateDesiredHeight(int cellSize){
         int rows = (getChildCount()-1)/numInRow +1;
         if(getChildCount()==0){
