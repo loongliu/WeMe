@@ -184,7 +184,6 @@ public class AtyActivityDetail extends SwipeActivity {
                                 break;
                             case 5:
                                 chooseImage();
-                                likeSignAty(StrUtils.SIGN_ACTIVITY);
                                 break;
                             default:
                                 LogUtils.e(TAG, "error" + flag);
@@ -194,6 +193,27 @@ public class AtyActivityDetail extends SwipeActivity {
                 }).show();
 
     }
+
+    void singIn(){
+        String url = StrUtils.SIGN_ACTIVITY;
+        ArrayMap<String,String> map=new ArrayMap<>();
+        map.put("token", StrUtils.token());
+        map.put("activityid", String.valueOf(activityid));
+        //signup 路由有bug
+        map.put("activity", String.valueOf(activityid));
+        OkHttpUtils.post(url, map, TAG, new SimpleOkCallBack() {
+            @Override
+            public void onResponse(String s) {
+                JSONObject j = OkHttpUtils.parseJSON(AtyActivityDetail.this, s);
+                if (j != null) {
+                    initData();
+                    Toast.makeText(AtyActivityDetail.this,"报名成功",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        });
+    }
+
 
     void likeSignAty(String url){
         ArrayMap<String,String> map=new ArrayMap<>();
@@ -232,17 +252,23 @@ public class AtyActivityDetail extends SwipeActivity {
             if (path!=null&&!path.isEmpty()){
                 Map<String,String> map=new ArrayMap<>();
                 map.put("token", StrUtils.token());
-                map.put("type","-10");
-                map.put("activityid",String.valueOf(activityid));
-                Toast.makeText(AtyActivityDetail.this,"正在上传生活照,请等待",Toast.LENGTH_LONG).show();
+                map.put("type","-9");
+                map.put("activityid", String.valueOf(activityid));
+                final int total = path.size();
+                final int[] cur = {0};
                 for (int i=0;i<path.size();i++){
                     map.put("number",String.valueOf(i+1));
+                    Toast.makeText(AtyActivityDetail.this,"正在上传生活照,请等待",Toast.LENGTH_SHORT).show();
                     OkHttpUtils.uploadFile(StrUtils.UPLOAD_AVATAR_URL, map, path.get(i), MEDIA_TYPE_PNG, TAG, new SimpleOkCallBack() {
                         @Override
                         public void onResponse(String s) {
                             JSONObject j = OkHttpUtils.parseJSON(AtyActivityDetail.this, s);
-                            if (j != null)
-                                Toast.makeText(AtyActivityDetail.this, "上传成功", Toast.LENGTH_SHORT).show();
+                            if (j != null) {
+                                cur[0]++;
+                                if(cur[0]==total){
+                                    singIn();
+                                }
+                            }
                         }
                     });
                 }

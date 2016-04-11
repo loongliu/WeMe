@@ -10,7 +10,7 @@
     <string name="me">个人</string>
     <string name="network_error">网络异常</string>
     <string name="friend">好友</string>
-    <string name="message">私信</string>
+    <string name="message">消息</string>
     <string name="location">附近</string>
     <string name="discovery">发现</string>
     <string name="food">美食</string>
@@ -141,6 +141,7 @@
     <string name="qr_code">二维码</string>
     <string name="send_message_m">发送消息</string>
     <string name="continue_find">继续寻觅</string>
+    <string name="private_letter">私信</string>
 
 
     <string-array name="aty_info_tabs">
@@ -165,5 +166,8 @@
         <item >500&#8211;1000</item>
         <item >1000+</item>
     </string-array>
+
+    <item type="id" name="tag_first"></item>
+    <item type="id" name="tag_second"></item>
 
 </resources>

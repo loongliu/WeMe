@@ -106,7 +106,7 @@ public final class BitmapUtils {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(path, options);
-        int resize = calculateInSampleSize(options);
+        int resize = calculateInSampleSize(options,1080);
         options.inJustDecodeBounds = false;
         options.inSampleSize = resize;
         return BitmapFactory.decodeFile(path,options);
@@ -130,13 +130,13 @@ public final class BitmapUtils {
         return inSampleSize;
     }
     private static int calculateInSampleSize(
-            BitmapFactory.Options options, int w, int h) {
+            BitmapFactory.Options options, int w) {
         // Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;
         int inSampleSize = 1;
 
-        while(height/inSampleSize>h && width/inSampleSize>w){
+        while(width/inSampleSize>w){
             inSampleSize*=2;
         }
         return inSampleSize;

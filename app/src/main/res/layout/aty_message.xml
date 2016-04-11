@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
     <android.support.v7.widget.Toolbar
         android:background="@color/colorPrimary"
@@ -8,17 +10,26 @@
         android:layout_height="56dp">
         <TextView
             android:textSize="16sp"
-            android:text="@string/message_list"
+            android:text="@string/message"
             android:gravity="center"
             android:textColor="@color/white"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </android.support.v7.widget.Toolbar>
 
-    <android.support.v7.widget.RecyclerView
+    <android.support.design.widget.TabLayout
+        android:id="@+id/aty_user_message_tab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:tabIndicatorColor="@color/blue_100"
+        app:tabSelectedTextColor="@color/colorPrimary"
+        app:tabTextColor="@color/colorGray"/>
+    <android.support.v4.view.ViewPager
         android:background="@color/grey_gap"
-        android:id="@+id/aty_message_recycler"
+        android:id="@+id/aty_user_message_pager"
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="0dp"/>
+
 </LinearLayout>

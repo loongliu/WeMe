@@ -51,7 +51,7 @@ public final class StrUtils {
 
     public static final String GET_PERSON_INFO = BASE_URL + "getprofile";
 
-    public static final String GET_UNREAD_MESSAGE_URL = BASE_URL + "getmessageunreadnumber";
+    public static final String GET_UNREAD_MESSAGE_URL = BASE_URL + "unreadmessagenum";
 
     public static final String GET_TOPIC_LIST = BASE_URL + "gettopiclist";
 
@@ -88,6 +88,8 @@ public final class StrUtils {
     public static final String SEARCH_USER_URL = BASE_URL + "searchuser";
 
     public static final String GET_USER_MESSAGE_LIST = BASE_URL + "getSendUserList";
+
+    public static final String GET_SYSTEM_NOTIFICATION = BASE_URL + "systemnotification";
 
     public static final String READ_MESSAGE = BASE_URL + "readmessage";
 
@@ -138,6 +140,8 @@ public final class StrUtils {
     public static final String LIKE_USER_CARD = BASE_URL + "likeusercard";
 
     public static final String GET_LIKE_COUNT = BASE_URL + "getlikeusernumber";
+
+    public static final String READ_COMMUNITY_NOTIFICATION = BASE_URL + "readcommunitynotification";
 
 
 

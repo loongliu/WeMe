@@ -201,8 +201,9 @@ public final class OkHttpUtils {
     }
 
     private void cacheCallForCancel(Call call){
-        String tag = (String) call.request().tag();
-        if(tag!=null){
+        Object tag = call.request().tag();
+        if(tag instanceof String){
+            String tagg = (String) tag;
             synchronized (mRunningCalls) {
                 //LogUtils.d(TAG,"start caching Call: " + printCall(call) + " \ncurrent running calls: "+printRunningCalls());
                 Set<Call> calls = mRunningCalls.get(tag);
@@ -210,7 +211,7 @@ public final class OkHttpUtils {
                     calls = new HashSet<>();
                 }
                 calls.add(call);
-                mRunningCalls.put(tag, calls);
+                mRunningCalls.put(tagg, calls);
                 //LogUtils.d(TAG,"finish caching Call: " + printCall(call) + " \ncurrent running calls: "+printRunningCalls());
             }
         }
@@ -227,16 +228,17 @@ public final class OkHttpUtils {
         return isCancel(call,false);
     }
     private boolean isCancel(Call call, boolean remove){
-        String tag = (String) call.request().tag();
-        if(tag==null) return false;
+        Object tag = call.request().tag();
+        if(!(tag instanceof String)) return false;
+        String tagg = (String) tag;
         synchronized (mRunningCalls) {
             //LogUtils.d(TAG,"start remove Call: " + printCall(call) + " \ncurrent running calls: "+printRunningCalls());
-            Set<Call> calls = mRunningCalls.get(tag);
+            Set<Call> calls = mRunningCalls.get(tagg);
             if (calls == null || !calls.contains(call)) return true;
             if(remove) {
                 calls.remove(call);
                 if (calls.isEmpty()) {
-                    mRunningCalls.remove(tag);
+                    mRunningCalls.remove(tagg);
                     //LogUtils.d(TAG, "finish remove Call: " + printCall(call) + " \ncurrent running calls: " + printRunningCalls());
                 }
             }

@@ -90,7 +90,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public int getItemCount() {
         return messageList==null?0:messageList.size();
     }
-    class MessageViewHolder extends RecyclerView.ViewHolder{
+    public static class MessageViewHolder extends RecyclerView.ViewHolder{
         SimpleDraweeView avatar;
         TextView tvName;
         TextView tvSchool;
