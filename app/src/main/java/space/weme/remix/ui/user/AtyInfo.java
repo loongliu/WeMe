@@ -50,6 +50,7 @@ import space.weme.remix.util.DimensionUtils;
 import space.weme.remix.util.LogUtils;
 import space.weme.remix.util.OkHttpUtils;
 import space.weme.remix.util.StrUtils;
+import space.weme.remix.widgt.TagView;
 import space.weme.remix.widgt.WDialog;
 
 /**
@@ -242,6 +243,12 @@ public class AtyInfo extends BaseActivity {
     }
 
     private void configView1(){
+        TagView tagView = (TagView) mPagerViews[0].findViewById(R.id.tag_view);
+        tagView.setTags(new String[]{
+                "Android", "Google", "Winter is coming.",
+                "无人之境", "Cold Play","消灭人类暴政，世界属于三体！","Graphene",
+                "秦时明月", "Mostly Harmless"
+        });
         ArrayMap<String,String> param = new ArrayMap<>();
         param.put("token", StrUtils.token());
         param.put("id", mId);

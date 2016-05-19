@@ -142,6 +142,11 @@
     <string name="send_message_m">发送消息</string>
     <string name="continue_find">继续寻觅</string>
     <string name="private_letter">私信</string>
+    <string name="my_tag">我的标签#</string>
+    <string name="longclick">长按可编辑或删除标签</string>
+    <string name="edit">编辑</string>
+    <string name="edit_tag">编辑标签</string>
+    <string name="delete_tag">删除标签</string>
 
 
     <string-array name="aty_info_tabs">
