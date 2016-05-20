@@ -147,6 +147,7 @@
     <string name="edit">编辑</string>
     <string name="edit_tag">编辑标签</string>
     <string name="delete_tag">删除标签</string>
+    <string name="add_tag">添加标签...</string>
 
 
     <string-array name="aty_info_tabs">

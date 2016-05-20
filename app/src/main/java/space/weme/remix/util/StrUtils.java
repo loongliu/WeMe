@@ -143,6 +143,9 @@ public final class StrUtils {
 
     public static final String READ_COMMUNITY_NOTIFICATION = BASE_URL + "readcommunitynotification";
 
+    public static final String GET_TAGS_BY_ID = BASE_URL + "gettagsbyid";
+
+    public static final String SET_TAGS = BASE_URL + "settags";
 
 
     public static final String GET_AVATAR = BASE_URL_NGINX + "avatar/";

@@ -1,22 +1,21 @@
 package space.weme.remix.widgt;
 
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.database.DataSetObserver;
+import android.graphics.Color;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.util.AttributeSet;
 import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
-import space.weme.remix.APP;
 import space.weme.remix.R;
 import space.weme.remix.util.DimensionUtils;
 
@@ -25,9 +24,11 @@ import space.weme.remix.util.DimensionUtils;
  * liujilong.me@gmail.com
  */
 public class TagView extends ViewGroup {
-    private String[] mTags;
+    private TagAdapter mAdapter;
     private int mGapX = DimensionUtils.dp2px(4);
     private int mGapY = mGapX;
+
+
 
     private ArrayList<Integer> newLineIndex = new ArrayList<>();
 
@@ -42,22 +43,70 @@ public class TagView extends ViewGroup {
 
 
 
-    public void setTags(String[] tags){
-        mTags = tags;
+
+    public void setAdapter(TagAdapter adapter) {
+        if(mAdapter!=null){
+            mAdapter.unregisterDataSetObserver(dataSetObserver);
+        }
+        mAdapter = adapter;
+        mAdapter.registerDataSetObserver(dataSetObserver);
+        adapterInvalidated();
+    }
+
+    DataSetObserver dataSetObserver = new DataSetObserver() {
+        @Override
+        public void onChanged() {
+            adapterChanged();
+        }
+
+        @Override
+        public void onInvalidated() {
+            adapterInvalidated();
+        }
+    };
+
+    // remove all child views and create new views, this can make adapter's click listener work
+    private void adapterInvalidated(){
+        removeAllViews();
+        for(int i = 0; i<mAdapter.getCount(); i++){
+            InTag tagView = (InTag) mAdapter.getView(i,null,null);
+            addView(tagView);
+        }
+        if(mAdapter.getCanEdit()){
+            EditTag editTag = mAdapter.getAddView();
+            addView(editTag);
+        }
+    }
+
+    // reuse current views
+    private void adapterChanged(){
+        EditTag editTag = null;
+        if(getChildCount()>=1 && getChildAt(getChildCount()-1) instanceof EditTag){
+            editTag = (EditTag) getChildAt(getChildCount()-1);
+            removeViewAt(getChildCount()-1);
+        }
         for(int i = 0; i<getChildCount(); i++){
-            if(i<tags.length){
+            if(i<mAdapter.getCount()){
                 InTag tv = (InTag) getChildAt(i);
-                tv.setText(mTags[i]);
+                tv.setText((String) mAdapter.getItem(i));
             }else{
                 removeViewAt(i);
             }
         }
-        for(int i = getChildCount(); i<tags.length; i++){
-            InTag tagView = new InTag(getContext());
-            tagView.setText(mTags[i]);
+        for(int i = getChildCount(); i<mAdapter.getCount(); i++){
+            InTag tagView = (InTag) mAdapter.getView(i,null,null);
             addView(tagView);
         }
+        if(mAdapter.getCanEdit()){
+            if(editTag == null){
+                editTag = mAdapter.getAddView();
+            }
+            addView(editTag);
+        }
     }
+
+
+
 
     public void setGapX(int px){
         mGapX = px;
@@ -69,7 +118,6 @@ public class TagView extends ViewGroup {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
 
@@ -135,7 +183,7 @@ public class TagView extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        if(getChildCount() == 0) return; // TODO: 2016/5/18 no tag condition
+        if(getChildCount() == 0) return;
         int currentX=-mGapX , currentY=0, nextY = 0;
         int index = 0;
         for(int i = 0; i<getChildCount(); i++){
@@ -155,6 +203,108 @@ public class TagView extends ViewGroup {
     }
 
 
+
+    public static class TagAdapter extends BaseAdapter{
+        private boolean mCanEdit = false;
+
+        public void setCanEdit(boolean canEdit){
+            mCanEdit = canEdit;
+        }
+
+        public boolean getCanEdit(){
+            return mCanEdit;
+        }
+        private View.OnClickListener clickListener;
+        private View.OnLongClickListener longClickListener;
+        private View.OnClickListener addListener;
+
+        private List<String> mTags = new ArrayList<>();
+        private Context mContext;
+
+        public TagAdapter(Context context){
+            mContext = context;
+        }
+
+        public void setTags(List<String> tags){
+            mTags = tags;
+            notifyDataSetInvalidated();
+        }
+
+        public List<String> getTags(){
+            return mTags;
+        }
+
+        private void checkTags(){
+            if(mTags == null){
+                mTags = new ArrayList<>();
+            }
+        }
+
+        public void addTag(String tag){
+            checkTags();
+            mTags.add(tag);
+            notifyDataSetChanged();
+        }
+
+        public void setTagAtPosition(int position, String tag){
+            checkTags();
+            if(position>=mTags.size()) throw new ArrayIndexOutOfBoundsException(position);
+            mTags.set(position, tag);
+            notifyDataSetChanged();
+        }
+
+        public void removeTagAtPosition(int position){
+            checkTags();
+            mTags.remove(position);
+            notifyDataSetChanged();
+        }
+
+        public void setOnItemClickListener(View.OnClickListener clickListener){
+            this.clickListener = clickListener;
+        }
+
+        public void setOnItemLongClickListener(View.OnLongClickListener longClickListener){
+            this.longClickListener = longClickListener;
+        }
+
+        public void setOnAddListener(View.OnClickListener listener){
+            addListener = listener;
+        }
+
+        @Override
+        public int getCount() {
+            return mTags==null?0:mTags.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mTags.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        public EditTag getAddView(){
+            EditTag editTag = new EditTag(mContext);
+            if(addListener!=null){
+                editTag.setOnClickListener(addListener);
+            }
+            return editTag;
+        }
+
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            InTag tagView = new InTag(mContext);
+            tagView.setText(mTags.get(position));
+            if(clickListener!=null) tagView.setOnClickListener(clickListener);
+            if(longClickListener!=null) tagView.setOnLongClickListener(longClickListener);
+            return tagView;
+        }
+    }
+
     public static class InTag extends TextView{
         final static int[] TAG_BACK_COLORS = new int[]{0xffcac9e2, 0xffcfead8,0xffd3dee3,0xfff7b0a4,0xfffeeebf,0xffb5b6b7, 0xffb6c0de};
         final static int[] TAG_FRONT_COLORS = new int[]{0xff64638d,0xff13602d, 0xff35769c,0xffc4503c,0xffc3a245, 0xff5a6b80, 0xff6478b8};
@@ -166,7 +316,6 @@ public class TagView extends ViewGroup {
                 null,
                 null);
         ShapeDrawable background = new ShapeDrawable(rect);
-
 
 
         public InTag(Context context) {
@@ -185,70 +334,19 @@ public class TagView extends ViewGroup {
             int dp8 = DimensionUtils.dp2px(8);
             setPadding(dp8, dp8, dp8, dp8);
             setBackgroundDrawable(background);
-            setEnabled(true);
 
 
-
-            setOnClickListener(clickListener);
-
-            setOnLongClickListener(longClickListener);
-
-            setOnTouchListener(touchListener);
         }
+    }
 
-        View.OnClickListener clickListener = new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                SharedPreferences sp = APP.context().getSharedPreferences("Info3",Context.MODE_PRIVATE);
-                if(sp.getBoolean("shown",false)) return;
-                new WDialog.Builder(getContext()).setMessage(R.string.longclick).hideNegative(true).show();
-                sp.edit().putBoolean("shown",true).apply();
-            }
-        };
+    public static class EditTag extends InTag{
 
-        View.OnLongClickListener longClickListener = new OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                View vv = LayoutInflater.from(getContext()).inflate(R.layout.tag_view_edit_or_delete,null);
-                final WDialog dialog = new WDialog.Builder(getContext()).setCustomView(vv).hideButtons(true).show();
-                vv.findViewById(R.id.delete_tag).setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                        new WDialog.Builder(getContext()).setMessage("确定要删除标签：" + getText())
-                                .setPositive(R.string.ok, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        // TODO: 2016/5/19 delete
-                                    }
-                        }).show();
-                    }
-                });
-                vv.findViewById(R.id.edit_tag).setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                        View vvv = LayoutInflater.from(getContext()).inflate(R.layout.tag_view_edit,null);
-                        new WDialog.Builder(getContext()).setCustomView(vvv).show();
-                        EditText et = (EditText) vvv.findViewById(R.id.edit_tag_edit_text);
-                        et.setText(getText());
-                        // TODO: 2016/5/19 new Dialog
-                    }
-                });
-                return true;
-            }
-        };
-
-         View.OnTouchListener touchListener = new View.OnTouchListener(){
-             @Override
-             public boolean onTouch(View v, MotionEvent event) {
-//                 SharedPreferences sp = APP.context().getSharedPreferences("Info",Context.MODE_PRIVATE);
-//                 if(sp.getBoolean("shown",false)) return false;
-//                 new WDialog.Builder(getContext()).setTitle(R.string.longclick).setMessage(R.string.longclick).show();
-//                 sp.edit().putBoolean("shown",true).apply();
-                 return false;
-             }
-
-        };
+        public EditTag(Context context) {
+            super(context);
+            setTextColor(Color.DKGRAY);
+            background.getPaint().setColor(Color.GRAY);
+            setHint(R.string.add_tag);
+            setTextSize(12);
+        }
     }
 }

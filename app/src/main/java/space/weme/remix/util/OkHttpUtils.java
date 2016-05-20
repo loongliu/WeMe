@@ -68,6 +68,14 @@ public final class OkHttpUtils {
         post(url, params, null, callback);
     }
 
+    public static void post(String url, JSONObject params,String tag, OkCallBack callback){
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), params.toString());
+        Request.Builder builder = new Request.Builder().url(url).post(body);
+        if(tag!=null) builder.tag(tag);
+        Request request = builder.build();
+        getInstance().firePost(request, callback);
+    }
+
     public static void post(String url, Map<String,String> params,String tag, OkCallBack callback){
         JSONObject j = new JSONObject(params);
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), j.toString());
