@@ -83,6 +83,8 @@ public final class StrUtils {
 
     public static final String GET_USER_IMAGES_URL = BASE_URL + "getuserimages";
 
+    public static final String GET_PERSIONAL_IMAGE_URL = BASE_URL + "getpersonalimages";
+
     public static final String GET_FOLLOWERS_URL = BASE_URL + "followview";
 
     public static final String SEARCH_USER_URL = BASE_URL + "searchuser";

@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@color/black"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
     <FrameLayout
         android:id="@+id/top_bar"
         android:background="#7f000000"
@@ -28,49 +25,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </FrameLayout>
-    <LinearLayout
-        android:layout_gravity="bottom"
-        android:orientation="vertical"
-        android:id="@+id/bottom_bar"
-        android:background="#7f000000"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_marginTop="4dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            android:id="@+id/topic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:layout_marginTop="4dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:id="@+id/title"
-            android:textSize="16sp"
-            android:textColor="@color/white"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:layout_marginTop="4dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:textColor="@color/white"
-            android:id="@+id/body"
-            android:textSize="14sp"
-            android:maxLines="4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:layout_marginTop="4dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            android:id="@+id/time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-</FrameLayout>
+        android:layout_height="match_parent"/>
+</LinearLayout>

@@ -68,6 +68,13 @@ public class TagView extends ViewGroup {
     // remove all child views and create new views, this can make adapter's click listener work
     private void adapterInvalidated(){
         removeAllViews();
+        if(mAdapter.getCount() == 0 && !mAdapter.getCanEdit()){
+            InTag tag = (InTag) mAdapter.getView(-1,null,null);
+            tag.setText(R.string.no_tag);
+            tag.setTextSize(12);
+            addView(tag);
+            return;
+        }
         for(int i = 0; i<mAdapter.getCount(); i++){
             InTag tagView = (InTag) mAdapter.getView(i,null,null);
             addView(tagView);
@@ -80,6 +87,13 @@ public class TagView extends ViewGroup {
 
     // reuse current views
     private void adapterChanged(){
+        if(mAdapter.getCount() == 0 && !mAdapter.getCanEdit()){
+            removeAllViews();
+            InTag tag = (InTag) mAdapter.getView(-1,null,null);
+            tag.setText(R.string.no_tag);
+            tag.setTextSize(12);
+            return;
+        }
         EditTag editTag = null;
         if(getChildCount()>=1 && getChildAt(getChildCount()-1) instanceof EditTag){
             editTag = (EditTag) getChildAt(getChildCount()-1);
@@ -298,6 +312,7 @@ public class TagView extends ViewGroup {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             InTag tagView = new InTag(mContext);
+            if(position == -1) return tagView;
             tagView.setText(mTags.get(position));
             if(clickListener!=null) tagView.setOnClickListener(clickListener);
             if(longClickListener!=null) tagView.setOnLongClickListener(longClickListener);

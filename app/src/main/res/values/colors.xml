@@ -24,4 +24,6 @@
     <color name="half_alpha_black">#7f000000</color>
 
     <color name="test">#ffffffff</color>
+    <color name="pop_up_argb">#7f000000</color>
+    <color name="popup_bg">#7f202020</color>
 </resources>

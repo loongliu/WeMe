@@ -12,33 +12,30 @@ public class UserImage {
 
     public String image;
     public String thumbnail;
-    public String title;
-    public String body;
-    public String topic;
     public String timestamp;
-    public String postid;
+    public String userId;
+    public String userName;
+    public String id;
 
     public static UserImage fromJSON(JSONObject j){
         UserImage ui = new UserImage();
-        ui.body = j.optString("body");
         ui.image = j.optString("image");
-        ui.postid = j.optString("postid");
         ui.thumbnail = j.optString("thumbnail");
         ui.timestamp = j.optString("time");
-        ui.title = j.optString("title");
-        ui.topic = j.optString("topic");
+        ui.id = j.optString("id");
+        ui.userId = j.optString("userid");
+        ui.userName = j.optString("userName");
         return ui;
     }
 
     public JSONObject toJSON(){
         ArrayMap<String,String> map = new ArrayMap<>();
-        map.put("body", body);
         map.put("image",image);
-        map.put("postid", postid);
         map.put("thumbnail",thumbnail);
         map.put("time",timestamp);
-        map.put("title", title);
-        map.put("topic",topic);
+        map.put("id",id);
+        map.put("userid",userId);
+        map.put("userName",userName);
         return new JSONObject(map);
     }
 }

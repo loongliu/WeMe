@@ -1,6 +1,5 @@
 package space.weme.remix.ui.user;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
@@ -21,9 +20,7 @@ import java.util.List;
 import space.weme.remix.R;
 import space.weme.remix.model.UserImage;
 import space.weme.remix.ui.base.BaseActivity;
-import space.weme.remix.ui.community.AtyPost;
 import space.weme.remix.util.LogUtils;
-import space.weme.remix.util.StrUtils;
 
 /**
  * Created by Liujilong on 2016/2/17.
@@ -39,11 +36,7 @@ public class AtyImagePager extends BaseActivity {
 
     ViewPager pager;
     View mTop;
-    View mBottom;
     TextView mProgress;
-    TextView mTopic;
-    TextView mTitle;
-    TextView mBody;
     TextView mTime;
 
     ImageAdapter adapter;
@@ -72,7 +65,6 @@ public class AtyImagePager extends BaseActivity {
 
         pager = (ViewPager) findViewById(R.id.pager);
         mTop = findViewById(R.id.top_bar);
-        mBottom = findViewById(R.id.bottom_bar);
         findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,9 +72,6 @@ public class AtyImagePager extends BaseActivity {
             }
         });
         mProgress = (TextView) findViewById(R.id.progress);
-        mTopic = (TextView) findViewById(R.id.topic);
-        mTitle = (TextView) findViewById(R.id.title);
-        mBody = (TextView) findViewById(R.id.body);
         mTime = (TextView) findViewById(R.id.time);
 
         adapter = new ImageAdapter();
@@ -99,7 +88,6 @@ public class AtyImagePager extends BaseActivity {
 
             @Override
             public void onPageScrollStateChanged(int state) {
-                hideBar();
                 LogUtils.d(TAG, "state" + state);
                 if (state == ViewPager.SCROLL_STATE_IDLE) {
                     int item = pager.getCurrentItem();
@@ -107,49 +95,13 @@ public class AtyImagePager extends BaseActivity {
                 }
             }
         });
-        listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(state==STATE_HIDE){
-                    showBar();
-                }else if(state==STATE_SHOWN){
-                    hideBar();
-                }
-            }
-        };
+
         configBar(currentIndex);
         pager.setCurrentItem(currentIndex);
-
-        mBottom.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UserImage image = userImageList.get(pager.getCurrentItem());
-                Intent i = new Intent(AtyImagePager.this, AtyPost.class);
-                i.putExtra(AtyPost.THEME_INTENT,image.topic);
-                i.putExtra(AtyPost.POST_INTENT,image.postid);
-                startActivity(i);
-            }
-        });
     }
 
-    private void hideBar(){
-        state = STATE_HIDE;
-        mTop.setVisibility(View.GONE);
-        mBottom.setVisibility(View.GONE);
-    }
-    private void showBar(){
-        state = STATE_SHOWN;
-        mTop.setVisibility(View.VISIBLE);
-        mBottom.setVisibility(View.VISIBLE);
-    }
 
     private void configBar(int position){
-        UserImage image = userImageList.get(position);
-        String topic = getResources().getString(R.string.publish_in) + image.topic;
-        mTopic.setText(topic);
-        mTitle.setText(image.title);
-        mBody.setText(image.body);
-        mTime.setText(StrUtils.timeTransfer(image.timestamp));
 
         String progress = (position+1)+" of "+userImageList.size();
         mProgress.setText(progress);
@@ -169,7 +121,7 @@ public class AtyImagePager extends BaseActivity {
             container.addView(view, params);
             view.setImageURI(Uri.parse(userImageList.get(position).image));
             view.setOnClickListener(listener);
-            view.getHierarchy().setActualImageScaleType(ScalingUtils.ScaleType.CENTER_INSIDE);
+            view.getHierarchy().setActualImageScaleType(ScalingUtils.ScaleType.FIT_CENTER);
             return view;
         }
 

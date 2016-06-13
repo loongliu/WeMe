@@ -40,6 +40,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 import space.weme.remix.APP;
@@ -56,6 +57,7 @@ import space.weme.remix.util.DimensionUtils;
 import space.weme.remix.util.LogUtils;
 import space.weme.remix.util.OkHttpUtils;
 import space.weme.remix.util.StrUtils;
+import space.weme.remix.widgt.LoadingPrompt;
 import space.weme.remix.widgt.TagView;
 import space.weme.remix.widgt.WDialog;
 
@@ -67,6 +69,7 @@ public class AtyInfo extends BaseActivity {
     private static final String TAG = "AtyInfo";
     public static final String ID_INTENT = "id";
     private static final int REQUEST_IMAGE = 0xef;
+    private static final int REQUEST_AVATAR = 0xff;
 
     private String mId;
     private User mUser;
@@ -95,8 +98,7 @@ public class AtyInfo extends BaseActivity {
     int page_2;
 
     boolean isLoading_3 = false;
-    boolean canLoadMore_3 = true;
-    int page_3;
+    int page_3_previous_id;
     final int GRID_COUNT = 3;
 
     List<TimeLine> timeLineList;
@@ -193,6 +195,7 @@ public class AtyInfo extends BaseActivity {
     }
 
     private void visitUser() {
+        if(isMe) return;
         ArrayMap<String, String> param = new ArrayMap<>();
         param.put("token", StrUtils.token());
         param.put("userid", mId);
@@ -447,10 +450,10 @@ public class AtyInfo extends BaseActivity {
             return;
         }
         LogUtils.d(TAG, "uploadTags: param: " + j.toString());
-        OkHttpUtils.post(StrUtils.SET_TAGS,j,TAG,new OkHttpUtils.SimpleOkCallBack(){
+        OkHttpUtils.post(StrUtils.SET_TAGS, j, TAG, new OkHttpUtils.SimpleOkCallBack() {
             @Override
             public void onResponse(String s) {
-                LogUtils.d(TAG,"uploadTag: " + s);
+                LogUtils.d(TAG, "uploadTag: " + s);
             }
         });
     }
@@ -534,7 +537,7 @@ public class AtyInfo extends BaseActivity {
 
 
     private void configView3() {
-        swipe_3 = (SwipeRefreshLayout) mPagerViews[2];
+        swipe_3 = (SwipeRefreshLayout) mPagerViews[2].findViewById(R.id.aty_info_view3_swipe);
         RecyclerView recyclerView = (RecyclerView) swipe_3.findViewById(R.id.aty_info_view3_recycler);
         recyclerView.setLayoutManager(new GridLayoutManager(AtyInfo.this, GRID_COUNT));
         recyclerView.setHasFixedSize(true);
@@ -560,22 +563,38 @@ public class AtyInfo extends BaseActivity {
                 int totalItemCount = layoutManager.getItemCount();
                 int firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
                 if (!isLoading_3 && (totalItemCount - visibleItemCount)
-                        <= (firstVisibleItem + 2) && canLoadMore_3) {
-                    Log.i(TAG, "scroll to end  load page " + (page_3 + 1));
-                    getUserImages(page_3 + 1);
+                        <= (firstVisibleItem + 2)) {
+                    Log.i(TAG, "scroll to end  load page " + (page_3_previous_id - 1));
+                    getUserImages(page_3_previous_id - 1);
                 }
             }
         });
-        getUserImages(1);
+        page_3_previous_id = 0;
+        getUserImages(0);
+
+        mPagerViews[2].findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadAvatar();
+            }
+        });
     }
 
-    private void getUserImages(final int page) {
+    private void uploadAvatar(){
+        Intent intent = new Intent(AtyInfo.this, MultiImageSelectorActivity.class);
+        intent.putExtra(MultiImageSelectorActivity.EXTRA_SHOW_CAMERA, true);
+        intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_MODE, MultiImageSelectorActivity.MODE_MULTI);
+        startActivityForResult(intent, REQUEST_AVATAR);
+    }
+
+    private void getUserImages(final int previous_id) {
+        if(page_3_previous_id<0) return;
         ArrayMap<String, String> param = new ArrayMap<>();
         param.put("token", StrUtils.token());
         param.put("userid", mId);
-        param.put("page", String.format("%d", page));
+        param.put("previous_id", String.format("%d", previous_id));
         isLoading_3 = true;
-        OkHttpUtils.post(StrUtils.GET_USER_IMAGES_URL, param, TAG, new OkHttpUtils.SimpleOkCallBack() {
+        OkHttpUtils.post(StrUtils.GET_PERSIONAL_IMAGE_URL, param, TAG, new OkHttpUtils.SimpleOkCallBack() {
             @Override
             public void onFailure(IOException e) {
                 isLoading_3 = false;
@@ -589,17 +608,20 @@ public class AtyInfo extends BaseActivity {
                 if (j == null) {
                     return;
                 }
-                if (page == 1) {
+                if (previous_id == 0) {
                     userImageList.clear();
                 }
-                page_3 = page;
                 JSONArray result = j.optJSONArray("result");
                 int size = result.length();
                 int preCount = userImageList.size();
-                canLoadMore_3 = size != 0;
                 for (int i = 0; i < result.length(); i++) {
                     userImageList.add(UserImage.fromJSON(result.optJSONObject(i)));
                 }
+                if(userImageList.size()==0){
+                    page_3_previous_id = -1;
+                    return;
+                }
+                page_3_previous_id = Integer.parseInt(userImageList.get(userImageList.size()-1).id);
                 if (preCount == 0) {
                     mUserImageAdapter.notifyDataSetChanged();
                 } else {
@@ -928,6 +950,37 @@ public class AtyInfo extends BaseActivity {
                     imagePipeline.evictFromCache(Uri.parse(StrUtils.backgroundForID(mId)));
                 }
             });
+        }else if(requestCode == REQUEST_AVATAR){
+            final LoadingPrompt prompt = new LoadingPrompt(AtyInfo.this);
+            List<String> path=data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
+            if (path!=null&&!path.isEmpty()){
+                Map<String,String> map=new ArrayMap<>();
+                map.put("token", StrUtils.token());
+                map.put("type","-16");
+                final int total = path.size();
+                final int[] cur = {0};
+                prompt.show(getWindow().getDecorView(),"正在上传图片");
+                for (int i=0;i<path.size();i++){
+                    OkHttpUtils.uploadFile(StrUtils.UPLOAD_AVATAR_URL, map, path.get(i), StrUtils.MEDIA_TYPE_IMG, TAG, new OkHttpUtils.SimpleOkCallBack() {
+                        @Override
+                        public void onResponse(String s) {
+                            JSONObject j = OkHttpUtils.parseJSON(AtyInfo.this, s);
+                            if (j != null) {
+                                cur[0]++;
+                                if(cur[0]==total){
+                                    prompt.dismiss();
+                                    configView3();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(IOException e) {
+                            super.onFailure(e);
+                        }
+                    });
+                }
+            }
         }
     }
 
