@@ -191,21 +191,25 @@ public final class StrUtils {
             long gmtDif = TimeZone.getDefault().getRawOffset();
             long now = System.currentTimeMillis();
             long dif = (now -seconds+gmtDif)/1000;
-            if(dif<3600){
-                return (dif/60)+APP.context().getString(R.string.minute_ago);
-            }else if (dif<24*3600){
-                return (dif/3600) + APP.context().getString(R.string.hour_ago);
-            }else if(dif<7*24*3600){
-                return (dif/3600/24) + APP.context().getString(R.string.day_ago);
-            }else if(dif<30*24*3600){
-                return (dif/3600/24/7) + APP.context().getString(R.string.week_ago);
-            }else if(dif<365*30*24*3600){
-                return (dif/3600/24/30) + APP.context().getString(R.string.month_ago);
-            }else{
-                return (dif/3600/24/365) + APP.context().getString(R.string.year_ago);
-            }
+            return timeTransfer(dif);
         } catch (ParseException e) {
             return "";
+        }
+    }
+
+    public static String timeTransfer(long dif){
+        if(dif<3600){
+            return (dif/60)+APP.context().getString(R.string.minute_ago);
+        }else if (dif<24*3600){
+            return (dif/3600) + APP.context().getString(R.string.hour_ago);
+        }else if(dif<7*24*3600){
+            return (dif/3600/24) + APP.context().getString(R.string.day_ago);
+        }else if(dif<30*24*3600){
+            return (dif/3600/24/7) + APP.context().getString(R.string.week_ago);
+        }else if(dif<365*30*24*3600){
+            return (dif/3600/24/30) + APP.context().getString(R.string.month_ago);
+        }else{
+            return (dif/3600/24/365) + APP.context().getString(R.string.year_ago);
         }
     }
 

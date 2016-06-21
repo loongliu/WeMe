@@ -3,10 +3,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
+    <android.support.v7.widget.Toolbar
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="56dp">
+        <TextView
+            android:textSize="16sp"
+            android:text="@string/nearby"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </android.support.v7.widget.Toolbar>
     <com.amap.api.maps2d.MapView
         android:id="@+id/aty_near_by_map"
         android:layout_width="match_parent"
         android:layout_height="100dp" />
+
+    <ListView
+        android:id="@+id/aty_near_by_list"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp">
+
+    </ListView>
+
 
 </LinearLayout>
