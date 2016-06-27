@@ -25,6 +25,7 @@ public class User {
     public String lookcount;
     public String weme;
     public String constellation;
+    public String voiceUrl;
 
     public String avatar;
     public boolean match;
@@ -50,6 +51,7 @@ public class User {
         user.weme = j.optString("weme");
         user.constellation = j.optString("constellation");
 
+        user.voiceUrl = j.optString("voice","");
         user.avatar = j.optString("avatar");
         user.match = j.optString("match","0").equals("1");
         return user;

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -61,6 +62,8 @@ public class AtyPost extends SwipeActivity {
     private TextView mCommitText;
     private ImageView mAddImage;
 
+    private TextView tvDelete;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +75,8 @@ public class AtyPost extends SwipeActivity {
         SwipeBackLayout mSwipeBackLayout = getSwipeBackLayout();
         mSwipeBackLayout.setEdgeSize(DimensionUtils.getDisplay().widthPixels / 2);
         mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
+
+        tvDelete = (TextView) findViewById(R.id.post_detail_delete);
 
         mChatView = (LinearLayout) findViewById(R.id.chat_view_holder);
         mEditText = (EditText) findViewById(R.id.activity_post_editor);
@@ -131,6 +136,12 @@ public class AtyPost extends SwipeActivity {
                 }
                 JSONObject result = j.optJSONObject("result");
                 mPost = Post.fromJSON(result);
+                if(TextUtils.equals(mPost.userId,StrUtils.id())){
+                    tvDelete.setVisibility(View.VISIBLE);
+                    tvDelete.setOnClickListener(deleteListener);
+                }else{
+                    tvDelete.setVisibility(View.GONE);
+                }
                 mAdapter.setPost(mPost);
                 mAdapter.notifyDataSetChanged();
             }
@@ -139,6 +150,31 @@ public class AtyPost extends SwipeActivity {
         mChatView.setVisibility(View.INVISIBLE);
         canLoadMore = true;
     }
+
+    private View.OnClickListener deleteListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            final ProgressDialog progressDialog = new ProgressDialog(AtyPost.this);
+            progressDialog.show();
+            ArrayMap<String,String> map = new ArrayMap<>();
+            map.put("token",StrUtils.token());
+            map.put("postid",mPostID);
+            OkHttpUtils.post(StrUtils.DELETE_POST_URL, map, TAG, new OkHttpUtils.SimpleOkCallBack() {
+                @Override
+                public void onResponse(String s) {
+                    progressDialog.dismiss();
+                    JSONObject j = OkHttpUtils.parseJSON(AtyPost.this,s);
+                    if(j == null) return;
+                    finish();
+                }
+
+                @Override
+                public void onFailure(IOException e) {
+                    progressDialog.dismiss();
+                }
+            });
+        }
+    };
 
     private void loadPage(final int page){
         ArrayMap<String,String> param = new ArrayMap<>();

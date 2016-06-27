@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.database.DataSetObserver;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.view.PagerAdapter;
@@ -572,12 +573,18 @@ public class AtyInfo extends BaseActivity {
         page_3_previous_id = 0;
         getUserImages(0);
 
-        mPagerViews[2].findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                uploadAvatar();
-            }
-        });
+        FloatingActionButton fab = (FloatingActionButton) mPagerViews[2].findViewById(R.id.fab);
+        if(isMe) {
+            fab.setVisibility(View.VISIBLE);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    uploadAvatar();
+                }
+            });
+        }else{
+            fab.setVisibility(View.GONE);
+        }
     }
 
     private void uploadAvatar(){
@@ -849,10 +856,13 @@ public class AtyInfo extends BaseActivity {
                                 changeBackground();
                             } else if (v.getId() == R.id.aty_info_option_edit_info) {
                                 editMyInfo();
+                            }else if(v.getId() == R.id.aty_info_option_audio_record){
+                                audioRecord();
                             }
                             dialog.dismiss();
                         }
                     };
+                    content.findViewById(R.id.aty_info_option_audio_record).setOnClickListener(listener);
                     content.findViewById(R.id.aty_info_option_cancel).setOnClickListener(listener);
                     content.findViewById(R.id.aty_info_option_change_background).setOnClickListener(listener);
                     content.findViewById(R.id.aty_info_option_edit_info).setOnClickListener(listener);
@@ -904,6 +914,12 @@ public class AtyInfo extends BaseActivity {
         if (mUser != null) {
             i.putExtra(AtyEditInfo.INTENT_INFO, mUser.toJSONString());
         }
+        startActivity(i);
+    }
+
+    private void audioRecord(){
+        LogUtils.i(TAG,"audio record");
+        Intent i = new Intent(AtyInfo.this, AtyAudioRecord.class);
         startActivity(i);
     }
 

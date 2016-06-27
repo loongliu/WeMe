@@ -4,6 +4,19 @@
     android:background="@null"
     android:layout_height="match_parent">
 
+    <TextView
+        android:background="@color/white"
+        android:id="@+id/aty_info_option_audio_record"
+        android:textSize="16sp"
+        android:textColor="@color/colorPrimary"
+        android:gravity="center"
+        android:text="@string/audio_record"
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+    <View
+        android:background="@null"
+        android:layout_width="match_parent"
+        android:layout_height="1px"/>
 
     <TextView
         android:background="@color/white"

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:text="@string/audio_record"
+            android:id="@+id/aty_audio_record_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:gravity="center_vertical"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+
+    </FrameLayout>
+
+    <space.weme.remix.widgt.AudioVisualizerView
+        android:id="@+id/visualizer_view"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"/>
+    <space.weme.remix.widgt.TimerView
+        android:id="@+id/aty_audio_timer_view"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"/>
+    <View
+        android:background="@color/grey_gap"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+    <FrameLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+        <LinearLayout
+            android:id="@+id/left_layout"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:clickable="true"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/bg_audio_play"
+                android:id="@+id/left_button"
+                android:layout_width="80dp"
+                android:layout_height="80dp" />
+            <TextView
+                android:text="@string/record_string"
+                android:id="@+id/left_text"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/right_layout"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:clickable="true"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/bg_audio_play"
+                android:id="@+id/right_button"
+                android:layout_width="80dp"
+                android:layout_height="80dp" />
+            <TextView
+                android:text="@string/record_string"
+                android:gravity="center"
+                android:id="@+id/right_text"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp" />
+        </LinearLayout>
+    </FrameLayout>
+    <TextView
+        android:visibility="gone"
+        android:textColor="@color/black"
+        android:layout_margin="16dp"
+        android:id="@+id/upload_audio_record"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_vertical"
+        android:text="@string/upload_record"
+        android:textSize="18sp" />
+</LinearLayout>

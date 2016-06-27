@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.ACCESS_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:name=".APP"
@@ -56,6 +57,10 @@
         <activity android:name=".ui.find.AtyFoodMap" />
         <activity android:name=".ui.user.AtySetting" />
         <activity android:name=".ui.find.AtyAddFood"
+            android:screenOrientation="portrait"/>
+
+
+        <activity android:name=".ui.user.AtyAudioRecord"
             android:screenOrientation="portrait"/>
 
         <activity android:name=".ui.aty.AtyActivityDetail" android:theme="@style/AppTheme.Translucent" />

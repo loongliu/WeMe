@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:textColor="@color/black"
+            android:layout_marginBottom="2dp"
+            android:textSize="16sp"
+            android:id="@+id/aty_near_by_info_distance"
+            android:text="距你0.0km"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:textColor="@color/black"
+            android:layout_marginTop="2dp"
+            android:id="@+id/aty_near_by_info_time"
+            android:text="1分钟前"
+            android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <com.facebook.drawee.view.SimpleDraweeView
+        app:roundAsCircle="true"
+        android:id="@+id/aty_near_by_info_avatar"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="8dp"
+        app:placeholderImage="@mipmap/default_avatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp" />
+</LinearLayout>

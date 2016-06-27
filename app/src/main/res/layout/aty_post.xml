@@ -3,18 +3,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
-    <TextView
-        android:paddingLeft="16dp"
-        android:paddingStart="16dp"
-        android:paddingRight="16dp"
-        android:paddingEnd="16dp"
-        android:gravity="center_vertical"
-        android:textSize="16sp"
-        android:textColor="@color/white"
-        android:id="@+id/post_detail_toolbar"
+    <FrameLayout
+        android:background="@color/colorPrimary"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary" />
+        android:layout_height="?actionBarSize">
+        <TextView
+            android:visibility="gone"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical|end"
+            android:textSize="14sp"
+            android:text="@string/delete"
+            android:textColor="@color/white"
+            android:id="@+id/post_detail_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:id="@+id/post_detail_toolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/post_detail_recycler_view"
         android:layout_width="match_parent"

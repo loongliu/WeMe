@@ -138,6 +138,24 @@ public final class OkHttpUtils {
     }
 
 
+    public static void uploadAudio(String url,Map<String,String> param, String path,MediaType type, String tag, OkCallBack callBack){
+
+        JSONObject jsonObject = new JSONObject(param);
+        RequestBody requestBody=new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addPart(
+                        Headers.of("Content-Disposition", "form-data; name=\"json\""),
+                        RequestBody.create(MediaType.parse("application/json"), jsonObject.toString()))
+                .addPart(
+                        Headers.of("Content-Disposition", "form-data; name=\"avatar\";filename=\"file.jpg\""),
+                        RequestBody.create(type, new File(path))
+                ).build();
+        Request.Builder builder = new Request.Builder().url(url).post(requestBody);
+        if(tag!=null) builder.tag(tag);
+        Request request = builder.build();
+        getInstance().firePost(request, callBack);
+    }
+
 
     /**
      * upload image file to the server

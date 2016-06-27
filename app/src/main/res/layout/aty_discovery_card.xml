@@ -122,7 +122,12 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
                 android:src="@mipmap/location" />
-
+            <ImageView
+                android:layout_gravity="center_vertical"
+                android:id="@+id/card_people_voice"
+                android:src="@mipmap/voice"
+                android:layout_width="16dp"
+                android:layout_height="match_parent" />
             <TextView
                 android:id="@+id/card_people_location_text"
                 android:layout_width="wrap_content"

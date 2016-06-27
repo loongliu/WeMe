@@ -8,10 +8,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Animatable;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.CardView;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +33,7 @@ import com.facebook.imagepipeline.image.ImageInfo;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.Random;
 
 import space.weme.remix.R;
@@ -59,6 +62,7 @@ public class Card extends CardView {
     private ImageView ivGender;
     private ImageView ivLike;
     private TextView tvLikeAdd;
+    private ImageView ivVoice;
     private FrameLayout frameLayout;
     private AtyDiscovery aty;
 
@@ -66,6 +70,10 @@ public class Card extends CardView {
     private AnimatorSet likeTextAnimator;
 
     private AvatarListener avatarListener;
+
+    private VoiceListener voiceListener;
+    private MediaPlayer mMediaPlayer;
+    private int mediaState = 0;
 
     private User user;
 
@@ -118,8 +126,12 @@ public class Card extends CardView {
         }
         if(isFront){
             stopLikeAnimation();
+            stopMedia();
         }else{
             startLikeAnimation();
+            ViewGroup.LayoutParams params = ivVoice.getLayoutParams();
+            params.width = params.height;
+            ivVoice.setLayoutParams(params);
         }
         isLiked = false;
         mFront.setVisibility(isFront?GONE:VISIBLE);
@@ -162,6 +174,7 @@ public class Card extends CardView {
         tvDegree = (TextView) mFront.findViewById(R.id.card_people_education);
         tvLocation = (TextView) mFront.findViewById(R.id.card_people_location_text);
         tvLikeAdd = (TextView) mFront.findViewById(R.id.card_people_like_add);
+        ivVoice = (ImageView) mFront.findViewById(R.id.card_people_voice);
         frameLayout = (FrameLayout) mFront.findViewById(R.id.card_people_image_click);
         avatarListener = new AvatarListener();
 
@@ -244,7 +257,7 @@ public class Card extends CardView {
         }
         this.user = user;
         showAvatar(user);
-        avatarListener.setId(user.ID+"");
+        avatarListener.setId(user.ID + "");
         avatar.setOnClickListener(avatarListener);
         tvName.setText(user.name);
         ivGender.setImageResource(user.gender.equals("\u7537") ? R.mipmap.boy : R.mipmap.girl);
@@ -256,15 +269,14 @@ public class Card extends CardView {
         }else {
             tvLocation.setText(user.hometown);
         }
-//        if(user.match){
-//            isLiked = true;
-//            postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    aty.showLikeEachOther(user);
-//                }
-//            },600);
-//        }
+        if(TextUtils.equals(user.voiceUrl,"")){
+            ivVoice.setVisibility(GONE);
+        }else{
+            ivVoice.setVisibility(VISIBLE);
+            voiceListener = new VoiceListener();
+            voiceListener.setUser(user);
+            ivVoice.setOnClickListener(voiceListener);
+        }
     }
 
     private void showAvatar(User user){
@@ -308,6 +320,49 @@ public class Card extends CardView {
             Intent i = new Intent(aty,AtyInfo.class);
             i.putExtra(AtyInfo.ID_INTENT,id);
             aty.startActivity(i);
+        }
+    }
+
+    public void stopMedia(){
+        if(mediaState == 1 && mMediaPlayer != null){
+            mMediaPlayer.stop();
+            mMediaPlayer.release();
+            mediaState = 0;
+        }
+    }
+
+    class VoiceListener implements View.OnClickListener{
+        private User user;
+
+        public void setUser(User user){
+            this.user = user;
+        }
+        @Override
+        public void onClick(View v) {
+            if(mediaState == 0) {
+                mMediaPlayer = new MediaPlayer();
+                try {
+                    mMediaPlayer.setDataSource(getContext(), Uri.parse(user.voiceUrl));
+                    mMediaPlayer.prepareAsync();
+                    mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                        @Override
+                        public void onPrepared(MediaPlayer mp) {
+                            mMediaPlayer.start();
+                        }
+                    });
+                    mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mp) {
+                            mediaState = 0;
+                        }
+                    });
+                    mediaState=1;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }else{
+                stopMedia();
+            }
         }
     }
 

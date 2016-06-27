@@ -1,9 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'weme'
+            keyPassword 'wemeseu'
+            storeFile file('C:/devleop/keystore/weme_keystore.jks')
+            storePassword 'wemeseu'
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
-
     defaultConfig {
         applicationId "space.weme.remix"
         minSdkVersion 15
@@ -15,7 +22,11 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles  'proguard-rules.pro'
+            proguardFiles 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
+        debug {
+            signingConfig signingConfigs.config
         }
     }
     packagingOptions {

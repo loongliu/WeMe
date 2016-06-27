@@ -69,7 +69,6 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/assets" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/classes" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/classes-proguard" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/debug" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/dependency-cache" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/dex" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/jars" />
@@ -88,7 +87,6 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/manifests" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/pre-dexed" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/proguard-rules" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/release" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/res" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/rs" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/symbols" />
@@ -114,14 +112,14 @@
     <orderEntry type="library" exported="" name="fbcore-0.9.0" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-23.1.1" level="project" />
     <orderEntry type="library" exported="" name="support-v13-23.1.1" level="project" />
+    <orderEntry type="library" exported="" name="analytics-6.0.1" level="project" />
     <orderEntry type="library" exported="" name="okio-1.6.0" level="project" />
-    <orderEntry type="library" exported="" name="analytics-5.6.4" level="project" />
     <orderEntry type="library" exported="" name="zxing" level="project" />
     <orderEntry type="library" exported="" name="imagepipeline-0.9.0" level="project" />
     <orderEntry type="library" exported="" name="bolts-android-1.1.4" level="project" />
     <orderEntry type="library" exported="" name="cardview-v7-23.1.1" level="project" />
-    <orderEntry type="library" exported="" name="library-2.4.0" level="project" />
     <orderEntry type="library" exported="" name="okhttp-3.0.1" level="project" />
+    <orderEntry type="library" exported="" name="library-2.4.0" level="project" />
     <orderEntry type="library" exported="" name="picasso-2.4.0" level="project" />
     <orderEntry type="module" module-name="multi-image-selector" exported="" />
   </component>

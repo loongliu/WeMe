@@ -151,6 +151,18 @@
     <string name="no_tag">暂无标签</string>
     <string name="nearby">附近</string>
     <string name="distance_for_you">距你</string>
+    <string name="delete">删除</string>
+    <string name="audio_record">录制个人介绍</string>
+    <string name="upload_record">上传录音</string>
+    <string name="record_string">录制一段语音介绍自己吧</string>
+    <string name="recording">录音中，点击结束录音。</string>
+    <string name="audio_re_record">重新录音</string>
+    <string name="audio_play_record">播放录音</string>
+    <string name="audio_palying">正在播放录音，请先暂停。</string>
+    <string name="audio_stop_playing">点击结束播放。</string>
+    <string name="please_stop_playing_first">播放中，请先暂停播放</string>
+    <string name="upload_audio_record_finis">上传录音完成</string>
+    <string name="upload_audio_record_fail">上传录音失败</string>
 
 
     <string-array name="aty_info_tabs">

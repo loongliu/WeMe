@@ -402,6 +402,7 @@ public class AtyDiscovery extends BaseActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        mCard.stopMedia();
     }
 
     @Override
