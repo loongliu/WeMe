@@ -15,9 +15,11 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -153,7 +155,9 @@ public class AtyPublicActivity extends SwipeActivity {
         OkHttpUtils.post(StrUtils.PUBLISH_ACTIVITY, map, TAG, new OkHttpUtils.SimpleOkCallBack() {
             @Override
             public void onResponse(String s) {
+                //提交与活动相关的文字信息，得到在数据库中创建的activityid的信息。
                 JSONObject j = OkHttpUtils.parseJSON(AtyPublicActivity.this, s);
+
                 if(j == null)  {
                     new WDialog.Builder(AtyPublicActivity.this)
                             .setTitle("提示")
@@ -165,9 +169,38 @@ public class AtyPublicActivity extends SwipeActivity {
                                 }
                             }).show();
                 } else {
-                    new WDialog.Builder(AtyPublicActivity.this)
-                            .setTitle("提示")
-                            .setMessage("已发布活动").show();
+                    try{
+                        //成功上传文字后进行活动的图片的上传动作 lujuan
+                        String  activity_id= j.getString("id");
+                        ArrayMap<String,String> p = new ArrayMap<>();
+                        p.put("token",StrUtils.token());
+                        p.put("type","-10");
+                        p.put("activityid", activity_id);
+                        p.put("number", String.format("%d", 0));
+                        String path0 = Uri.fromFile(new File(path.get(0))).getPath();
+                        OkHttpUtils.uploadFile(StrUtils.UPLOAD_AVATAR_URL,p,path0,StrUtils.MEDIA_TYPE_IMG,TAG,new OkHttpUtils.SimpleOkCallBack(){
+                            @Override
+                            public void onFailure(IOException e) {
+                                //图片上传失败，活动发布失败
+                                new WDialog.Builder(AtyPublicActivity.this)
+                                        .setTitle("提示")
+                                        .setMessage("活动发布失败，请重新发布").show();
+                            }
+
+                            @Override
+                            public void onResponse(String s) {
+                                //图片上传成功，活动发布成功。、
+                                new WDialog.Builder(AtyPublicActivity.this)
+                                        .setTitle("提示")
+                                        .setMessage("已发布活动").show();
+                            }
+                        });
+                    }catch(JSONException e){
+                        //无法解析activityid，活动照片上传失败。
+                        new WDialog.Builder(AtyPublicActivity.this)
+                                .setTitle("提示")
+                                .setMessage("发布活动失败").show();
+                    }
                 }
             }
         });
