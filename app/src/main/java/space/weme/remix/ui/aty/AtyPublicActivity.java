@@ -155,7 +155,7 @@ public class AtyPublicActivity extends SwipeActivity {
         OkHttpUtils.post(StrUtils.PUBLISH_ACTIVITY, map, TAG, new OkHttpUtils.SimpleOkCallBack() {
             @Override
             public void onResponse(String s) {
-                //提交与活动相关的文字信息，得到在数据库中创建的activityid的信息。
+                //将活动相关的文字信息提交到数据库，得到的返回数据中包含活动的activityid。
                 JSONObject j = OkHttpUtils.parseJSON(AtyPublicActivity.this, s);
 
                 if(j == null)  {
@@ -186,10 +186,9 @@ public class AtyPublicActivity extends SwipeActivity {
                                         .setTitle("提示")
                                         .setMessage("活动发布失败，请重新发布").show();
                             }
-
                             @Override
                             public void onResponse(String s) {
-                                //图片上传成功，活动发布成功。、
+                                //图片上传成功，活动发布成功。
                                 new WDialog.Builder(AtyPublicActivity.this)
                                         .setTitle("提示")
                                         .setMessage("已发布活动").show();
