@@ -28,7 +28,8 @@
                 android:inputType="text"
                 android:background="@null"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:hint="手机号码" />
         </LinearLayout>
 
         <LinearLayout
@@ -48,7 +49,8 @@
                 android:inputType="textPassword"
                 android:background="@null"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:hint="密码" />
         </LinearLayout>
         <Button
             android:id="@+id/login_button_login"
